@@ -1,23 +1,18 @@
 const db = require("../connection");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { loginSchema, registerSchema } = require("../schemas/auth.schema");
 
 /**
  * Controlador para el registro de nuevos usuarios.
  * Recibe: nombre, apellidos, id_carrera, id_rol, password.
  */
 const register = async (req, res) => {
-    const { nombre, apellidos, id_carrera, id_rol, password } = req.body;
-
-    // Validación de campos obligatorios
-    if (!nombre || !apellidos || !id_carrera || !id_rol || !password) {
-        return res.status(400).json({
-            success: false,
-            message: "Todos los campos (nombre, apellidos, id_carrera, id_rol, password) son obligatorios."
-        });
-    }
-
     try {
+        // Validación de datos estructurados con Zod
+        const validatedData = registerSchema.parse(req.body);
+        const { nombre, apellidos, id_carrera, id_rol, password } = validatedData;
+
         // Encriptar la contraseña
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -34,10 +29,20 @@ const register = async (req, res) => {
         return res.status(201).json({
             success: true,
             message: "Usuario registrado exitosamente.",
-            usuario: result.rows[0]
+            data: {
+                usuario: result.rows[0]
+            }
         });
 
     } catch (error) {
+        if (error.name === "ZodError") {
+            return res.status(400).json({
+                success: false,
+                message: "Error de validación",
+                errors: error.errors.map(e => ({ campo: e.path.join('.'), mensaje: e.message }))
+            });
+        }
+
         console.error("Error en el registro:", error);
 
         // Manejo básico de errores de BD (ej. violación de FK)
@@ -60,18 +65,10 @@ const register = async (req, res) => {
  * Recibe: nombre_completo (se normaliza) y password.
  */
 const login = async (req, res) => {
-    const { nombre_completo, password } = req.body;
-
-    if (!nombre_completo || !password) {
-        return res.status(400).json({
-            success: false,
-            message: "El nombre completo y la contraseña son obligatorios."
-        });
-    }
-
     try {
-        // Normalización: Mayúsculas y sin espacios
-        const normalizedInput = nombre_completo.toUpperCase().replace(/\s/g, '');
+        // Doble verificación: Validación y normalización con Zod
+        const validatedData = loginSchema.parse(req.body);
+        const { nombre_completo: normalizedInput, password } = validatedData;
 
         // Consulta buscando por nombre completo concatenado y normalizado
         const query = `
@@ -115,15 +112,25 @@ const login = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Inicio de sesión exitoso.",
-            token,
-            user: {
-                id: user.id,
-                nombre_completo: `${user.nombre} ${user.apellidos}`,
-                role: user.role_name
+            data: {
+                token,
+                user: {
+                    id: user.id,
+                    nombre_completo: `${user.nombre} ${user.apellidos}`,
+                    role: user.role_name
+                }
             }
         });
 
     } catch (error) {
+        if (error.name === "ZodError") {
+            return res.status(400).json({
+                success: false,
+                message: "Error de validación",
+                errors: error.errors.map(e => ({ campo: e.path.join('.'), mensaje: e.message }))
+            });
+        }
+
         console.error("Error en el login:", error);
         return res.status(500).json({
             success: false,
