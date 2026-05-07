@@ -13,6 +13,7 @@ function Navbar({ onLoginClick }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("inicio");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -113,13 +114,22 @@ function Navbar({ onLoginClick }: NavbarProps) {
     }
   };
 
+  const handleRegisterClick = () => {
+    setMenuOpen(false);
+    setIsRegisterModalOpen(true);
+  };
+
   const handleLogout = () => {
     logout();
   };
 
-  const handleCloseModal = () => {
+  const handleCloseLoginModal = () => {
     setIsLoginModalOpen(false);
     setIsLoggedIn(isAuthenticated());
+  };
+
+  const handleCloseRegisterModal = () => {
+    setIsRegisterModalOpen(false);
   };
 
   const isActive = (sectionId: string) => {
@@ -183,15 +193,48 @@ function Navbar({ onLoginClick }: NavbarProps) {
                 Cerrar Sesión
               </button>
             ) : (
-              <button className="login-btn" onClick={handleLoginClick}>
-                Login
-              </button>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button className="login-btn" onClick={handleLoginClick}>
+                  Iniciar Sesión
+                </button>
+                <button className="nav-button" onClick={handleRegisterClick}>
+                  Registrarse
+                </button>
+              </div>
             )}
           </li>
         </ul>
       </nav>
 
-      <Login isOpen={isLoginModalOpen} onClose={handleCloseModal} />
+      <Login isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} />
+      
+      {/* Modal de Registro - lo crearemos después */}
+      {isRegisterModalOpen && (
+        <div className="modal-overlay" onClick={handleCloseRegisterModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={handleCloseRegisterModal}>×</button>
+            <h2>Registrarse</h2>
+            <p style={{ textAlign: 'center', color: '#666', marginTop: '20px' }}>
+              Formulario de registro en desarrollo...
+            </p>
+            <button 
+              onClick={handleCloseRegisterModal}
+              style={{ 
+                marginTop: '20px', 
+                width: '100%', 
+                padding: '10px',
+                background: '#003DA5',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -127,7 +127,9 @@ body {
 /* ==================== RESPONSIVE MÓVIL ==================== */
 @media (max-width: 768px) {
   .navbar {
-    padding: 12px 20px;
+    padding: 12px 20px;}
+  .menu li:last-child {
+    width: 100%;}
   }
 
   /* Mostrar icono hamburguesa */
@@ -181,7 +183,16 @@ body {
     width: 1.8rem;
     height: 1.8rem;
   }
-}
+
+  .menu li:last-child div {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px !important;
+  }
+  
+  .menu li:last-child button {
+    width: 100%;
+  }
 
 /* ==================== RESPONSIVE TABLET ==================== */
 @media (min-width: 769px) and (max-width: 1024px) {
