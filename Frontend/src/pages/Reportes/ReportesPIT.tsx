@@ -67,7 +67,7 @@ function DonutChart({ data }: { data: Record<string, number> }) {
       <svg width="140" height="140" viewBox="0 0 140 140">
         {entries.map(([label, val], i) => {
           const pct = val / total
-          const offset = circumference * (1 - pct)
+          const offset = 0
           const rotation = cumulative * 360 - 90
           cumulative += pct
           return (
