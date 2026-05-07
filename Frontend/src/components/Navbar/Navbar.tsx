@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Logo from "../../assets/icons/unam_logo.svg";
 import Login from "../../pages/Login/Login";
 import { isAuthenticated, logout } from "../../services/api";
-import Register from "../../pages/Register/Register";
+import Registro from "../../pages/Registro/Registro";
 
 interface NavbarProps {
   onLoginClick?: () => void;
