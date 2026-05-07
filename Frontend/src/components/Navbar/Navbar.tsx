@@ -3,8 +3,8 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import Logo from "../../assets/icons/unam_logo.svg";
 import Login from "../../pages/Login/Login";
+import Registro from "../../pages/Registro/Registro"; // Cambiado a Registro
 import { isAuthenticated, logout } from "../../services/api";
-import Registro from "../../pages/Registro/Registro";
 
 interface NavbarProps {
   onLoginClick?: () => void;
@@ -14,7 +14,7 @@ function Navbar({ onLoginClick }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("inicio");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isRegistroModalOpen, setIsRegistroModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -115,12 +115,12 @@ function Navbar({ onLoginClick }: NavbarProps) {
     }
   };
 
-  const handleRegisterClick = () => {
+  const handleRegistroClick = () => {
     setMenuOpen(false);
-    setIsRegisterModalOpen(true);
+    setIsRegistroModalOpen(true);
   };
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
     logout();
   };
 
@@ -129,8 +129,8 @@ function Navbar({ onLoginClick }: NavbarProps) {
     setIsLoggedIn(isAuthenticated());
   };
 
-  const handleCloseRegisterModal = () => {
-    setIsRegisterModalOpen(false);
+  const handleCloseRegistroModal = () => {
+    setIsRegistroModalOpen(false);
   };
 
   const isActive = (sectionId: string) => {
@@ -189,20 +189,26 @@ function Navbar({ onLoginClick }: NavbarProps) {
             </li>
           )}
           <li>
-            <div className="auth-buttons">
-              <button className="login-btn" onClick={handleLoginClick}>
-                Iniciar Sesión
+            {isLoggedIn ? (
+              <button className="login-btn" onClick={handleLogoutClick}>
+                Cerrar Sesión
               </button>
-              <button className="nav-button" onClick={handleRegisterClick}>
-                Registrarse
-              </button>
-          </div>
+            ) : (
+              <div className="auth-buttons">
+                <button className="login-btn" onClick={handleLoginClick}>
+                  Iniciar Sesión
+                </button>
+                <button className="nav-button" onClick={handleRegistroClick}>
+                  Registrarse
+                </button>
+              </div>
+            )}
           </li>
         </ul>
       </nav>
 
       <Login isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} />
-      <Register isOpen={isRegisterModalOpen} onClose={handleCloseRegisterModal} />
+      <Registro isOpen={isRegistroModalOpen} onClose={handleCloseRegistroModal} />
     </>
   );
 }
