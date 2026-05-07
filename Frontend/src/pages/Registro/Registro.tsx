@@ -198,29 +198,22 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
           </div>
 
           <div className="registro-form-group">
-            <label htmlFor="password">Contraseña *</label>
-            <div className="registro-password-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
+            <label htmlFor="rol">Tipo de usuario *</label>
+            <select
+                id="rol"
+                name="rol"
+                value={formData.rol}
                 onChange={handleChange}
-                placeholder="Mínimo 6 caracteres"
                 required
-              />
-              <button 
-                type="button"
-                className="registro-toggle-password"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <span className="material-symbols-outlined">visibility_off</span>
-                ) : (
-                  <span className="material-symbols-outlined">visibility</span>
-                )}
-              </button>
-            </div>
+            >
+                <option value="4">Alumno (Solicitar tutorías)</option>
+                <option value="3">Tutorado (Alumno que puede dar tutorías)</option>
+                <option value="2">Tutor (Dar tutorías)</option>
+            </select>
+            <small>Selecciona el tipo de usuario que serás</small>
+            <small style={{ display: 'block', color: '#D6A600', fontSize: '11px' }}>
+                * El rol de Tutorado permite dar tutorías al igual que Tutor, con un reconocimiento especial
+            </small>
           </div>
 
           <div className="registro-form-group">

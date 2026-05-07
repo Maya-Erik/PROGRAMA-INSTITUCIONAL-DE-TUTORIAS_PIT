@@ -12,6 +12,16 @@ const pool = new Pool({
     }
 });
 
+// Probar la conexión
+pool.connect((err, client, release) => {
+    if (err) {
+        console.error('Error al conectar a Supabase:', err.stack);
+    } else {
+        console.log('Conectado a Supabase PostgreSQL');
+        release();
+    }
+});
+
 const query = async (text, params) => {
     try {
         const res = await pool.query(text, params);

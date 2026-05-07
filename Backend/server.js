@@ -4,10 +4,12 @@ require('dotenv').config();
 
 const app = express();
 
-// Configuración CORS para Vercel
+// Configuración CORS para permitir peticiones del frontend
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://tu-frontend.vercel.app'],
-    credentials: true
+    origin: ['http://localhost:5173', 'https://tu-frontend.vercel.app', 'https://tu-frontend.onrender.com'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
@@ -23,11 +25,16 @@ app.use("/api/citas", citasRoutes);
 
 // Endpoint de prueba
 app.get("/api/health", (req, res) => {
-    res.json({ status: "OK", message: "Servidor PIT funcionando 🚀" });
+    res.json({ 
+        status: "OK", 
+        message: "Servidor PIT funcionando 🚀",
+        timestamp: new Date().toISOString()
+    });
 });
 
 // Puerto
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/api/health`);
 });

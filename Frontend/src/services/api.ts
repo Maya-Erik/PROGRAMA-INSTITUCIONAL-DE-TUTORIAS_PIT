@@ -9,12 +9,26 @@ const getHeaders = () => {
     };
 };
 
-// Login
 export const login = async (email: string, password: string) => {
     const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
+    });
+    return response.json();
+};
+
+export const register = async (userData: {
+    n_cuenta: string;
+    email: string;
+    password: string;
+    nombre_completo: string;
+    carrera: string;
+}) => {
+    const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
     });
     return response.json();
 };
