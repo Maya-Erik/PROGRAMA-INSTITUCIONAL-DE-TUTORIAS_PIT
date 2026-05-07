@@ -1,242 +1,54 @@
-/* Modal overlay */
-.registro-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+/* Agrega estos estilos al final del archivo Registro.css */
+
+/* Wrapper para email con dominio */
+.registro-email-wrapper {
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
-  animation: registroFadeIn 0.3s ease;
-}
-
-/* Contenido del modal */
-.registro-modal-content {
-  background-color: white;
-  border-radius: 16px;
-  padding: 30px 35px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  animation: registroSlideIn 0.3s ease;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-}
-
-.registro-modal-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.registro-modal-content::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.registro-modal-content::-webkit-scrollbar-thumb {
-  background: #003DA5;
-  border-radius: 10px;
-}
-
-.registro-modal-close {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 28px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #666;
-  transition: color 0.3s;
-}
-
-.registro-modal-close:hover {
-  color: #003DA5;
-}
-
-.registro-modal-content h2 {
-  text-align: center;
-  margin-bottom: 8px;
-  color: #003DA5;
-  font-size: 28px;
-  font-weight: 700;
-  font-family: 'Lexend', 'Montserrat', sans-serif;
-}
-
-.registro-subtitle {
-  text-align: center;
-  color: #666;
-  margin-bottom: 25px;
-  font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.registro-form-group {
-  margin-bottom: 18px;
-}
-
-.registro-form-group label {
-  display: block;
-  margin-bottom: 6px;
-  color: #333;
-  font-weight: 600;
-  font-size: 14px;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.registro-form-group input,
-.registro-form-group select {
-  width: 100%;
-  padding: 10px 12px;
   border: 1.5px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 14px;
+  overflow: hidden;
+  background: white;
   transition: border-color 0.3s;
-  box-sizing: border-box;
+}
+
+.registro-email-wrapper:focus-within {
+  border-color: #003DA5;
+}
+
+.registro-email-wrapper input {
+  flex: 1;
+  border: none;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
   font-family: 'Montserrat', sans-serif;
 }
 
-.registro-form-group input:focus,
-.registro-form-group select:focus {
-  outline: none;
-  border-color: #003DA5;
+.registro-email-domain {
+  padding: 0 10px;
+  background: #f5f5f5;
+  color: #666;
+  font-size: 13px;
+  white-space: nowrap;
+  border-left: 1px solid #e0e0e0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .registro-form-group small {
   display: block;
-  margin-top: 4px;
+  margin-top: 5px;
   color: #888;
   font-size: 11px;
 }
 
-.registro-password-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.registro-password-wrapper input {
-  padding-right: 40px;
-}
-
-.registro-toggle-password {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #666;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.registro-toggle-password:hover {
-  color: #003DA5;
-}
-
-.registro-toggle-password .material-symbols-outlined {
-  font-size: 20px;
-}
-
-.registro-error-message {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-size: 13px;
-  text-align: center;
-}
-
-.registro-btn-submit {
-  width: 100%;
-  padding: 12px;
-  background-color: #D6A600;
-  color: #001F54;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 10px;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.registro-btn-submit:hover:not(:disabled) {
-  background-color: #c09500;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(214, 166, 0, 0.3);
-}
-
-.registro-btn-submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.registro-footer-text {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 13px;
-  color: #666;
-}
-
-.registro-link-btn {
-  background: none;
-  border: none;
-  color: #003DA5;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  font-size: 13px;
-}
-
-.registro-link-btn:hover {
-  color: #D6A600;
-}
-
-@keyframes registroFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes registroSlideIn {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
 @media (max-width: 480px) {
-  .registro-modal-content {
-    padding: 20px;
-    width: 95%;
+  .registro-email-domain {
+    font-size: 10px;
+    padding: 0 6px;
   }
   
-  .registro-modal-content h2 {
-    font-size: 24px;
-  }
-  
-  .registro-form-group input,
-  .registro-form-group select {
+  .registro-email-wrapper input {
     font-size: 13px;
     padding: 8px 10px;
-  }
-  
-  .registro-btn-submit {
-    font-size: 14px;
-    padding: 10px;
   }
 }

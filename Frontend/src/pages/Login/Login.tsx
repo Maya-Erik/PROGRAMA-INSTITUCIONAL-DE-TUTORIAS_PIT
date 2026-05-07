@@ -16,22 +16,33 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  // Agregar @pcpuma.acatlan.unam.mx automáticamente
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    // Eliminar cualquier @ que el usuario intente escribir
+    value = value.replace(/@.*$/, '');
+    setEmail(value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
+    // Completar el correo automáticamente
+    const emailCompleto = `${email}@pcpuma.acatlan.unam.mx`;
+
     try {
-      const data = await login(email, password);
+      const data = await login(emailCompleto, password);
       
       if (data.success) {
         localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify({ email, role: data.role }));
+        localStorage.setItem('user', JSON.stringify({ email: emailCompleto, role: data.role }));
         
         console.log('Login exitoso');
         onClose();
         navigate('/agenda');
-        window.location.reload(); // Recargar para actualizar navbar
+        window.location.reload();
       } else {
         setError(data.message || 'Usuario o contraseña incorrectos');
       }
@@ -56,15 +67,19 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose }) => {
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Correo electrónico:</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="correo@ejemplo.com"
-              required
-            />
+            <label htmlFor="email">Correo institucional:</label>
+            <div className="email-input-wrapper">
+              <input
+                type="text"
+                id="email"
+                value={email}
+                onChange={handleEmailChange}
+                placeholder="usuario"
+                required
+              />
+              <span className="email-domain">@pcpuma.acatlan.unam.mx</span>
+            </div>
+            <small>Ingresa solo tu usuario (sin el @)</small>
           </div>
           
           <div className="form-group">

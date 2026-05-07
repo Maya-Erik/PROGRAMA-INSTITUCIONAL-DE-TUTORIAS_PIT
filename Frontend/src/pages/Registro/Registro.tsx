@@ -10,7 +10,7 @@ interface RegistroProps {
 const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess }) => {
   const [formData, setFormData] = useState({
     nombre: '',
-    email: '',
+    usuario: '', // Cambiado de email a usuario
     carrera: '',
     numeroCuenta: '',
     password: '',
@@ -22,7 +22,6 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Lista de carreras
   const carreras = [
     "Actuaría",
     "Arquitectura",
@@ -44,9 +43,16 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    let value = e.target.value;
+    
+    // Si es el campo usuario, eliminar cualquier @
+    if (e.target.name === 'usuario') {
+      value = value.replace(/@.*$/, '');
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: value
     });
     setError('');
   };
@@ -57,7 +63,7 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
     setError('');
 
     // Validaciones
-    if (!formData.nombre || !formData.email || !formData.carrera || !formData.numeroCuenta || !formData.password) {
+    if (!formData.nombre || !formData.usuario || !formData.carrera || !formData.numeroCuenta || !formData.password) {
       setError('Por favor completa todos los campos obligatorios');
       setLoading(false);
       return;
@@ -75,13 +81,16 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
       return;
     }
 
-    // Validar formato de correo institucional
-    const emailRegex = /^[a-zA-Z0-9._-]+@(?:[a-zA-Z0-9.-]+\.)?(comunidad\.)?unam\.mx$/;
-    if (!emailRegex.test(formData.email)) {
-      setError('Debes usar un correo institucional de la UNAM (@unam.mx o @comunidad.unam.mx)');
+    // Validar que el usuario solo contenga letras, números, puntos y guiones
+    const usuarioRegex = /^[a-zA-Z0-9._-]+$/;
+    if (!usuarioRegex.test(formData.usuario)) {
+      setError('El usuario solo puede contener letras, números, puntos y guiones');
       setLoading(false);
       return;
     }
+
+    // Completar el correo automáticamente
+    const emailCompleto = `${formData.usuario}@pcpuma.acatlan.unam.mx`;
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
@@ -93,7 +102,7 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
         },
         body: JSON.stringify({
           n_cuenta: formData.numeroCuenta,
-          email: formData.email,
+          email: emailCompleto,
           password: formData.password,
           nombre_completo: formData.nombre,
           carrera: formData.carrera,
@@ -104,7 +113,7 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
       const data = await response.json();
 
       if (data.success) {
-        alert('Registro exitoso. Ahora puedes iniciar sesión.');
+        alert(`Registro exitoso. Tu correo es: ${emailCompleto}\nAhora puedes iniciar sesión.`);
         onClose();
         if (onRegistroSuccess) onRegistroSuccess();
       } else {
@@ -143,17 +152,20 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
           </div>
 
           <div className="registro-form-group">
-            <label htmlFor="email">Correo institucional *</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="ejemplo@unam.mx"
-              required
-            />
-            <small>Usa tu correo @unam.mx o @comunidad.unam.mx</small>
+            <label htmlFor="usuario">Usuario (correo institucional) *</label>
+            <div className="registro-email-wrapper">
+              <input
+                type="text"
+                id="usuario"
+                name="usuario"
+                value={formData.usuario}
+                onChange={handleChange}
+                placeholder="usuario"
+                required
+              />
+              <span className="registro-email-domain">@pcpuma.acatlan.unam.mx</span>
+            </div>
+            <small>Ej: juan.perez (sin el @)</small>
           </div>
 
           <div className="registro-form-group">
