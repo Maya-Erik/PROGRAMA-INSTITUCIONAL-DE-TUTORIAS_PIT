@@ -188,20 +188,14 @@ function Navbar({ onLoginClick }: NavbarProps) {
             </li>
           )}
           <li>
-            {isLoggedIn ? (
-              <button className="login-btn" onClick={handleLogout}>
-                Cerrar Sesión
+            <div className="auth-buttons">
+              <button className="login-btn" onClick={handleLoginClick}>
+                Iniciar Sesión
               </button>
-            ) : (
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <button className="login-btn" onClick={handleLoginClick}>
-                  Iniciar Sesión
-                </button>
-                <button className="nav-button" onClick={handleRegisterClick}>
-                  Registrarse
-                </button>
-              </div>
-            )}
+              <button className="nav-button" onClick={handleRegisterClick}>
+                Registrarse
+              </button>
+          </div>
           </li>
         </ul>
       </nav>
