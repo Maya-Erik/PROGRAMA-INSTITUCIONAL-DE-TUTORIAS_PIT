@@ -1,6 +1,4 @@
-
-import Navbar from "../../components/Navbar/Navbar"
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./SobreNosotros.css";
 
 // Importar iconos
@@ -22,7 +20,7 @@ const SobreNosotros = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        //  CONECTA AQUÍ TU BACKEND
+        // CONECTA AQUÍ TU BACKEND
         // const response = await fetch('https://tu-api.com/stats');
         // const data = await response.json();
         // setStats({
@@ -45,7 +43,7 @@ const SobreNosotros = () => {
     const duration = 2000;
     const stepTime = 20;
 
-    const animateCount = (target, setter) => {
+    const animateCount = (target: number, setter: React.Dispatch<React.SetStateAction<number>>) => {
       let start = 0;
       const increment = target / (duration / stepTime);
       const interval = setInterval(() => {

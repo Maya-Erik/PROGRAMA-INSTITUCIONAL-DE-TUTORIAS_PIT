@@ -1,9 +1,14 @@
-// Avisos.jsx
-import React, { useState, useEffect } from 'react';
+// Avisos.tsx - Corregido
+import { useState, useEffect } from 'react';
 import './Avisos.css';
 
+interface Aviso {
+  id: number;
+  color: string;
+}
+
 const Avisos = () => {
-  const [avisos, setAvisos] = useState([
+  const [avisos] = useState<Aviso[]>([
     { id: 1, color: "#003DA6" },
     { id: 2, color: "#001F54" },
     { id: 3, color: "#D6A600" },
@@ -34,7 +39,7 @@ const Avisos = () => {
     setTimeout(() => setAnimando(false), 500);
   };
 
-  const irAlAviso = (indice) => {
+  const irAlAviso = (indice: number) => {
     if (animando || indice === avisoActual) return;
     setAnimando(true);
     setAvisoActual(indice);

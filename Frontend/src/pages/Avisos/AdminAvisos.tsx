@@ -1,32 +1,48 @@
-// AdminAvisos.jsx
-import React, { useState } from 'react';
+// AdminAvisos.tsx - Corregido
+import { useState } from 'react';
 import './AdminAvisos.css';
 
+// Definir tipos
+interface Aviso {
+  id: number;
+  titulo: string;
+  contenido: string;
+  imagen: string;
+  color: string;
+}
+
+interface FormData {
+  titulo: string;
+  contenido: string;
+  imagen: string;
+  color: string;
+}
+
 const AdminAvisos = () => {
-  const [avisos, setAvisos] = useState([
+  const [avisos, setAvisos] = useState<Aviso[]>([
     { id: 1, titulo: "", contenido: "", imagen: "", color: "#003DA6" },
     { id: 2, titulo: "", contenido: "", imagen: "", color: "#001F54" },
     { id: 3, titulo: "", contenido: "", imagen: "", color: "#D6A600" },
   ]);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     titulo: '',
     contenido: '',
     imagen: '',
     color: '#003DA6'
   });
-  const [editandoId, setEditandoId] = useState(null);
+  const [editandoId, setEditandoId] = useState<number | null>(null);
 
   const coloresDisponibles = ['#003DA6', '#001F54', '#D6A600', '#4A4A4A'];
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (editandoId) {
       setAvisos(avisos.map((aviso) => 
@@ -39,23 +55,23 @@ const AdminAvisos = () => {
     setFormData({ titulo: '', contenido: '', imagen: '', color: '#003DA6' });
   };
 
-  const handleEdit = (aviso) => {
+  const handleEdit = (aviso: Aviso) => {
     setFormData(aviso);
     setEditandoId(aviso.id);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     setAvisos(avisos.filter((aviso) => aviso.id !== id));
   };
 
-  const moverArriba = (posicion) => {
+  const moverArriba = (posicion: number) => {
     if (posicion === 0) return;
     const nuevosAvisos = [...avisos];
     [nuevosAvisos[posicion], nuevosAvisos[posicion - 1]] = [nuevosAvisos[posicion - 1], nuevosAvisos[posicion]];
     setAvisos(nuevosAvisos);
   };
 
-  const moverAbajo = (posicion) => {
+  const moverAbajo = (posicion: number) => {
     if (posicion === avisos.length - 1) return;
     const nuevosAvisos = [...avisos];
     [nuevosAvisos[posicion], nuevosAvisos[posicion + 1]] = [nuevosAvisos[posicion + 1], nuevosAvisos[posicion]];

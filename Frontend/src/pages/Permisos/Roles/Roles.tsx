@@ -1,11 +1,11 @@
 import React from 'react';
-import { Search, Bell, Plus, ArrowRight, ShieldCheck, GraduationCap, Users, UserPlus } from 'lucide-react';
+import { Plus, ArrowRight, ShieldCheck, GraduationCap, Users, UserPlus } from 'lucide-react';
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Roles.css';
 
 const Roles: React.FC = () => {
   const roles = [
-    { id: 1, titulo: 'Administrador', descripcion: 'Supervisión total de la infraestructura, gestión de usuarios de alto nivel y auditoría de logs.', permisos: ['Acceso Total', 'Gestión de API', 'Configuración Global'], icon: <ShieldCheck size={24} />, color: '#003DA6' },
+    { id: 1, titulo: 'Administrador', descripcion: 'Supervisión total de la infraestructura, gestión de usuarios de alto nivel y auditoría de logs.', permisos: ['Acceso Total', 'Gestión de API', 'Configuración Global'], icon: <ShieldCheck size={24} />, color: '#003DA5' },
     { id: 2, titulo: 'Tutor', descripcion: 'Supervisión de planes de estudio, asignación de tutores y validación de informes semestrales.', permisos: ['Gestión de Citas', 'Reportes de Área', 'Asignación Académica'], icon: <Users size={24} />, color: '#D6A600' },
     { id: 3, titulo: 'Tutorando', descripcion: 'Supervisión de planes de estudio, asignación de tutores y validación de informes semestrales.', permisos: ['Gestión de Citas', 'Reportes de Área', 'Asignación Académica'], icon: <UserPlus size={24} />, color: '#D6A600' },
     { id: 4, titulo: 'Estudiante', descripcion: 'Acceso a materiales, solicitud de citas, seguimiento de historial académico y descarga de constancias.', permisos: ['Mis Citas', 'Consulta de Reportes', 'Descarga de Archivos'], icon: <GraduationCap size={24} />, color: '#00897B' }
@@ -16,7 +16,6 @@ const Roles: React.FC = () => {
       <Sidebar />
       
       <main className="roles-main">
-        {/* Topbar */}
         <header className="roles-topbar">
           <span className="roles-breadcrumb">Configuración › Roles</span>
           <div className="roles-topbar-right">

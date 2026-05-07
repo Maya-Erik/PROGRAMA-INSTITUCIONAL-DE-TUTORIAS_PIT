@@ -1,15 +1,15 @@
 import React from 'react';
-import { Search, Bell, Download, Filter, List, TrendingUp, AlertTriangle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Download, Filter, List, TrendingUp, AlertTriangle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Bitacora.css';
 
 const Bitacora: React.FC = () => {
   const logs = [
-    { id: 1, fecha: '20 Oct 2023', hora: '14:22:15', usuario: 'Admin Principal', init: 'AP', mod: 'Citas', color: '#003DA6' },
+    { id: 1, fecha: '20 Oct 2023', hora: '14:22:15', usuario: 'Admin Principal', init: 'AP', mod: 'Citas', color: '#003DA5' },
     { id: 2, fecha: '20 Oct 2023', hora: '14:18:02', usuario: 'Coord. Académica', init: 'CA', mod: 'Sistema', color: '#4A4A4A' },
     { id: 3, fecha: '20 Oct 2023', hora: '13:55:10', usuario: 'Admin Principal', init: 'AP', mod: 'Usuarios', color: '#D6A600' },
     { id: 4, fecha: '20 Oct 2023', hora: '12:40:00', usuario: 'Soporte Técnico', init: 'ST', mod: 'Permisos', color: '#EF4444' },
-    { id: 5, fecha: '20 Oct 2023', hora: '10:15:33', usuario: 'Admin Principal', init: 'AP', mod: 'Citas', color: '#003DA6' },
+    { id: 5, fecha: '20 Oct 2023', hora: '10:15:33', usuario: 'Admin Principal', init: 'AP', mod: 'Citas', color: '#003DA5' },
   ];
 
   return (
@@ -17,7 +17,6 @@ const Bitacora: React.FC = () => {
       <Sidebar />
       
       <main className="bitacora-main">
-        {/* Topbar */}
         <header className="bitacora-topbar">
           <span className="bitacora-breadcrumb">Configuración › Bitácora</span>
           <div className="bitacora-topbar-right">

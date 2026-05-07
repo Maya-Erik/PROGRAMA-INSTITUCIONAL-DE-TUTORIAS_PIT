@@ -1,6 +1,6 @@
 import "./ReportesPIT.css"
 import "../../components/Sidebar/Sidebar.css"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect} from "react"
 
 interface Cita {
   materia: string

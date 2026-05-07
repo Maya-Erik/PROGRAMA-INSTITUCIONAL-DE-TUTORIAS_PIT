@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Bell, Plus, Shield, CheckCircle, Clock, Info, Mail, Phone, Edit3, Trash2, ChevronLeft, ChevronRight, Filter, Download } from 'lucide-react';
+import { Plus, Shield, CheckCircle, Info, Mail, Phone, Edit3, Trash2, ChevronLeft, ChevronRight, Filter, Download } from 'lucide-react';
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Accesos.css';
 
@@ -15,7 +15,6 @@ const ControlAccesos: React.FC = () => {
       <Sidebar />
       
       <main className="accesos-main">
-        {/* Topbar */}
         <header className="accesos-topbar">
           <span className="accesos-breadcrumb">Configuración › Accesos</span>
           <div className="accesos-topbar-right">
@@ -39,7 +38,6 @@ const ControlAccesos: React.FC = () => {
             <button className="gold-btn-access"><Plus size={20} /> Nuevo Permiso</button>
           </div>
 
-          {/* TARJETAS DE RESUMEN */}
           <section className="stats-grid">
             <div className="stat-mini-card">
               <div className="icon-blue-bg"><Shield size={22} /></div>
@@ -58,7 +56,6 @@ const ControlAccesos: React.FC = () => {
             </div>
           </section>
 
-          {/* TABLA PRINCIPAL */}
           <section className="table-container-access">
             <div className="table-header-row">
               <h3>Listado de Usuarios y Permisos</h3>
@@ -124,7 +121,6 @@ const ControlAccesos: React.FC = () => {
             </div>
           </section>
 
-          {/* BLOQUES INFERIORES */}
           <section className="bottom-info-grid">
             <div className="info-card-blue">
               <h3>Seguridad Institucional</h3>
