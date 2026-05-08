@@ -15,7 +15,7 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
     numeroCuenta: '',
     password: '',
     confirmPassword: '',
-    rol: '4'  // Agrega el campo rol al state
+    rol: '4'
   });
   
   const [error, setError] = useState('');
@@ -91,19 +91,19 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-
-      const response = await fetch(`${API_URL}/auth/register`, {  
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({...})
-      });
+      
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           n_cuenta: formData.numeroCuenta,
           email: emailCompleto,
           password: formData.password,
           nombre_completo: formData.nombre,
           carrera: formData.carrera,
-          id_rol: parseInt(formData.rol)  // Enviar el rol seleccionado
+          id_rol: parseInt(formData.rol)
         }),
       });
 
@@ -162,7 +162,7 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
               />
               <span className="registro-email-domain">@pcpuma.acatlan.unam.mx</span>
             </div>
-            <small>Ej: juan.perez (sin el @)</small>
+            <small>Ej: 529461453</small>
           </div>
 
           <div className="registro-form-group">
@@ -190,14 +190,11 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
               onChange={handleChange}
               required
             >
-              <option value="4">Alumno (Solicitar tutorías)</option>
-              <option value="3">Tutorado (Alumno que puede dar tutorías)</option>
-              <option value="2">Tutor (Dar tutorías)</option>
+              <option value="4">Alumno</option>
+              <option value="3">Tutorado</option>
+              <option value="2">Tutor</option>
             </select>
             <small>Selecciona el tipo de usuario que serás</small>
-            <small style={{ display: 'block', color: '#D6A600', fontSize: '11px' }}>
-              * El rol de Tutorado permite dar tutorías al igual que Tutor, con un reconocimiento especial
-            </small>
           </div>
 
           <div className="registro-form-group">
@@ -230,11 +227,9 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
                 className="registro-toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? (
-                  <span className="material-symbols-outlined">visibility_off</span>
-                ) : (
-                  <span className="material-symbols-outlined">visibility</span>
-                )}
+                <span className="material-symbols-outlined">
+                  {showPassword ? 'visibility_off' : 'visibility'}
+                </span>
               </button>
             </div>
           </div>
@@ -256,11 +251,9 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
                 className="registro-toggle-password"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
-                {showConfirmPassword ? (
-                  <span className="material-symbols-outlined">visibility_off</span>
-                ) : (
-                  <span className="material-symbols-outlined">visibility</span>
-                )}
+                <span className="material-symbols-outlined">
+                  {showConfirmPassword ? 'visibility_off' : 'visibility'}
+                </span>
               </button>
             </div>
           </div>
