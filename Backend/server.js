@@ -38,3 +38,14 @@ app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
     console.log(`Health check: http://localhost:${PORT}/api/health`);
 });
+
+// Endpoint de prueba
+app.get("/api/test-db", async (req, res) => {
+    const { query } = require('./connection');
+    try {
+        const result = await query('SELECT NOW() as time');
+        res.json({ success: true, time: result.rows[0].time });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
