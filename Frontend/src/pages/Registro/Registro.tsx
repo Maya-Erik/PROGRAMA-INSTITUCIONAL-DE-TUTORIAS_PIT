@@ -91,12 +91,12 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-      
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+
+      const response = await fetch(`${API_URL}/auth/register`, {  
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({...})
+      });
         body: JSON.stringify({
           n_cuenta: formData.numeroCuenta,
           email: emailCompleto,
