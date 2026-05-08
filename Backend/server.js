@@ -4,13 +4,37 @@ require('dotenv').config();
 
 const app = express();
 
-// Configuración CORS para permitir peticiones del frontend
+// Configuración CORS actualizada
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    
+    'https://programa-institucional-de-tutorias-pit.onrender.com',
+    'https://programa-institucional-de-tutorias-pit-1.onrender.com',
+    'https://programa-institucional-de-tutorias-pit.vercel.app',
+    'https://*.onrender.com'  // Permitir cualquier subdominio de render
+];
+
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://tu-frontend.vercel.app', 'https://tu-frontend.onrender.com'],
+    origin: function(origin, callback) {
+        // Permitir peticiones sin origen (como Postman)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('.onrender.com')) {
+            callback(null, true);
+        } else {
+            console.log('❌ CORS bloqueado para:', origin);
+            callback(new Error('No permitido por CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
+// Manejar preflight requests
+app.options('*', cors());
+
 app.use(express.json());
 
 // Importar rutas
@@ -32,14 +56,7 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-// Puerto
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`);
-    console.log(`Health check: http://localhost:${PORT}/api/health`);
-});
-
-// Endpoint de prueba
+// Endpoint test DB
 app.get("/api/test-db", async (req, res) => {
     const { query } = require('./connection');
     try {
@@ -48,4 +65,11 @@ app.get("/api/test-db", async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
+});
+
+// Puerto
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en puerto ${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/api/health`);
 });
