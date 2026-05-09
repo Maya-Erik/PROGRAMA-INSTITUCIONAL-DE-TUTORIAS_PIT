@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-
 import Inicio from "./pages/Inicio/Inicio"
 import SobreNosotros from "./pages/SobreNosotros/SobreNosotros"
 import Servicios from "./pages/Servicios/Servicios"
@@ -15,32 +14,73 @@ import Divisiones from "./pages/Divisiones/Divisiones"
 import Accesos from "./pages/Permisos/Accesos/Accesos"
 import Roles from "./pages/Permisos/Roles/Roles"
 import Usuarios from "./pages/Permisos/Usuarios/Usuarios"
-import ReportesPIT from "./pages/Reportes/ReportesPIT"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Rutas públicas */}
         <Route path="/" element={<Inicio />} />
         <Route path="/sobre-nosotros" element={<SobreNosotros />} />
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/divisiones" element={<Divisiones />} />
-        <Route path="/citas" element={<GestionCitas />} />
+        <Route path="/avisos" element={<Avisos />} />
         <Route path="/repositorio" element={<Repositorio />} />
         <Route path="/repositorio/:carrera" element={<RepositorioCarrera />} />
-        <Route path="/avisos" element={<Avisos />} />
-        <Route path="/admin-avisos" element={<AdminAvisos />} />
-        <Route path="/solicitar-tutoria" element={<SolicitarTutoria />} />
-        <Route path="/agenda" element={<Agenda />} />
-        <Route path="/bitacora" element={<Bitacora />} />
-        <Route path="/accesos" element={<Accesos />} />
-        <Route path="/usuarios" element={<Usuarios />} />
-        <Route path="/roles" element={<Roles />} />
-        <Route path="/reportes" element={<ReportesPIT />} />
-      
+        
+        {/* Rutas protegidas (requieren autenticación) */}
+        <Route path="/citas" element={
+          <ProtectedRoute allowedRoles={['admin', 'tutor', 'tutorado']}>
+            <GestionCitas />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/admin-avisos" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminAvisos />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/solicitar-tutoria" element={
+          <ProtectedRoute allowedRoles={['alumno', 'tutorado']}>
+            <SolicitarTutoria />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/agenda" element={
+          <ProtectedRoute allowedRoles={['admin', 'tutor', 'tutorado', 'alumno']}>
+            <Agenda />
+          </ProtectedRoute>
+        } />
+        
+        {/* Rutas de administración */}
+        <Route path="/bitacora" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <Bitacora />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/accesos" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <Accesos />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/roles" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <Roles />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/usuarios" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <Usuarios />
+          </ProtectedRoute>
+        } />
       </Routes>
     </BrowserRouter>
   )
 }
 
-export default App
+export default App;

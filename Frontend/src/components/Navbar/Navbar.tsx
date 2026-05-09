@@ -25,8 +25,16 @@ function Navbar({ onLoginClick }: NavbarProps) {
     return navbar ? navbar.getBoundingClientRect().height : 80;
   };
 
+  // En Navbar.tsx - useEffect para detectar login
   useEffect(() => {
-    setIsLoggedIn(isAuthenticated());
+      setIsLoggedIn(isAuthenticated());
+      if (isAuthenticated()) {
+          const user = localStorage.getItem('user');
+          if (user) {
+              const userData = JSON.parse(user);
+              console.log('Usuario logueado:', userData);
+          }
+      }
   }, [location.pathname]);
 
   useEffect(() => {
