@@ -1,3 +1,4 @@
+import { getCitasDisponibles, seleccionarCita, isAuthenticated } from "../../../services/api";
 import "./GestionCitas.css"
 import { useState, useEffect } from "react"
 import NuevaCitaModal from "./NuevaCitaModal"

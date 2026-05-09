@@ -1,6 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-// Login
+
+//Autenticacion
 export const login = async (email: string, password: string) => {
     const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
@@ -10,8 +11,7 @@ export const login = async (email: string, password: string) => {
     return response.json();
 };
 
-// Registro
-export const registro = async (userData: {
+export const register = async (userData: {
     n_cuenta: string;
     email: string;
     password: string;
@@ -19,7 +19,7 @@ export const registro = async (userData: {
     carrera: string;
     id_rol: number;
 }) => {
-    const response = await fetch(`${API_URL}/auth/registro`, {
+    const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData)
@@ -27,7 +27,6 @@ export const registro = async (userData: {
     return response.json();
 };
 
-// Obtener perfil del usuario autenticado
 export const getPerfil = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/users/perfil`, {
@@ -39,12 +38,10 @@ export const getPerfil = async () => {
     return response.json();
 };
 
-// Verificar si está autenticado
 export const isAuthenticated = () => {
     const token = localStorage.getItem('token');
     if (!token) return false;
     
-    // Verificar si el token no ha expirado
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         return payload.exp > Date.now() / 1000;
@@ -53,7 +50,6 @@ export const isAuthenticated = () => {
     }
 };
 
-// Obtener el rol del usuario
 export const getUserRole = () => {
     const token = localStorage.getItem('token');
     if (!token) return null;
@@ -66,9 +62,80 @@ export const getUserRole = () => {
     }
 };
 
-// Cerrar sesión
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.location.href = '/';
+};
+
+
+//Citas
+export const getCitasDisponibles = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/citas/disponibles`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.json();
+};
+
+export const seleccionarCita = async (id_cita: number) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/citas/seleccionar`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ id: id_cita })
+    });
+    return response.json();
+};
+
+export const crearCita = async (citaData: {
+    materia: string;
+    tutor: string;
+    fecha: string;
+    hora: string;
+    lugar: string;
+    notas: string;
+}) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/citas`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(citaData)
+    });
+    return response.json();
+};
+
+
+//Usuarios
+export const getUsuarios = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/users`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.json();
+};
+
+export const updateUserRole = async (id_user: number, id_rol_nuevo: number, motivo?: string) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/auth/user-role`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ id_user, id_rol_nuevo, motivo })
+    });
+    return response.json();
 };
