@@ -16,19 +16,19 @@ const Avisos = () => {
   const [animando, setAnimando] = useState(false);
   const [mostrarCarrusel, setMostrarCarrusel] = useState(false);
 
+  // Cargar avisos desde localStorage (después se conectará al backend)
   useEffect(() => {
     const avisosGuardados = localStorage.getItem('avisos');
     if (avisosGuardados) {
       setAvisos(JSON.parse(avisosGuardados));
     } else {
-      setAvisos([
-        { id: 1, titulo: "Convocatoria Tutores", contenido: "Inscríbete como tutor", imagen: "", enlace: "", color: "#003DA5" },
-        { id: 2, titulo: "Talleres", contenido: "Talleres de apoyo académico", imagen: "", enlace: "", color: "#D6A600" },
-      ]);
+      // Si no hay avisos, array vacío
+      setAvisos([]);
     }
   }, []);
 
   useEffect(() => {
+    // Si no hay avisos, no mostrar carrusel
     if (avisos.length === 0) return;
     
     // Mostrar el hero primero, luego el carrusel
@@ -61,11 +61,26 @@ const Avisos = () => {
     setTimeout(() => setAnimando(false), 500);
   };
 
-  if (avisos.length === 0) return null;
+  // Si no hay avisos, mostrar solo el hero
+  if (avisos.length === 0) {
+    return (
+      <div className="hero-contenido visible">
+        <h1>Programa de Tutorías</h1>
+        <p>
+          Impulsando tu éxito académico con el apoyo de nuestra comunidad
+          universitaria y herramientas de aprendizaje colaborativo.
+        </p>
+        <div className="botones">
+          <a href="/servicios" className="btn-comenzar">Comencemos</a>
+          <a href="/sobre-nosotros" className="btn-info">Ver más info</a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
-      {/* Hero con texto original */}
+      {/* Hero con texto original (se muestra al inicio) */}
       <div className={`hero-contenido ${!mostrarCarrusel ? 'visible' : 'oculto'}`}>
         <h1>Programa de Tutorías</h1>
         <p>
@@ -78,7 +93,7 @@ const Avisos = () => {
         </div>
       </div>
 
-      {/* Carrusel de avisos (aparece después) */}
+      {/* Carrusel de avisos (ocupa TODO el hero) */}
       <div className={`carrusel-container ${mostrarCarrusel ? 'visible' : 'oculto'}`}>
         {avisos.length > 1 && (
           <button className="carrusel-btn carrusel-btn-prev" onClick={anteriorAviso}>

@@ -1,11 +1,14 @@
 /* Hero contenido (texto original) */
 .hero-contenido {
-  position: relative;
-  z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 700px;
+  z-index: 15;
   text-align: center;
   color: white;
-  max-width: 700px;
-  margin: 0 auto;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
@@ -17,28 +20,28 @@
 .hero-contenido.oculto {
   opacity: 0;
   visibility: hidden;
-  position: absolute;
 }
 
 .hero-contenido h1 {
   font-size: 3.5rem;
   margin-bottom: 1rem;
+  font-family: 'Lexend', sans-serif;
 }
 
 .hero-contenido p {
   font-size: 1.2rem;
   margin-bottom: 2rem;
+  line-height: 1.6;
 }
 
-/* Carrusel */
+/* Carrusel - OCUPA TODO EL HERO */
 .carrusel-container {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 85%;
-  max-width: 900px;
-  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
@@ -53,83 +56,86 @@
 }
 
 .carrusel-wrapper {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .carrusel-slides {
   display: flex;
+  width: 100%;
+  height: 100%;
   transition: transform 0.5s ease-in-out;
 }
 
 .carrusel-slide {
   min-width: 100%;
-  padding: 2rem;
-  min-height: 250px;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-size: cover;
+  background-position: center;
 }
 
 .carrusel-contenido {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
+  text-align: center;
   color: white;
+  max-width: 80%;
+  padding: 2rem;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .carrusel-imagen {
-  width: 180px;
-  height: 130px;
-  object-fit: cover;
+  max-width: 200px;
+  max-height: 150px;
+  object-fit: contain;
+  margin-bottom: 1rem;
   border-radius: 12px;
-  background: rgba(255,255,255,0.2);
-}
-
-.carrusel-texto {
-  flex: 1;
-  text-align: left;
 }
 
 .carrusel-texto h2 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-family: 'Lexend', sans-serif;
 }
 
 .carrusel-texto p {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  opacity: 0.95;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
 }
 
 .carrusel-enlace {
   display: inline-block;
-  background: white;
-  color: #003DA5;
-  padding: 8px 20px;
-  border-radius: 30px;
+  background: #D6A600;
+  color: #001F54;
+  padding: 12px 30px;
+  border-radius: 40px;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   transition: transform 0.3s;
 }
 
 .carrusel-enlace:hover {
   transform: scale(1.05);
+  background: #c09500;
 }
 
+/* Botones de navegación */
 .carrusel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.8);
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #003DA5;
   z-index: 20;
   transition: all 0.3s;
@@ -141,23 +147,28 @@
 }
 
 .carrusel-btn-prev {
-  left: -20px;
+  left: 20px;
 }
 
 .carrusel-btn-next {
-  right: -20px;
+  right: 20px;
 }
 
+/* Indicadores */
 .carrusel-indicadores {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
-  gap: 0.8rem;
-  margin-top: 1rem;
+  gap: 1rem;
+  z-index: 20;
 }
 
 .indicador {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
   border: none;
@@ -166,39 +177,40 @@
 }
 
 .indicador.activo {
-  width: 25px;
-  border-radius: 5px;
+  width: 30px;
+  border-radius: 6px;
   background: #D6A600;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .carrusel-container {
-    width: 90%;
+  .hero-contenido h1 {
+    font-size: 2rem;
   }
   
-  .carrusel-contenido {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .carrusel-texto {
-    text-align: center;
+  .hero-contenido p {
+    font-size: 1rem;
   }
   
   .carrusel-texto h2 {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+  }
+  
+  .carrusel-texto p {
+    font-size: 0.9rem;
+  }
+  
+  .carrusel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
   
   .carrusel-btn-prev {
-    left: -10px;
+    left: 10px;
   }
   
   .carrusel-btn-next {
-    right: -10px;
-  }
-  
-  .hero-contenido h1 {
-    font-size: 2rem;
+    right: 10px;
   }
 }
