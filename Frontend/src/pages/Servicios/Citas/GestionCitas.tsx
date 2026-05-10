@@ -1,8 +1,8 @@
-import { getCitasDisponibles, seleccionarCita, isAuthenticated } from "../../../services/api";
-import "./GestionCitas.css"
 import { useState, useEffect } from "react"
 import NuevaCitaModal from "./NuevaCitaModal"
 import Sidebar from "../../../components/Sidebar/Sidebar"
+import { obtenerCitas, inscribirseCita, isAuthenticated } from "../../../services/api"
+import "./GestionCitas.css"
 
 function GestionCitas() {
   const [openModal, setOpenModal] = useState(false)
@@ -14,8 +14,10 @@ function GestionCitas() {
   const cargarCitas = async () => {
     setLoading(true)
     try {
-      const data = await getCitasDisponibles()
-      setCitas(data)
+      const data = await obtenerCitas()
+      if (data.success) {
+        setCitas(data.citas || [])
+      }
     } catch (error) {
       console.error("Error al cargar citas:", error)
     } finally {
@@ -30,9 +32,13 @@ function GestionCitas() {
     }
     
     try {
-      const result = await seleccionarCita(id_cita)
-      alert(result.mensaje || "Cita registrada correctamente")
-      cargarCitas() // Recargar lista
+      const result = await inscribirseCita(id_cita)
+      if (result.success) {
+        alert(result.message || "Cita registrada correctamente")
+        cargarCitas()
+      } else {
+        alert(result.error || "Error al seleccionar la cita")
+      }
     } catch (error) {
       alert("Error al seleccionar la cita")
     }
@@ -43,7 +49,8 @@ function GestionCitas() {
   }, [])
 
   const citasFiltradas = citas.filter(c => {
-    const matchBusqueda = c.tutor?.toLowerCase().includes(busqueda.toLowerCase()) || false
+    const matchBusqueda = c.tutor_nombre?.toLowerCase().includes(busqueda.toLowerCase()) || 
+                          c.materia?.toLowerCase().includes(busqueda.toLowerCase()) || false
     const matchFecha = fechaFiltro ? c.fecha === fechaFiltro : true
     return matchBusqueda && matchFecha
   })
@@ -51,7 +58,7 @@ function GestionCitas() {
   return (
     <div className="gc-layout">
       <Sidebar />
-
+      
       <main className="gc-main">
         <header className="gc-topbar">
           <span className="gc-breadcrumb">Panel › Citas</span>
@@ -82,7 +89,7 @@ function GestionCitas() {
             <span>🔍</span>
             <input
               type="text"
-              placeholder="Buscar tutores..."
+              placeholder="Buscar materias, tutores..."
               value={busqueda}
               onChange={e => setBusqueda(e.target.value)}
             />
@@ -100,28 +107,40 @@ function GestionCitas() {
           <table className="gc-tabla">
             <thead>
               <tr>
+                <th>MATERIA</th>
                 <th>TUTOR</th>
                 <th>FECHA</th>
                 <th>HORA</th>
-                <th>ESTADO</th>
+                <th>LUGAR</th>
+                <th>CUPOS</th>
                 <th>ACCIONES</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={5} className="gc-empty">Cargando citas...</td></tr>
+                <tr><td colSpan={7} className="gc-empty">Cargando citas...</td></tr>
               ) : citasFiltradas.length === 0 ? (
-                <tr><td colSpan={5} className="gc-empty">No hay citas disponibles</td></tr>
+                <tr><td colSpan={7} className="gc-empty">No hay citas disponibles</td></tr>
               ) : (
                 citasFiltradas.map((cita, i) => (
                   <tr key={i}>
-                    <td><strong>{cita.tutor}</strong></td>
+                    <td><strong>{cita.materia}</strong></td>
+                    <td>{cita.tutor_nombre}</td>
                     <td className="gc-fecha">{cita.fecha}</td>
                     <td><span className="gc-hora-badge">{cita.hora}</span></td>
-                    <td><span className="status-pill activo">Disponible</span></td>
+                    <td>{cita.lugar || "Por asignar"}</td>
                     <td>
-                      <button className="gc-btn-icono" onClick={() => handleSeleccionarCita(cita.id_cita)}>
-                        📅 Seleccionar
+                      <span className={`status-pill ${(cita.inscritos || 0) >= (cita.capacidad || 1) ? 'lleno' : 'disponible'}`}>
+                        {(cita.inscritos || 0)}/{(cita.capacidad || 1)}
+                      </span>
+                    </td>
+                    <td>
+                      <button 
+                        className="gc-btn-icono" 
+                        onClick={() => handleSeleccionarCita(cita.id_cita)}
+                        disabled={(cita.inscritos || 0) >= (cita.capacidad || 1)}
+                      >
+                        📅 Inscribirse
                       </button>
                     </td>
                   </tr>
