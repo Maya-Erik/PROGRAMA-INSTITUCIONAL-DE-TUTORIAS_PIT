@@ -9,7 +9,7 @@ interface SidebarProps {
 function Sidebar({ userRole }: SidebarProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const [openMenus, setOpenMenus] = useState<string[]>([])
+  // Eliminado: const [openMenus, setOpenMenus] = useState<string[]>([])
 
   const isActive = (path: string) => location.pathname === path
 
@@ -42,40 +42,32 @@ function Sidebar({ userRole }: SidebarProps) {
             <Link to="/admin-avisos" className={`nav-item ${isActive("/admin-avisos") ? "active" : ""}`}>
               <span>📢</span> Administrar Avisos
             </Link>
-            <div className="nav-item-container">
-              <div className={`nav-item ${isActive("/bitacora") || isActive("/usuarios") || isActive("/roles") || isActive("/accesos") ? "active-parent" : ""}`}>
-                <span>⚙</span> Administración
-                <span className="nav-arrow">▼</span>
-              </div>
-              <div className="submenu">
-                <Link to="/bitacora" className={`submenu-item ${isActive("/bitacora") ? "active" : ""}`}>
-                  <span>📝</span> Bitácora
-                </Link>
-                <Link to="/usuarios" className={`submenu-item ${isActive("/usuarios") ? "active" : ""}`}>
-                  <span>👥</span> Usuarios
-                </Link>
-                <Link to="/roles" className={`submenu-item ${isActive("/roles") ? "active" : ""}`}>
-                  <span>🎭</span> Roles
-                </Link>
-                <Link to="/accesos" className={`submenu-item ${isActive("/accesos") ? "active" : ""}`}>
-                  <span>🔐</span> Accesos
-                </Link>
-              </div>
-            </div>
+            <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`}>
+              <span>📝</span> Bitácora
+            </Link>
+            <Link to="/usuarios" className={`nav-item ${isActive("/usuarios") ? "active" : ""}`}>
+              <span>👥</span> Usuarios
+            </Link>
+            <Link to="/roles" className={`nav-item ${isActive("/roles") ? "active" : ""}`}>
+              <span>🎭</span> Roles
+            </Link>
+            <Link to="/accesos" className={`nav-item ${isActive("/accesos") ? "active" : ""}`}>
+              <span>🔐</span> Accesos
+            </Link>
           </>
+        )}
+
+        {/* Bitácora - Solo visible para tutor (no admin) */}
+        {userRole === 'tutor' && (
+          <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`}>
+            <span>📋</span> Bitácora
+          </Link>
         )}
 
         {/* Enlaces comunes */}
         <Link to="/agenda" className={`nav-item ${isActive("/agenda") ? "active" : ""}`}>
           <span>📅</span> Agenda de Tutorías
         </Link>
-        
-        {/* Bitácora - Solo visible para admin y tutor */}
-        {(userRole === 'admin' || userRole === 'tutor') && (
-          <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`}>
-            <span>📋</span> Bitácora
-          </Link>
-        )}
         
         <Link to="/repositorio" className={`nav-item ${isActive("/repositorio") ? "active" : ""}`}>
           <span>📚</span> Repositorio

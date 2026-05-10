@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   Container, Card, CardContent, Box, Chip, Select, MenuItem, FormControl, Typography, 
   Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, 
-  IconButton, Alert, Snackbar, Tabs, Tab, Avatar
+  Alert, Snackbar, Tabs, Tab, Avatar
 } from '@mui/material';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,7 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { 
   obtenerCitas, crearCita, editarCita, eliminarCita, 
-  inscribirseCita, misCitas, obtenerPerfil 
+  inscribirseCita, misCitas
 } from '../../services/api';
 import './Agenda.css';
 
@@ -46,7 +45,6 @@ interface Cita {
 const Agenda: React.FC = () => {
   const [citas, setCitas] = useState<Cita[]>([]);
   const [misCitasList, setMisCitasList] = useState<Cita[]>([]);
-  const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [editandoCita, setEditandoCita] = useState<Cita | null>(null);
@@ -82,8 +80,6 @@ const Agenda: React.FC = () => {
         await Promise.all([cargarCitas(), cargarMisCitas()]);
       } catch (error) {
         console.error('Error al cargar datos:', error);
-      } finally {
-        setLoading(false);
       }
     };
     
@@ -182,7 +178,8 @@ const Agenda: React.FC = () => {
   };
 
   const puedeEditar = (cita: Cita) => {
-    return userRole === 'admin' || cita.id_creador === parseInt(localStorage.getItem('userId') || '0');
+    const userId = localStorage.getItem('userId');
+    return userRole === 'admin' || (userId && cita.id_creador === parseInt(userId));
   };
 
   const filtrarCitas = () => {
@@ -277,7 +274,7 @@ const Agenda: React.FC = () => {
                         <Typography variant="h6">{cita.materia}</Typography>
                         <Typography variant="body2" color="textSecondary">{cita.tutor_nombre}</Typography>
                         <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                          📅 {new Date(cita.fecha).toLocaleDateString('es-MX')}
+                          {new Date(cita.fecha).toLocaleDateString('es-MX')}
                         </Typography>
                         <Typography variant="body2" color="textSecondary">{cita.hora}</Typography>
                         <Typography variant="body2" color="textSecondary">{cita.lugar}</Typography>
