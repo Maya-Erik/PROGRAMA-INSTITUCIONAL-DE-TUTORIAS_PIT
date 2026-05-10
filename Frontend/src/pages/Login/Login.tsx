@@ -30,6 +30,9 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose, onLoginSuccess }) => {
 
     const emailCompleto = `${usuario}@pcpuma.acatlan.unam.mx`;
 
+    console.log('📧 Intentando login con:', emailCompleto);
+    console.log('🔑 Contraseña:', password);
+
     try {
       const data = await login(emailCompleto, password);
       
