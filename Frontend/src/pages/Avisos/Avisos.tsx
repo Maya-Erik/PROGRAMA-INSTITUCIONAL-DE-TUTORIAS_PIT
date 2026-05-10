@@ -34,7 +34,6 @@ const Avisos = () => {
     }
   };
 
-  // Si no hay avisos, mostrar solo el hero
   if (avisos.length === 0) {
     return (
       <div className="hero-contenido visible">
@@ -76,22 +75,64 @@ const Avisos = () => {
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="carrusel-link-full"
-                    style={{ backgroundImage: aviso.imagen ? `url(${aviso.imagen})` : aviso.color }}
                   >
-                    <div className="carrusel-info-oculta">
-                      <h2>{aviso.titulo}</h2>
-                      <p>{aviso.contenido}</p>
-                    </div>
+                    {aviso.imagen ? (
+                      <img 
+                        src={aviso.imagen} 
+                        alt={aviso.titulo}
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '100%',
+                          width: 'auto',
+                          height: 'auto',
+                          objectFit: 'contain'
+                        }}
+                      />
+                    ) : (
+                      <div style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        backgroundColor: aviso.color,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <div className="carrusel-info-oculta">
+                          <h2>{aviso.titulo}</h2>
+                          <p>{aviso.contenido}</p>
+                        </div>
+                      </div>
+                    )}
                   </a>
                 ) : (
-                  <div 
-                    className="carrusel-contenido-full"
-                    style={{ backgroundImage: aviso.imagen ? `url(${aviso.imagen})` : aviso.color }}
-                  >
-                    <div className="carrusel-info-oculta">
-                      <h2>{aviso.titulo}</h2>
-                      <p>{aviso.contenido}</p>
-                    </div>
+                  <div className="carrusel-contenido-full">
+                    {aviso.imagen ? (
+                      <img 
+                        src={aviso.imagen} 
+                        alt={aviso.titulo}
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '100%',
+                          width: 'auto',
+                          height: 'auto',
+                          objectFit: 'contain'
+                        }}
+                      />
+                    ) : (
+                      <div style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        backgroundColor: aviso.color,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <div className="carrusel-info-oculta">
+                          <h2>{aviso.titulo}</h2>
+                          <p>{aviso.contenido}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

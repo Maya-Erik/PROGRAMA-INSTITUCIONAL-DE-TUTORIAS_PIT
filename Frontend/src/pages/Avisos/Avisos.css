@@ -1,6 +1,6 @@
-/* Avisos.css - Carrusel con imagen a pantalla completa */
 
-/* Hero contenido (texto original) */
+
+
 .hero-contenido {
   position: relative;
   z-index: 10;
@@ -72,7 +72,7 @@
   color: #003DA5;
 }
 
-/* Carrusel - OCUPA TODO EL HERO */
+/* Carrusel*/
 .carrusel-container {
   position: absolute;
   top: 0;
@@ -112,20 +112,58 @@
   min-width: 100%;
   height: 100%;
   position: relative;
-  overflow: hidden;
+  overflow: auto; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
 }
 
-/* Contenido a pantalla completa */
+/* Contenido */
 .carrusel-contenido-full,
 .carrusel-link-full {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   text-decoration: none;
   cursor: pointer;
+  background-color: #000;
+}
+
+/* Imagen dentro del slide - mantiene tamaño original */
+.carrusel-contenido-full img,
+.carrusel-link-full img {
+  max-width: none;
+  max-height: none;
+  width: auto;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Si la imagen es más grande que el hero, permitir scroll y centrar */
+.carrusel-slide::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.carrusel-slide::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.carrusel-slide::-webkit-scrollbar-thumb {
+  background: #D6A600;
+  border-radius: 4px;
+}
+
+/* Fondo sólido cuando no hay imagen */
+.carrusel-contenido-full,
+.carrusel-link-full {
+  background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Información oculta (solo para referencia en el código, no visible al usuario) */
@@ -148,6 +186,9 @@
   color: #003DA5;
   z-index: 20;
   transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .carrusel-btn:hover {
@@ -218,5 +259,11 @@
   .botones {
     flex-direction: column;
     align-items: center;
+  }
+  
+  /* En telefono, permitir scroll */
+  .carrusel-slide {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
