@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,
-  TextField, Button, Box, Avatar, Typography, Alert,
-  CircularProgress
+  TextField, Button, Box, Avatar, Alert, CircularProgress
 } from '@mui/material';
 import { obtenerPerfil, actualizarPerfil } from '../services/api';
 
@@ -39,13 +38,12 @@ const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }
       if (result.success) {
         setUserData({
           nombre_completo: result.user.nombre_completo || '',
-          email: result.user.email || '',
+          email: result.user.correo || '',
           n_cuenta: result.user.n_cuenta || '',
           carrera: result.user.carrera || '',
           role: result.user.role || ''
         });
       } else {
-        // Si no hay endpoint, usar datos de localStorage
         const userStr = localStorage.getItem('user');
         if (userStr) {
           const user = JSON.parse(userStr);
@@ -84,7 +82,6 @@ const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }
       
       if (result.success) {
         setSuccess('Perfil actualizado correctamente');
-        // Actualizar localStorage
         const userStr = localStorage.getItem('user');
         if (userStr) {
           const user = JSON.parse(userStr);
@@ -152,7 +149,6 @@ const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }
               label="Correo electrónico"
               name="email"
               value={userData.email}
-              onChange={handleChange}
               margin="normal"
               variant="outlined"
               disabled
@@ -164,7 +160,6 @@ const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }
               label="Número de cuenta"
               name="n_cuenta"
               value={userData.n_cuenta}
-              onChange={handleChange}
               margin="normal"
               variant="outlined"
               disabled
