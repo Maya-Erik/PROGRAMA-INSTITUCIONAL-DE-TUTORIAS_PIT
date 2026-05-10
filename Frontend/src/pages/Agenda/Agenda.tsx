@@ -10,7 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EventIcon from '@mui/icons-material/Event';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sidebar from "../../components/Sidebar/Sidebar";
-import PerfilUsuario from "../../components/PerfilUsuario/PerfilUsuario";
+import PerfilUsuario from "../../components/PerfilUsuario";
+
 import { 
   obtenerCitas, crearCita, editarCita, eliminarCita, 
   inscribirseCita, misCitas

@@ -13,7 +13,7 @@ interface PerfilUsuarioProps {
 const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState('');  // Mantenemos setError
   const [success, setSuccess] = useState('');
   const [userData, setUserData] = useState({
     nombre_completo: '',
@@ -26,6 +26,7 @@ const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }
   useEffect(() => {
     if (open) {
       setLoading(true);
+      setError('');  // Limpiar error al abrir
       setTimeout(() => {
         const userStr = localStorage.getItem('user');
         if (userStr) {
@@ -45,24 +46,38 @@ const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
+    setError(''); // Limpiar error al editar
   };
 
   const handleSubmit = () => {
     setSaving(true);
-    setTimeout(() => {
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        const user = JSON.parse(userStr);
-        user.nombre = userData.nombre_completo;
-        user.carrera = userData.carrera;
-        localStorage.setItem('user', JSON.stringify(user));
-      }
-      setSuccess('Perfil actualizado correctamente');
-      onUpdate();
-      setTimeout(() => {
-        onClose();
-      }, 1500);
+    setError('');
+    
+    if (!userData.nombre_completo) {
+      setError('El nombre completo es obligatorio');
       setSaving(false);
+      return;
+    }
+    
+    setTimeout(() => {
+      try {
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          user.nombre = userData.nombre_completo;
+          user.carrera = userData.carrera;
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+        setSuccess('Perfil actualizado correctamente');
+        onUpdate();
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+      } catch (err) {
+        setError('Error al guardar los cambios');
+      } finally {
+        setSaving(false);
+      }
     }, 500);
   };
 
