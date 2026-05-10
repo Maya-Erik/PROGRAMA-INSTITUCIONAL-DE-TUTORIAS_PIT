@@ -27,6 +27,13 @@
   color: white;
 }
 
+.item-enlace-text {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+  color: #D6A600;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .carrusel-contenido {
