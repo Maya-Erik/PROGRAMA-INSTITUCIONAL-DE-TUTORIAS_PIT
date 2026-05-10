@@ -34,9 +34,43 @@ function Sidebar({ userRole }: SidebarProps) {
       </div>
 
       <nav className="sidebar-nav">
+        {/* Solo admin ve estos enlaces */}
+        {userRole === 'admin' && (
+          <>
+            <Link to="/admin-avisos" className={`nav-item ${isActive("/admin-avisos") ? "active" : ""}`}>
+              <span>📢</span> Administrar Avisos
+            </Link>
+            <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`}>
+              <span>📝</span> Bitácora
+            </Link>
+            <Link to="/usuarios" className={`nav-item ${isActive("/usuarios") ? "active" : ""}`}>
+              <span>👥</span> Usuarios
+            </Link>
+            <Link to="/roles" className={`nav-item ${isActive("/roles") ? "active" : ""}`}>
+              <span>🎭</span> Roles
+            </Link>
+            <Link to="/accesos" className={`nav-item ${isActive("/accesos") ? "active" : ""}`}>
+              <span>🔐</span> Accesos
+            </Link>
+          </>
+        )}
+
+        {/* Solo tutor ve bitácora */}
+        {userRole === 'tutor' && (
+          <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`}>
+            <span>📋</span> Bitácora
+          </Link>
+        )}
+
+        {/* Enlaces comunes para todos */}
         <Link to="/agenda" className={`nav-item ${isActive("/agenda") ? "active" : ""}`}>
           <span>📅</span> Agenda de Tutorías
         </Link>
+        
+        <Link to="/citas" className={`nav-item ${isActive("/citas") ? "active" : ""}`}>
+          <span>📋</span> Gestionar Citas
+        </Link>
+        
         <Link to="/repositorio" className={`nav-item ${isActive("/repositorio") ? "active" : ""}`}>
           <span>📚</span> Repositorio
         </Link>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
 import NuevaCitaModal from "./NuevaCitaModal"
 import Sidebar from "../../../components/Sidebar/Sidebar"
-import { obtenerCitas, inscribirseCita, isAuthenticated } from "../../../services/api"
+import { obtenerCitas, inscribirseCita, eliminarCita, isAuthenticated, getUserRole } from "../../../services/api"
+import { useNavigate } from "react-router-dom"
 import "./GestionCitas.css"
 
 function GestionCitas() {
@@ -10,6 +11,13 @@ function GestionCitas() {
   const [busqueda, setBusqueda] = useState("")
   const [fechaFiltro, setFechaFiltro] = useState("")
   const [loading, setLoading] = useState(true)
+  const [userRole, setUserRole] = useState<string>('')
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    setUserRole(getUserRole() || '')
+    cargarCitas()
+  }, [])
 
   const cargarCitas = async () => {
     setLoading(true)
@@ -28,13 +36,14 @@ function GestionCitas() {
   const handleSeleccionarCita = async (id_cita: number) => {
     if (!isAuthenticated()) {
       alert("Debes iniciar sesión para seleccionar una cita")
+      navigate('/')
       return
     }
     
     try {
       const result = await inscribirseCita(id_cita)
       if (result.success) {
-        alert(result.message || "Cita registrada correctamente")
+        alert("Cita registrada correctamente")
         cargarCitas()
       } else {
         alert(result.error || "Error al seleccionar la cita")
@@ -44,9 +53,21 @@ function GestionCitas() {
     }
   }
 
-  useEffect(() => {
-    cargarCitas()
-  }, [])
+  const handleEliminarCita = async (id_cita: number) => {
+    if (window.confirm('¿Estás seguro de eliminar esta cita?')) {
+      try {
+        const result = await eliminarCita(id_cita)
+        if (result.success) {
+          alert("Cita eliminada correctamente")
+          cargarCitas()
+        } else {
+          alert(result.error || "Error al eliminar la cita")
+        }
+      } catch (error) {
+        alert("Error al eliminar la cita")
+      }
+    }
+  }
 
   const citasFiltradas = citas.filter(c => {
     const matchBusqueda = c.tutor_nombre?.toLowerCase().includes(busqueda.toLowerCase()) || 
@@ -57,7 +78,7 @@ function GestionCitas() {
 
   return (
     <div className="gc-layout">
-      <Sidebar />
+      <Sidebar userRole={userRole} />
       
       <main className="gc-main">
         <header className="gc-topbar">
@@ -79,9 +100,11 @@ function GestionCitas() {
             <h1>Gestión de Citas de Tutoría</h1>
             <p>Administra y programa las sesiones académicas de acompañamiento.</p>
           </div>
-          <button className="gc-btn-nueva" onClick={() => setOpenModal(true)}>
-            + Nueva Cita
-          </button>
+          {(userRole === 'admin' || userRole === 'tutor' || userRole === 'tutorado') && (
+            <button className="gc-btn-nueva" onClick={() => setOpenModal(true)}>
+              + Nueva Cita
+            </button>
+          )}
         </div>
 
         <div className="gc-filtros">
@@ -135,13 +158,24 @@ function GestionCitas() {
                       </span>
                     </td>
                     <td>
-                      <button 
-                        className="gc-btn-icono" 
-                        onClick={() => handleSeleccionarCita(cita.id_cita)}
-                        disabled={(cita.inscritos || 0) >= (cita.capacidad || 1)}
-                      >
-                        📅 Inscribirse
-                      </button>
+                      {(userRole === 'admin' || userRole === 'tutor' || userRole === 'tutorado') && (
+                        <button 
+                          className="gc-btn-icono" 
+                          onClick={() => handleEliminarCita(cita.id_cita)}
+                          style={{ color: 'red' }}
+                        >
+                          🗑️ Eliminar
+                        </button>
+                      )}
+                      {(userRole === 'alumno' || userRole === 'tutorado') && (
+                        <button 
+                          className="gc-btn-icono" 
+                          onClick={() => handleSeleccionarCita(cita.id_cita)}
+                          disabled={(cita.inscritos || 0) >= (cita.capacidad || 1)}
+                        >
+                          📅 Inscribirse
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))
