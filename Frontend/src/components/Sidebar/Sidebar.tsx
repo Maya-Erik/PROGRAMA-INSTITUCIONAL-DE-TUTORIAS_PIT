@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import "./Sidebar.css"
 
@@ -9,7 +8,6 @@ interface SidebarProps {
 function Sidebar({ userRole }: SidebarProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  // Eliminado: const [openMenus, setOpenMenus] = useState<string[]>([])
 
   const isActive = (path: string) => location.pathname === path
 
@@ -36,39 +34,9 @@ function Sidebar({ userRole }: SidebarProps) {
       </div>
 
       <nav className="sidebar-nav">
-        {/* Menú Admin - Solo visible para admin */}
-        {userRole === 'admin' && (
-          <>
-            <Link to="/admin-avisos" className={`nav-item ${isActive("/admin-avisos") ? "active" : ""}`}>
-              <span>📢</span> Administrar Avisos
-            </Link>
-            <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`}>
-              <span>📝</span> Bitácora
-            </Link>
-            <Link to="/usuarios" className={`nav-item ${isActive("/usuarios") ? "active" : ""}`}>
-              <span>👥</span> Usuarios
-            </Link>
-            <Link to="/roles" className={`nav-item ${isActive("/roles") ? "active" : ""}`}>
-              <span>🎭</span> Roles
-            </Link>
-            <Link to="/accesos" className={`nav-item ${isActive("/accesos") ? "active" : ""}`}>
-              <span>🔐</span> Accesos
-            </Link>
-          </>
-        )}
-
-        {/* Bitácora - Solo visible para tutor (no admin) */}
-        {userRole === 'tutor' && (
-          <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`}>
-            <span>📋</span> Bitácora
-          </Link>
-        )}
-
-        {/* Enlaces comunes */}
         <Link to="/agenda" className={`nav-item ${isActive("/agenda") ? "active" : ""}`}>
           <span>📅</span> Agenda de Tutorías
         </Link>
-        
         <Link to="/repositorio" className={`nav-item ${isActive("/repositorio") ? "active" : ""}`}>
           <span>📚</span> Repositorio
         </Link>
