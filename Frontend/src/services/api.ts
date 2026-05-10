@@ -16,7 +16,7 @@ export const login = async (email: string, password: string) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     });
-    return response.json();
+    return res.json();
 };
 
 export const register = async (userData: {
