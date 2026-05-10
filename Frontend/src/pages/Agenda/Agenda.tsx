@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EventIcon from '@mui/icons-material/Event';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sidebar from "../../components/Sidebar/Sidebar";
+import PerfilUsuario from "/PerfilUsuario/PerfilUsuario"
 import { 
   obtenerCitas, crearCita, editarCita, eliminarCita, 
   inscribirseCita, misCitas
@@ -41,8 +42,11 @@ interface Cita {
   id_creador: number;
 }
 
+
+
 const Agenda: React.FC = () => {
   const [citas, setCitas] = useState<Cita[]>([]);
+  const [openPerfilModal, setOpenPerfilModal] = useState(false);
   const [misCitasList, setMisCitasList] = useState<Cita[]>([]);
   const [tabValue, setTabValue] = useState(0);
   const [openModal, setOpenModal] = useState(false);
@@ -83,6 +87,10 @@ const Agenda: React.FC = () => {
     };
     cargarDatos();
   }, []);
+
+  const handleOpenPerfil = () => {
+    setOpenPerfilModal(true);
+  };
 
   const cargarCitas = async () => {
     const result = await obtenerCitas();
@@ -210,10 +218,14 @@ const Agenda: React.FC = () => {
                      userRole === 'tutorado' ? 'TUTORADO' : 'ALUMNO'}
                   </p>
                 </div>
-                <Avatar className="agenda-topbar-avatar" sx={{ bgcolor: '#003DA5' }}>
+                <Avatar 
+                  className="agenda-topbar-avatar" 
+                  sx={{ bgcolor: '#003DA5', cursor: 'pointer' }}
+                  onClick={handleOpenPerfil}
+                >
                   {userName.charAt(0).toUpperCase()}
                 </Avatar>
-              </div>
+                              </div>
             </div>
           </header>
 
@@ -417,6 +429,20 @@ const Agenda: React.FC = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
+
+      <PerfilUsuario 
+        open={openPerfilModal} 
+        onClose={() => setOpenPerfilModal(false)}
+        onUpdate={() => {
+          // Recargar datos del usuario después de actualizar perfil
+          const userStr = localStorage.getItem('user');
+          if (userStr) {
+            const user = JSON.parse(userStr);
+            setUserName(user.nombre || user.email?.split('@')[0] || 'Usuario');
+          }
+        }}
+      />
+
     </ThemeProvider>
   );
 };

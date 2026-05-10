@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const { verifyToken } = require('../middlewares/roleAuth');
+const { getPerfil, updatePerfil } = require('../controllers/authController');
 
 const { 
     login, 
@@ -18,6 +20,9 @@ console.log('Funciones importadas:', { login, register, getEstadisticas });
 // Rutas públicas
 router.post("/login", login);
 router.post("/register", register);
+router.use(verifyToken);
+router.get('/perfil', getPerfil);
+router.put('/perfil', updatePerfil);
 
 // Ruta para estadísticas (pública)
 if (getEstadisticas) {
@@ -30,5 +35,7 @@ if (getEstadisticas) {
 router.get("/users", verifyToken, requireRole(['admin']), getAllUsers);
 router.get("/roles", verifyToken, requireRole(['admin']), getAvailableRoles);
 router.put("/user-role", verifyToken, requireRole(['admin']), updateUserRole);
+
+
 
 module.exports = router;

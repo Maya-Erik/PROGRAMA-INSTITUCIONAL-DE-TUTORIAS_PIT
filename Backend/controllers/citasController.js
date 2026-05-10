@@ -26,7 +26,7 @@ exports.obtenerCitas = async (req, res) => {
         }
         // Admin ve todo
         else if (userRole === 'admin') {
-            // Sin filtros adicionales
+            
         }
         
         query += ` ORDER BY c.fecha DESC, c.hora DESC`;

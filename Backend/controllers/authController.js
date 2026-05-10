@@ -182,11 +182,57 @@ const getEstadisticas = async (req, res) => {
     }
 };
 
+// Obtener perfil del usuario autenticado
+const getPerfil = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const query = `
+            SELECT u.id_user, u.n_cuenta, u.correo, u.nombre_completo, u.carrera, r.nombre_rol as role
+            FROM tr_user u
+            JOIN tr_roles r ON u.id_rol = r.id_rol
+            WHERE u.id_user = $1
+        `;
+        const result = await db.query(query, [userId]);
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+        }
+        
+        res.json({ success: true, user: result.rows[0] });
+    } catch (error) {
+        console.error("Error al obtener perfil:", error);
+        res.status(500).json({ success: false, message: "Error al obtener perfil" });
+    }
+};
+
+// Actualizar perfil del usuario
+const updatePerfil = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { nombre_completo, carrera } = req.body;
+        
+        const query = `
+            UPDATE tr_user 
+            SET nombre_completo = $1, carrera = $2, updated_at = NOW()
+            WHERE id_user = $3
+            RETURNING *
+        `;
+        const result = await db.query(query, [nombre_completo, carrera, userId]);
+        
+        res.json({ success: true, user: result.rows[0], message: "Perfil actualizado correctamente" });
+    } catch (error) {
+        console.error("Error al actualizar perfil:", error);
+        res.status(500).json({ success: false, message: "Error al actualizar perfil" });
+    }
+};
+
 module.exports = {
     login,
     register,
     getAllUsers,
     getAvailableRoles,
     updateUserRole,
-    getEstadisticas
+    getEstadisticas,
+    getPerfil,
+    updatePerfil
 };
