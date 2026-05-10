@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './AdminAvisos.css';
 
 interface Aviso {
@@ -6,24 +6,39 @@ interface Aviso {
   titulo: string;
   contenido: string;
   imagen: string;
+  enlace: string;
   color: string;
 }
 
 const AdminAvisos = () => {
-  const [avisos, setAvisos] = useState<Aviso[]>([
-    { id: 1, titulo: "Aviso 1", contenido: "Contenido del aviso 1", imagen: "", color: "#003DA5" },
-    { id: 2, titulo: "Aviso 2", contenido: "Contenido del aviso 2", imagen: "", color: "#D6A600" },
-  ]);
+  const [avisos, setAvisos] = useState<Aviso[]>([]);
   
   const [formData, setFormData] = useState({
     titulo: '',
     contenido: '',
     imagen: '',
+    enlace: '',
     color: '#003DA5'
   });
   const [editandoId, setEditandoId] = useState<number | null>(null);
 
   const coloresDisponibles = ['#003DA5', '#001F54', '#D6A600', '#4A4A4A'];
+
+  // Cargar avisos desde localStorage al iniciar
+  useEffect(() => {
+    const avisosGuardados = localStorage.getItem('avisos');
+    if (avisosGuardados) {
+      setAvisos(JSON.parse(avisosGuardados));
+    } else {
+      // Datos de ejemplo
+      const avisosIniciales = [
+        { id: 1, titulo: "Bienvenidos al PIT", contenido: "El Programa Institucional de Tutorías está aquí para apoyarte", imagen: "", enlace: "", color: "#003DA5" },
+        { id: 2, titulo: "Nuevos Horarios", contenido: "Consulta los horarios disponibles para tutorías", imagen: "", enlace: "", color: "#D6A600" },
+      ];
+      setAvisos(avisosIniciales);
+      localStorage.setItem('avisos', JSON.stringify(avisosIniciales));
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -34,7 +49,9 @@ const AdminAvisos = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     if (editandoId) {
+      // Actualizar aviso existente
       const nuevosAvisos = avisos.map((aviso) => 
         aviso.id === editandoId ? { ...formData, id: editandoId } : aviso
       );
@@ -42,16 +59,25 @@ const AdminAvisos = () => {
       localStorage.setItem('avisos', JSON.stringify(nuevosAvisos));
       setEditandoId(null);
     } else {
+      // Crear nuevo aviso
       const nuevoAviso = { ...formData, id: Date.now() };
       const nuevosAvisos = [...avisos, nuevoAviso];
       setAvisos(nuevosAvisos);
       localStorage.setItem('avisos', JSON.stringify(nuevosAvisos));
     }
-    setFormData({ titulo: '', contenido: '', imagen: '', color: '#003DA5' });
+    
+    // Resetear formulario
+    setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5' });
   };
 
   const handleEdit = (aviso: Aviso) => {
-    setFormData(aviso);
+    setFormData({
+      titulo: aviso.titulo,
+      contenido: aviso.contenido,
+      imagen: aviso.imagen || '',
+      enlace: aviso.enlace || '',
+      color: aviso.color
+    });
     setEditandoId(aviso.id);
   };
 
@@ -85,23 +111,33 @@ const AdminAvisos = () => {
         <input
           type="text"
           name="titulo"
-          placeholder="Título del aviso"
+          placeholder="Título del aviso *"
           value={formData.titulo}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <textarea
           name="contenido"
-          placeholder="Contenido del aviso"
+          placeholder="Contenido del aviso *"
           value={formData.contenido}
           onChange={handleChange}
           className="form-textarea"
+          required
         />
         <input
           type="text"
           name="imagen"
           placeholder="URL de la imagen (opcional)"
           value={formData.imagen}
+          onChange={handleChange}
+          className="form-input"
+        />
+        <input
+          type="text"
+          name="enlace"
+          placeholder="URL del enlace (opcional)"
+          value={formData.enlace}
           onChange={handleChange}
           className="form-input"
         />
@@ -128,7 +164,7 @@ const AdminAvisos = () => {
           {editandoId && (
             <button type="button" onClick={() => {
               setEditandoId(null);
-              setFormData({ titulo: '', contenido: '', imagen: '', color: '#003DA5' });
+              setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5' });
             }} className="btn-cancelar">
               Cancelar
             </button>
@@ -152,7 +188,8 @@ const AdminAvisos = () => {
                 <div className="aviso-detalles">
                   <h3 className="item-titulo">{aviso.titulo || "Sin título"}</h3>
                   <p className="item-contenido">{aviso.contenido || "Sin contenido"}</p>
-                  {aviso.imagen && <span className="item-imagen-text">📷 Con imagen</span>}
+                  {aviso.imagen && <span className="item-imagen-text">Con imagen</span>}
+                  {aviso.enlace && <span className="item-enlace-text">Con enlace</span>}
                 </div>
               </div>
               <div className="aviso-acciones">

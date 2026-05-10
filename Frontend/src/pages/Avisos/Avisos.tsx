@@ -6,6 +6,7 @@ interface Aviso {
   titulo: string;
   contenido: string;
   imagen: string;
+  enlace: string;
   color: string;
 }
 
@@ -14,10 +15,14 @@ const Avisos = () => {
   const [avisoActual, setAvisoActual] = useState(0);
   const [mostrarCarrusel, setMostrarCarrusel] = useState(false);
 
+  // Cargar avisos desde localStorage
   useEffect(() => {
     const avisosGuardados = localStorage.getItem('avisos');
     if (avisosGuardados) {
       setAvisos(JSON.parse(avisosGuardados));
+    } else {
+      // Datos por defecto si no hay nada
+      setAvisos([]);
     }
   }, []);
 
@@ -27,7 +32,6 @@ const Avisos = () => {
     return () => clearTimeout(timer);
   }, [avisos]);
 
-  // Función para cambiar de aviso
   const cambiarAviso = (nuevoIndice: number) => {
     if (nuevoIndice >= 0 && nuevoIndice < avisos.length) {
       setAvisoActual(nuevoIndice);
@@ -48,8 +52,11 @@ const Avisos = () => {
     );
   }
 
+  const avisoActualData = avisos[avisoActual];
+
   return (
     <>
+      {/* Hero con texto original */}
       <div className={`hero-contenido ${!mostrarCarrusel ? 'visible' : 'oculto'}`}>
         <h1>Programa de Tutorías</h1>
         <p>Impulsando tu éxito académico con el apoyo de nuestra comunidad universitaria.</p>
@@ -59,6 +66,7 @@ const Avisos = () => {
         </div>
       </div>
 
+      {/* Carrusel de avisos */}
       <div className={`carrusel-container ${mostrarCarrusel ? 'visible' : 'oculto'}`}>
         {avisos.length > 1 && (
           <button className="carrusel-btn carrusel-btn-prev" onClick={() => cambiarAviso(avisoActual - 1)}>
@@ -71,9 +79,22 @@ const Avisos = () => {
             {avisos.map((aviso) => (
               <div key={aviso.id} className="carrusel-slide" style={{ backgroundColor: aviso.color }}>
                 <div className="carrusel-contenido">
+                  {aviso.imagen && (
+                    <img src={aviso.imagen} alt={aviso.titulo} className="carrusel-imagen" />
+                  )}
                   <div className="carrusel-texto">
                     <h2>{aviso.titulo}</h2>
                     <p>{aviso.contenido}</p>
+                    {aviso.enlace && (
+                      <a 
+                        href={aviso.enlace} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="carrusel-enlace"
+                      >
+                        Ver más →
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
