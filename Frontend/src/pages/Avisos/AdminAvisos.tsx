@@ -88,7 +88,7 @@ const AdminAvisos = () => {
       </form>
       <div>
         <h2>Avisos</h2>
-        {avisos.map((aviso, idx) => (
+        {avisos.map((aviso) => (  // ← Eliminado "idx" aquí
           <div key={aviso.id}>
             <h3>{aviso.titulo}</h3>
             <p>{aviso.contenido}</p>
