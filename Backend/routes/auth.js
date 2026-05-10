@@ -1,14 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
+const { 
+    login, 
+    register, 
+    updateUserRole, 
+    getAllUsers, 
+    getAvailableRoles,
+    getEstadisticas  // ← Agregar esta línea
+} = require("../controllers/authController");
+const { verifyToken, requireRole } = require("../middlewares/roleAuth");
 
-const { login, register, getAllUsers, getAvailableRoles, updateUserRole } = require("../controllers/authController");
-
-// rutas
+// Rutas públicas
 router.post("/login", login);
 router.post("/register", register);
-router.get("/users", getAllUsers);
-router.get("/roles", getAvailableRoles);
-router.put("/user-role", updateUserRole);
+router.get("/estadisticas", getEstadisticas);  // ← Agregar esta línea (pública)
+
+// Rutas protegidas (solo admin)
+router.get("/users", verifyToken, requireRole(['admin']), getAllUsers);
+router.get("/roles", verifyToken, requireRole(['admin']), getAvailableRoles);
+router.put("/user-role", verifyToken, requireRole(['admin']), updateUserRole);
 
 module.exports = router;

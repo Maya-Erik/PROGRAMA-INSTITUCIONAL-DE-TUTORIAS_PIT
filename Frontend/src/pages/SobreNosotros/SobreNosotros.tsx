@@ -8,34 +8,58 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 const SobreNosotros = () => {
   const [stats, setStats] = useState({
-    teachers: 50,
-    tutors: 120,
-    students: 1500,
+    teachers: 0,
+    tutors: 0,
+    students: 0,
   });
 
   const [countTeachers, setCountTeachers] = useState(0);
   const [countTutors, setCountTutors] = useState(0);
   const [countStudents, setCountStudents] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // Función para formatear números (50+, 999+, etc.)
+  const formatNumber = (num: number, max: number) => {
+    if (num > max) {
+      return `${max}+`;
+    }
+    return `${num}+`;
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // CONECTA AQUÍ TU BACKEND
-        // const response = await fetch('https://tu-api.com/stats');
-        // const data = await response.json();
-        // setStats({
-        //   teachers: data.docentes,
-        //   tutors: data.tutores,
-        //   students: data.estudiantes,
-        // });
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+        const response = await fetch(`${API_URL}/auth/estadisticas`);
+        const data = await response.json();
         
-        setTimeout(() => {
-          setStats({ teachers: 52, tutors: 128, students: 1580 });
-        }, 1000);
+        if (data.success) {
+          setStats({
+            teachers: data.data.maestros,  // Maestros = tutores + tutorados
+            tutors: data.data.tutores,     // Solo tutores (no tutorados)
+            students: data.data.alumnos,   // Solo alumnos normales
+          });
+        } else {
+          // Si hay error, usar valores por defecto
+          setStats({
+            teachers: 52,
+            tutors: 128,
+            students: 1580,
+          });
+        }
       } catch (error) {
         console.error("Error al cargar estadísticas:", error);
+        // Valores por defecto en caso de error
+        setStats({
+          teachers: 52,
+          tutors: 128,
+          students: 1580,
+        });
+      } finally {
+        setLoading(false);
       }
     };
+    
     fetchStats();
   }, []);
 
@@ -43,13 +67,14 @@ const SobreNosotros = () => {
     const duration = 2000;
     const stepTime = 20;
 
-    const animateCount = (target: number, setter: React.Dispatch<React.SetStateAction<number>>) => {
+    const animateCount = (target: number, setter: React.Dispatch<React.SetStateAction<number>>, max: number) => {
       let start = 0;
-      const increment = target / (duration / stepTime);
+      const finalTarget = target > max ? max : target;
+      const increment = finalTarget / (duration / stepTime);
       const interval = setInterval(() => {
         start += increment;
-        if (start >= target) {
-          setter(target);
+        if (start >= finalTarget) {
+          setter(finalTarget);
           clearInterval(interval);
         } else {
           setter(Math.ceil(start));
@@ -58,9 +83,9 @@ const SobreNosotros = () => {
       return () => clearInterval(interval);
     };
 
-    const clearTeachers = animateCount(stats.teachers, setCountTeachers);
-    const clearTutors = animateCount(stats.tutors, setCountTutors);
-    const clearStudents = animateCount(stats.students, setCountStudents);
+    const clearTeachers = animateCount(stats.teachers, setCountTeachers, 250);
+    const clearTutors = animateCount(stats.tutors, setCountTutors, 500);
+    const clearStudents = animateCount(stats.students, setCountStudents, 999);
 
     return () => {
       clearTeachers();
@@ -68,6 +93,23 @@ const SobreNosotros = () => {
       clearStudents();
     };
   }, [stats]);
+
+  // Mostrar loading mientras se cargan los datos
+  if (loading) {
+    return (
+      <section id="sobre-nosotros" className="sobre-nosotros">
+        <div className="container">
+          <div className="grid">
+            <div className="info-wrapper">
+              <h2 className="section-title">Conócenos</h2>
+              <h3 className="section-subtitle">Nuestra misión es tu excelencia</h3>
+              <p className="description">Cargando estadísticas...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="sobre-nosotros" className="sobre-nosotros">
@@ -113,18 +155,24 @@ const SobreNosotros = () => {
           
           <div className="counters-wrapper">
             <div className="counter-card primary">
-              <p className="counter-number primary">{countTeachers}+</p>
-              <p className="counter-label">Docentes</p>
+              <p className="counter-number primary">
+                {formatNumber(countStudents, 999)}
+              </p>
+              <p className="counter-label">Alumnos</p>
             </div>
             
             <div className="counter-card secondary top-offset">
-              <p className="counter-number secondary">{countTutors}+</p>
-              <p className="counter-label">Tutores</p>
+              <p className="counter-number secondary">
+                {formatNumber(countTeachers, 250)}
+              </p>
+              <p className="counter-label">Maestros</p>
             </div>
             
             <div className="counter-card primary bottom-offset">
-              <p className="counter-number primary">{countStudents}+</p>
-              <p className="counter-label">Estudiantes</p>
+              <p className="counter-number primary">
+                {formatNumber(countTutors, 500)}
+              </p>
+              <p className="counter-label">Tutores</p>
             </div>
             
             <div className="excellence-card">

@@ -137,4 +137,49 @@ const updateUserRole = async (req, res) => {
     }
 };
 
+// Obtener estadísticas de usuarios (alumnos, tutores, tutorados)
+const getEstadisticas = async (req, res) => {
+    try {
+        // Contar alumnos (id_rol = 4)
+        const alumnosQuery = await db.query(
+            "SELECT COUNT(*) as total FROM tr_user WHERE id_rol = 4"
+        );
+        
+        // Contar tutores (id_rol = 2)
+        const tutoresQuery = await db.query(
+            "SELECT COUNT(*) as total FROM tr_user WHERE id_rol = 2"
+        );
+        
+        // Contar tutorados (id_rol = 3)
+        const tutoradosQuery = await db.query(
+            "SELECT COUNT(*) as total FROM tr_user WHERE id_rol = 3"
+        );
+        
+        // Total de maestros = tutores + tutorados
+        const totalMaestros = parseInt(tutoresQuery.rows[0].total) + parseInt(tutoradosQuery.rows[0].total);
+        
+        // Total de alumnos (solo id_rol = 4)
+        const totalAlumnos = parseInt(alumnosQuery.rows[0].total);
+        
+        // Total de tutores (mostrar solo tutores, no tutorados)
+        const totalTutores = parseInt(tutoresQuery.rows[0].total);
+        
+        return res.status(200).json({
+            success: true,
+            data: {
+                alumnos: totalAlumnos,
+                maestros: totalMaestros,
+                tutores: totalTutores
+            }
+        });
+        
+    } catch (error) {
+        console.error("Error al obtener estadísticas:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error al obtener estadísticas"
+        });
+    }
+};
+
 module.exports = { login, register, getAllUsers, getAvailableRoles, updateUserRole };
