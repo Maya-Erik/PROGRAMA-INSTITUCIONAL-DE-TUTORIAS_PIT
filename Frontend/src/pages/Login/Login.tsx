@@ -37,6 +37,7 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose, onLoginSuccess }) => {
         // Guardar token y datos del usuario
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('userId', String(data.user.id)); //Esta se eliminara(solo es prueba)
         
         console.log('Login exitoso:', data.user);
         
