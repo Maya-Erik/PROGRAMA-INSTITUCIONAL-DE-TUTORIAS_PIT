@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EventIcon from '@mui/icons-material/Event';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sidebar from "../../components/Sidebar/Sidebar";
-import PerfilUsuario from '../../components/PerfilUsuario/PerfilUsuario';
+//import PerfilUsuario from '../../components/PerfilUsuario/PerfilUsuario';
 import { 
   obtenerCitas, crearCita, editarCita, eliminarCita, 
   inscribirseCita, misCitas
@@ -430,18 +430,18 @@ const Agenda: React.FC = () => {
         </Alert>
       </Snackbar>
 
-      <PerfilUsuario 
-        open={openPerfilModal} 
-        onClose={() => setOpenPerfilModal(false)}
-        onUpdate={() => {
+      //<PerfilUsuario 
+        //open={openPerfilModal} 
+        //onClose={() => setOpenPerfilModal(false)}
+        //onUpdate={() => {
           // Recargar datos del usuario después de actualizar perfil
-          const userStr = localStorage.getItem('user');
-          if (userStr) {
-            const user = JSON.parse(userStr);
-            setUserName(user.nombre || user.email?.split('@')[0] || 'Usuario');
-          }
-        }}
-      />
+          //const userStr = localStorage.getItem('user');
+          //if (userStr) {
+            //const user = JSON.parse(userStr);
+            //setUserName(user.nombre || user.email?.split('@')[0] || 'Usuario');
+          //}
+        //}}
+      ///>
 
     </ThemeProvider>
   );
