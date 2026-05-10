@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EventIcon from '@mui/icons-material/Event';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sidebar from "../../components/Sidebar/Sidebar";
+import PerfilUsuario from "../../componentes/PerfilUsuario/PerfilUsuario";
 import { 
   obtenerCitas, crearCita, editarCita, eliminarCita, 
   inscribirseCita, misCitas
@@ -46,6 +47,7 @@ const Agenda: React.FC = () => {
   const [misCitasList, setMisCitasList] = useState<Cita[]>([]);
   const [tabValue, setTabValue] = useState(0);
   const [openModal, setOpenModal] = useState(false);
+  const [openPerfilModal, setOpenPerfilModal] = useState(false);
   const [editandoCita, setEditandoCita] = useState<Cita | null>(null);
   const [userRole, setUserRole] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
@@ -71,7 +73,7 @@ const Agenda: React.FC = () => {
         if (userStr) {
           const user = JSON.parse(userStr);
           setUserRole(user.role || '');
-          setUserName(user.nombre || user.email?.split('@')[0] || 'Usuario');
+          setUserName(user.nombre || user.nombre_completo || user.email?.split('@')[0] || 'Usuario');
           setUserCarrera(user.carrera || '');
           setUserId(user.id || 0);
           setFormData(prev => ({ ...prev, carrera: user.carrera || '' }));
@@ -104,6 +106,10 @@ const Agenda: React.FC = () => {
     } catch (error) {
       console.error('Error al cargar mis citas:', error);
     }
+  };
+
+  const handleOpenPerfil = () => {
+    setOpenPerfilModal(true);
   };
 
   const handleOpenModal = (cita?: Cita) => {
@@ -200,6 +206,15 @@ const Agenda: React.FC = () => {
     return filtradas;
   };
 
+  const handlePerfilUpdate = () => {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      setUserName(user.nombre || user.nombre_completo || user.email?.split('@')[0] || 'Usuario');
+      setUserCarrera(user.carrera || '');
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box className="agenda-layout">
@@ -218,7 +233,11 @@ const Agenda: React.FC = () => {
                      userRole === 'tutorado' ? 'TUTORADO' : 'ALUMNO'}
                   </p>
                 </div>
-                <Avatar className="agenda-topbar-avatar" sx={{ bgcolor: '#003DA5' }}>
+                <Avatar 
+                  className="agenda-topbar-avatar" 
+                  sx={{ bgcolor: '#003DA5', cursor: 'pointer' }}
+                  onClick={handleOpenPerfil}
+                >
                   {userName.charAt(0).toUpperCase()}
                 </Avatar>
               </div>
@@ -346,6 +365,7 @@ const Agenda: React.FC = () => {
         </main>
       </Box>
 
+      {/* Modal de crear/editar cita */}
       <Dialog open={openModal} onClose={() => setOpenModal(false)} maxWidth="sm" fullWidth>
         <DialogTitle>{editandoCita ? 'Editar Tutoría' : 'Crear Nueva Tutoría'}</DialogTitle>
         <DialogContent>
@@ -415,6 +435,14 @@ const Agenda: React.FC = () => {
         </DialogActions>
       </Dialog>
 
+      {/* Modal de perfil de usuario */}
+      <PerfilUsuario 
+        open={openPerfilModal} 
+        onClose={() => setOpenPerfilModal(false)}
+        onUpdate={handlePerfilUpdate}
+      />
+
+      {/* Snackbar para notificaciones */}
       <Snackbar 
         open={snackbar.open} 
         autoHideDuration={6000} 
