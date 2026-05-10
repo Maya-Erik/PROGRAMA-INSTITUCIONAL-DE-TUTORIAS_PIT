@@ -155,14 +155,14 @@ const getEstadisticas = async (req, res) => {
             "SELECT COUNT(*) as total FROM tr_user WHERE id_rol = 3"
         );
         
-        // Total de maestros = tutores + tutorados
-        const totalMaestros = parseInt(tutoresQuery.rows[0].total) + parseInt(tutoradosQuery.rows[0].total);
+        // Total de maestros = tutores 
+        const totalMaestros = parseInt(tutoresQuery.rows[0].total);
         
         // Total de alumnos (solo id_rol = 4)
         const totalAlumnos = parseInt(alumnosQuery.rows[0].total);
         
-        // Total de tutores (mostrar solo tutores, no tutorados)
-        const totalTutores = parseInt(tutoresQuery.rows[0].total);
+        // Total de tutores (tutores + tutorados)
+        const totalTutores = parseInt(tutoresQuery.rows[0].total) + parseInt(tutoradosQuery.rows[0].total);
         
         return res.status(200).json({
             success: true,
@@ -182,4 +182,11 @@ const getEstadisticas = async (req, res) => {
     }
 };
 
-module.exports = { login, register, getAllUsers, getAvailableRoles, updateUserRole };
+module.exports = {
+    login,
+    register,
+    getAllUsers,
+    getAvailableRoles,
+    updateUserRole,
+    getEstadisticas
+};
