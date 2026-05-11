@@ -152,3 +152,60 @@ export const obtenerEstadisticas = async () => {
     const res = await fetch(`${API_URL}/auth/estadisticas`);
     return res.json();
 };
+
+
+
+//Avisos
+export const obtenerAvisos = async () => {
+    const response = await fetch(`${API_URL}/avisos`);
+    return response.json();
+};
+
+export const obtenerAvisosAdmin = async () => {
+    const response = await fetch(`${API_URL}/avisos/admin`, {
+        headers: getHeaders()
+    });
+    return response.json();
+};
+
+export const crearAviso = async (avisoData: {
+    titulo: string;
+    contenido: string;
+    imagen: string;
+    enlace: string;
+    color: string;
+    orden: number;
+}) => {
+    const response = await fetch(`${API_URL}/avisos`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(avisoData)
+    });
+    return response.json();
+};
+
+export const actualizarAviso = async (id: number, avisoData: any) => {
+    const response = await fetch(`${API_URL}/avisos/${id}`, {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify(avisoData)
+    });
+    return response.json();
+};
+
+export const eliminarAviso = async (id: number) => {
+    const response = await fetch(`${API_URL}/avisos/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    return response.json();
+};
+
+export const actualizarOrdenAvisos = async (avisos: { id_aviso: number }[]) => {
+    const response = await fetch(`${API_URL}/avisos/orden/actualizar`, {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify({ avisos })
+    });
+    return response.json();
+};

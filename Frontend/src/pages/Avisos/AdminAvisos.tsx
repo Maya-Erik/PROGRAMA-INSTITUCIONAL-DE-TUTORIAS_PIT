@@ -1,40 +1,53 @@
+
 import { useState, useEffect } from 'react';
+import { 
+    obtenerAvisosAdmin, crearAviso, actualizarAviso, 
+    eliminarAviso, actualizarOrdenAvisos 
+} from '../../services/api';
 import './AdminAvisos.css';
 
 interface Aviso {
-  id: number;
+  id_aviso: number;
   titulo: string;
   contenido: string;
   imagen: string;
   enlace: string;
   color: string;
+  orden: number;
+  activo: boolean;
 }
 
 const AdminAvisos = () => {
   const [avisos, setAvisos] = useState<Aviso[]>([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     titulo: '',
     contenido: '',
     imagen: '',
     enlace: '',
-    color: '#003DA5'
+    color: '#003DA5',
+    orden: 0
   });
   const [editandoId, setEditandoId] = useState<number | null>(null);
 
   const coloresDisponibles = ['#003DA5', '#001F54', '#D6A600', '#4A4A4A'];
 
-  useEffect(() => {
-    const avisosGuardados = localStorage.getItem('avisos');
-    if (avisosGuardados) {
-      setAvisos(JSON.parse(avisosGuardados));
-    } else {
-      const avisosIniciales: Aviso[] = [
-        { id: 1, titulo: "Bienvenidos al PIT", contenido: "El Programa Institucional de Tutorías está aquí para apoyarte", imagen: "", enlace: "", color: "#003DA5" },
-        { id: 2, titulo: "Nuevos Horarios", contenido: "Consulta los horarios disponibles para tutorías", imagen: "", enlace: "", color: "#D6A600" },
-      ];
-      setAvisos(avisosIniciales);
-      localStorage.setItem('avisos', JSON.stringify(avisosIniciales));
+  const cargarAvisos = async () => {
+    setLoading(true);
+    try {
+      const data = await obtenerAvisosAdmin();
+      if (data.success) {
+        setAvisos(data.avisos || []);
+      }
+    } catch (error) {
+      console.error('Error al cargar avisos:', error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    cargarAvisos();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -44,29 +57,33 @@ const AdminAvisos = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!formData.titulo || !formData.contenido) {
-      alert('Título y contenido son obligatorios');
+      alert('Titulo y contenido son obligatorios');
       return;
     }
 
-    if (editandoId) {
-      const nuevosAvisos = avisos.map((aviso) => 
-        aviso.id === editandoId ? { ...formData, id: editandoId } : aviso
-      );
-      setAvisos(nuevosAvisos);
-      localStorage.setItem('avisos', JSON.stringify(nuevosAvisos));
-      setEditandoId(null);
-    } else {
-      const nuevoAviso: Aviso = { ...formData, id: Date.now() };
-      const nuevosAvisos = [...avisos, nuevoAviso];
-      setAvisos(nuevosAvisos);
-      localStorage.setItem('avisos', JSON.stringify(nuevosAvisos));
+    try {
+      let result;
+      if (editandoId) {
+        result = await actualizarAviso(editandoId, formData);
+      } else {
+        result = await crearAviso(formData);
+      }
+      
+      if (result.success) {
+        alert(`Aviso ${editandoId ? 'actualizado' : 'creado'} correctamente`);
+        setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5', orden: 0 });
+        setEditandoId(null);
+        cargarAvisos();
+      } else {
+        alert(result.error || 'Error al guardar aviso');
+      }
+    } catch (error) {
+      alert('Error al guardar aviso');
     }
-    
-    setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5' });
   };
 
   const handleEdit = (aviso: Aviso) => {
@@ -75,32 +92,51 @@ const AdminAvisos = () => {
       contenido: aviso.contenido,
       imagen: aviso.imagen || '',
       enlace: aviso.enlace || '',
-      color: aviso.color
+      color: aviso.color,
+      orden: aviso.orden
     });
-    setEditandoId(aviso.id);
+    setEditandoId(aviso.id_aviso);
   };
 
-  const handleDelete = (id: number) => {
-    const nuevosAvisos = avisos.filter((aviso) => aviso.id !== id);
-    setAvisos(nuevosAvisos);
-    localStorage.setItem('avisos', JSON.stringify(nuevosAvisos));
+  const handleDelete = async (id: number) => {
+    if (window.confirm('¿Estas seguro de eliminar este aviso?')) {
+      try {
+        const result = await eliminarAviso(id);
+        if (result.success) {
+          alert('Aviso eliminado correctamente');
+          cargarAvisos();
+        } else {
+          alert(result.error || 'Error al eliminar aviso');
+        }
+      } catch (error) {
+        alert('Error al eliminar aviso');
+      }
+    }
   };
 
-  const moverArriba = (posicion: number) => {
+  const moverArriba = async (posicion: number) => {
     if (posicion === 0) return;
     const nuevosAvisos = [...avisos];
     [nuevosAvisos[posicion], nuevosAvisos[posicion - 1]] = [nuevosAvisos[posicion - 1], nuevosAvisos[posicion]];
     setAvisos(nuevosAvisos);
-    localStorage.setItem('avisos', JSON.stringify(nuevosAvisos));
+    
+    const ordenActualizado = nuevosAvisos.map((aviso, idx) => ({ id_aviso: aviso.id_aviso, orden: idx }));
+    await actualizarOrdenAvisos(ordenActualizado);
   };
 
-  const moverAbajo = (posicion: number) => {
+  const moverAbajo = async (posicion: number) => {
     if (posicion === avisos.length - 1) return;
     const nuevosAvisos = [...avisos];
     [nuevosAvisos[posicion], nuevosAvisos[posicion + 1]] = [nuevosAvisos[posicion + 1], nuevosAvisos[posicion]];
     setAvisos(nuevosAvisos);
-    localStorage.setItem('avisos', JSON.stringify(nuevosAvisos));
+    
+    const ordenActualizado = nuevosAvisos.map((aviso, idx) => ({ id_aviso: aviso.id_aviso, orden: idx }));
+    await actualizarOrdenAvisos(ordenActualizado);
   };
+
+  if (loading) {
+    return <div className="admin-container">Cargando avisos...</div>;
+  }
 
   return (
     <div className="admin-container">
@@ -110,7 +146,7 @@ const AdminAvisos = () => {
         <input
           type="text"
           name="titulo"
-          placeholder="Título del aviso *"
+          placeholder="Titulo del aviso *"
           value={formData.titulo}
           onChange={handleChange}
           className="form-input"
@@ -163,7 +199,7 @@ const AdminAvisos = () => {
           {editandoId && (
             <button type="button" onClick={() => {
               setEditandoId(null);
-              setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5' });
+              setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5', orden: 0 });
             }} className="btn-cancelar">
               Cancelar
             </button>
@@ -179,7 +215,7 @@ const AdminAvisos = () => {
           <p className="sin-avisos">No hay avisos creados</p>
         ) : (
           avisos.map((aviso, posicion) => (
-            <div key={aviso.id} className="aviso-item">
+            <div key={aviso.id_aviso} className="aviso-item">
               <div className="aviso-info">
                 <div className="aviso-preview" style={{ backgroundColor: aviso.color }}>
                   <span className="preview-numero">{posicion + 1}</span>
@@ -201,7 +237,7 @@ const AdminAvisos = () => {
                 <button onClick={() => handleEdit(aviso)} className="btn-editar">
                   Editar
                 </button>
-                <button onClick={() => handleDelete(aviso.id)} className="btn-eliminar">
+                <button onClick={() => handleDelete(aviso.id_aviso)} className="btn-eliminar">
                   Eliminar
                 </button>
               </div>

@@ -1,25 +1,38 @@
+
 import { useState, useEffect } from 'react';
+import { obtenerAvisos } from '../../services/api';
 import './Avisos.css';
 
 interface Aviso {
-  id: number;
+  id_aviso: number;
   titulo: string;
   contenido: string;
   imagen: string;
   enlace: string;
   color: string;
+  orden: number;
 }
 
 const Avisos = () => {
   const [avisos, setAvisos] = useState<Aviso[]>([]);
   const [avisoActual, setAvisoActual] = useState(0);
   const [mostrarCarrusel, setMostrarCarrusel] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const avisosGuardados = localStorage.getItem('avisos');
-    if (avisosGuardados) {
-      setAvisos(JSON.parse(avisosGuardados));
-    }
+    const cargarAvisos = async () => {
+      try {
+        const data = await obtenerAvisos();
+        if (data.success) {
+          setAvisos(data.avisos || []);
+        }
+      } catch (error) {
+        console.error('Error al cargar avisos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarAvisos();
   }, []);
 
   useEffect(() => {
@@ -34,14 +47,23 @@ const Avisos = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="hero-contenido visible">
+        <h1>Programa de Tutorias</h1>
+        <p>Cargando contenido...</p>
+      </div>
+    );
+  }
+
   if (avisos.length === 0) {
     return (
       <div className="hero-contenido visible">
-        <h1>Programa de Tutorías</h1>
-        <p>Impulsando tu éxito académico con el apoyo de nuestra comunidad universitaria.</p>
+        <h1>Programa de Tutorias</h1>
+        <p>Impulsando tu exito academico con el apoyo de nuestra comunidad universitaria.</p>
         <div className="botones">
           <a href="/servicios" className="btn-comenzar">Comencemos</a>
-          <a href="/sobre-nosotros" className="btn-info">Ver más info</a>
+          <a href="/sobre-nosotros" className="btn-info">Ver mas info</a>
         </div>
       </div>
     );
@@ -50,11 +72,11 @@ const Avisos = () => {
   return (
     <>
       <div className={`hero-contenido ${!mostrarCarrusel ? 'visible' : 'oculto'}`}>
-        <h1>Programa de Tutorías</h1>
-        <p>Impulsando tu éxito académico con el apoyo de nuestra comunidad universitaria.</p>
+        <h1>Programa de Tutorias</h1>
+        <p>Impulsando tu exito academico con el apoyo de nuestra comunidad universitaria.</p>
         <div className="botones">
           <a href="/servicios" className="btn-comenzar">Comencemos</a>
-          <a href="/sobre-nosotros" className="btn-info">Ver más info</a>
+          <a href="/sobre-nosotros" className="btn-info">Ver mas info</a>
         </div>
       </div>
 
@@ -68,72 +90,19 @@ const Avisos = () => {
         <div className="carrusel-wrapper">
           <div className="carrusel-slides" style={{ transform: `translateX(-${avisoActual * 100}%)` }}>
             {avisos.map((aviso) => (
-              <div key={aviso.id} className="carrusel-slide">
+              <div key={aviso.id_aviso} className="carrusel-slide" style={{ backgroundColor: aviso.color }}>
                 {aviso.enlace ? (
-                  <a 
-                    href={aviso.enlace} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="carrusel-link-full"
-                  >
-                    {aviso.imagen ? (
-                      <img 
-                        src={aviso.imagen} 
-                        alt={aviso.titulo}
-                        style={{
-                          maxWidth: '100%',
-                          maxHeight: '100%',
-                          width: 'auto',
-                          height: 'auto',
-                          objectFit: 'contain'
-                        }}
-                      />
-                    ) : (
-                      <div style={{ 
-                        width: '100%', 
-                        height: '100%', 
-                        backgroundColor: aviso.color,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        <div className="carrusel-info-oculta">
-                          <h2>{aviso.titulo}</h2>
-                          <p>{aviso.contenido}</p>
-                        </div>
-                      </div>
+                  <a href={aviso.enlace} target="_blank" rel="noopener noreferrer" className="carrusel-link-full">
+                    {aviso.imagen && (
+                      <img src={aviso.imagen} alt={aviso.titulo} className="carrusel-imagen" />
                     )}
                   </a>
                 ) : (
-                  <div className="carrusel-contenido-full">
-                    {aviso.imagen ? (
-                      <img 
-                        src={aviso.imagen} 
-                        alt={aviso.titulo}
-                        style={{
-                          maxWidth: '100%',
-                          maxHeight: '100%',
-                          width: 'auto',
-                          height: 'auto',
-                          objectFit: 'contain'
-                        }}
-                      />
-                    ) : (
-                      <div style={{ 
-                        width: '100%', 
-                        height: '100%', 
-                        backgroundColor: aviso.color,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        <div className="carrusel-info-oculta">
-                          <h2>{aviso.titulo}</h2>
-                          <p>{aviso.contenido}</p>
-                        </div>
-                      </div>
+                  <>
+                    {aviso.imagen && (
+                      <img src={aviso.imagen} alt={aviso.titulo} className="carrusel-imagen" />
                     )}
-                  </div>
+                  </>
                 )}
               </div>
             ))}

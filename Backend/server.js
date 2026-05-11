@@ -36,11 +36,13 @@ app.use(express.json());
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/userRoutes");
 const citasRoutes = require("./routes/citas");
+const avisoRoutes = require("./routes/avisoRoutes");
 
 // Endpoints principales
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/citas", citasRoutes);
+app.use("/api/avisos", avisoRoutes);
 
 // Endpoint de prueba
 app.get("/api/health", (req, res) => {
