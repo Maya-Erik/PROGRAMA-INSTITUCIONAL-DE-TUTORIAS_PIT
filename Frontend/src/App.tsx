@@ -11,8 +11,6 @@ import SolicitarTutoria from "./pages/Servicios/SolicitarTutoria/SolicitarTutori
 import Agenda from "./pages/Agenda/Agenda"
 import Bitacora from "./pages/Permisos/Bitacora/Bitacora"
 import Divisiones from "./pages/Divisiones/Divisiones"
-import Accesos from "./pages/Permisos/Accesos/Accesos"
-import Roles from "./pages/Permisos/Roles/Roles"
 import ProtectedRoute from "./components/ProtectedRoute"
 import AdminCitas from "./pages/Admin/AdminCitas";
 import AdminUsuarios from "./pages/Admin/AdminUsuarios";
@@ -67,20 +65,6 @@ function App() {
             <Bitacora />
           </ProtectedRoute>
         } />
-        
-        <Route path="/accesos" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <Accesos />
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/roles" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <Roles />
-          </ProtectedRoute>
-        } />
-        
-        
 
         <Route path="/usuarios" element={
           <ProtectedRoute allowedRoles={['admin']}>
