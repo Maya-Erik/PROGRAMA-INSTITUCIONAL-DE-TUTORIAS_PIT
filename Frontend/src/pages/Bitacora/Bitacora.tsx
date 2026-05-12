@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Typography, Paper, Table, TableHead, TableRow,
+    Paper, Table, TableHead, TableRow,
     TableCell, TableBody, TableContainer, IconButton, Dialog,
     DialogTitle, DialogContent, DialogActions, TextField, Button,
     Alert, Snackbar, Accordion, AccordionSummary, AccordionDetails
-
 } from '@mui/material';
 import { 
     Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon,
-    ExpandMore as ExpandMoreIcon, Notes as NotesIcon
+    ExpandMore as ExpandMoreIcon
 } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import {
@@ -34,12 +33,10 @@ interface Nota {
 const Bitacora: React.FC = () => {
     const [notas, setNotas] = useState<Nota[]>([]);
     const [loading, setLoading] = useState(true);
-    const [tabValue, setTabValue] = useState(0);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [notaSeleccionada, setNotaSeleccionada] = useState<Nota | null>(null);
     const [nuevaNota, setNuevaNota] = useState({ id_cita: 0, nota: '' });
-    const [citasDisponibles, setCitasDisponibles] = useState<any[]>([]);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
     const [userRole, setUserRole] = useState<string>('');
 
@@ -122,6 +119,19 @@ const Bitacora: React.FC = () => {
         });
     };
 
+    if (loading) {
+        return (
+            <div className="bitacora-container">
+                <Sidebar userRole={userRole} />
+                <main className="bitacora-main">
+                    <div className="bitacora-content">
+                        <p>Cargando notas...</p>
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
     return (
         <div className="bitacora-container">
             <Sidebar userRole={userRole} />
@@ -160,22 +170,15 @@ const Bitacora: React.FC = () => {
                                         <TableCell>FECHA</TableCell>
                                         <TableCell>MATERIA</TableCell>
                                         <TableCell>TUTOR</TableCell>
-                                        <TableCell>CITA FECHA</TableCell>
                                         <TableCell>NOTA</TableCell>
                                         <TableCell>REGISTRADO POR</TableCell>
                                         <TableCell>ACCIONES</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {loading ? (
+                                    {notas.length === 0 ? (
                                         <TableRow>
-                                            <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
-                                                Cargando notas...
-                                            </TableCell>
-                                        </TableRow>
-                                    ) : notas.length === 0 ? (
-                                        <TableRow>
-                                            <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                                            <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
                                                 No hay notas registradas
                                             </TableCell>
                                         </TableRow>
@@ -187,38 +190,26 @@ const Bitacora: React.FC = () => {
                                                 </TableCell>
                                                 <TableCell>{nota.materia || 'N/A'}</TableCell>
                                                 <TableCell>{nota.tutor_nombre || 'N/A'}</TableCell>
-                                                <TableCell>
-                                                    {nota.cita_fecha ? new Date(nota.cita_fecha).toLocaleDateString('es-MX') : 'N/A'}
-                                                </TableCell>
                                                 <TableCell className="bitacora-nota-cell">
                                                     <Accordion className="bitacora-accordion">
                                                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                                            <Typography className="bitacora-nota-preview">
+                                                            <span className="bitacora-nota-preview">
                                                                 {nota.nota.length > 100 ? `${nota.nota.substring(0, 100)}...` : nota.nota}
-                                                            </Typography>
+                                                            </span>
                                                         </AccordionSummary>
                                                         <AccordionDetails>
-                                                            <Typography className="bitacora-nota-completa">
+                                                            <span className="bitacora-nota-completa">
                                                                 {nota.nota}
-                                                            </Typography>
+                                                            </span>
                                                         </AccordionDetails>
                                                     </Accordion>
                                                 </TableCell>
                                                 <TableCell>{nota.usuario_nombre || 'N/A'}</TableCell>
                                                 <TableCell className="bitacora-acciones">
-                                                    <IconButton 
-                                                        size="small" 
-                                                        onClick={() => handleOpenEditModal(nota)}
-                                                        title="Editar nota"
-                                                    >
+                                                    <IconButton size="small" onClick={() => handleOpenEditModal(nota)} title="Editar nota">
                                                         <EditIcon fontSize="small" />
                                                     </IconButton>
-                                                    <IconButton 
-                                                        size="small" 
-                                                        onClick={() => handleEliminar(nota.id_bitacora)}
-                                                        title="Eliminar nota"
-                                                        sx={{ color: '#dc3545' }}
-                                                    >
+                                                    <IconButton size="small" onClick={() => handleEliminar(nota.id_bitacora)} title="Eliminar nota" sx={{ color: '#dc3545' }}>
                                                         <DeleteIcon fontSize="small" />
                                                     </IconButton>
                                                 </TableCell>
