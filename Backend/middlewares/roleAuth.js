@@ -12,7 +12,7 @@ const verifyToken = (req, res, next) => {
 
     try {
         // Verificar y decodificar el token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'llave_secreta_por_defecto');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'pit_fes_acatlan_secret_key_2026');
 
         // Adjuntar el payload decodificado (que incluye el rol) al objeto request
         req.user = decoded;
@@ -25,14 +25,20 @@ const verifyToken = (req, res, next) => {
 // Middleware para verificar roles (RBAC)
 const requireRole = (allowedRoles) => {
     return (req, res, next) => {
-        // req.user viene del middleware anterior (verifyToken)
-        if (!req.user || !req.user.rol) {
+        console.log('Roles permitidos:', allowedRoles);
+        console.log('Usuario en request:', req.user);
+        
+        if (!req.user || !req.user.role) {
             return res.status(403).json({ message: 'No se encontraron permisos para el usuario' });
         }
 
-        // Verificar si el rol del usuario está dentro de los roles permitidos
-        if (!allowedRoles.includes(req.user.rol)) {
-            return res.status(403).json({ message: 'Acceso denegado: permisos insuficientes' });
+        const userRole = req.user.role.toLowerCase();
+        const allowed = allowedRoles.map(r => r.toLowerCase());
+        
+        if (!allowed.includes(userRole)) {
+            return res.status(403).json({ 
+                message: `Acceso denegado. Se requiere rol: ${allowedRoles.join(', ')}` 
+            });
         }
 
         next();

@@ -208,6 +208,14 @@
   font-size: 1rem;
 }
 
+
+.loading-container {
+  text-align: center;
+  padding: 50px;
+  color: #003DA5;
+  font-size: 1.2rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .sobre-nosotros {

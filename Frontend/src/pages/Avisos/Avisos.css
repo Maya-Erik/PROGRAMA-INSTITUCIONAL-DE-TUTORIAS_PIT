@@ -1,114 +1,269 @@
 
-.anuncios-container {
-  margin-top: 50px;
-  background-color: #4A4A4A;
-  padding: 1rem;
-  border-radius: 8px;
-  width: 100%;
+
+ 
+.hero-contenido {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  color: white;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
-.carrusel-container {
-  position: relative;
+.hero-contenido.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hero-contenido.oculto {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  pointer-events: none;
+}
+
+.hero-contenido h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  font-family: 'Lexend', sans-serif;
+}
+
+.hero-contenido p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.hero-contenido .botones {
   display: flex;
-  align-items: center;
+  gap: 20px;
   justify-content: center;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-contenido .btn-comenzar {
+  background: #D6A600;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.hero-contenido .btn-comenzar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.hero-contenido .btn-info {
+  border: 2px solid white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+
+.hero-contenido .btn-info:hover {
+  background: white;
+  color: #003DA5;
+}
+
+/* Carrusel*/
+.carrusel-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.carrusel-container.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.carrusel-container.oculto {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .carrusel-wrapper {
-  flex: 1;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  aspect-ratio: 16 / 6;
+  position: relative;
+}
+
+.carrusel-slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
 }
 
 .carrusel-slide {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-  height: 100%;
-}
-
-.carrusel-slide.animando {
-  transition: transform 0.5s ease-in-out;
-}
-
-.carrusel-item {
   min-width: 100%;
   height: 100%;
+  position: relative;
+  overflow: auto; 
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #ffffff;
 }
 
-.carrusel-btn {
-  background-color: rgba(242, 232, 207, 0.9);
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.2rem;
-  color: #003DA6;
+/* Contenido */
+.carrusel-contenido-full,
+.carrusel-link-full {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 10;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+/* Imagen dentro del slide - mantiene tamaño original */
+.carrusel-contenido-full img,
+.carrusel-link-full img {
+  max-width: none;
+  max-height: none;
+  width: auto;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Si la imagen es más grande que el hero, permitir scroll y centrar */
+.carrusel-slide::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.carrusel-slide::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.carrusel-slide::-webkit-scrollbar-thumb {
+  background: #D6A600;
+  border-radius: 4px;
+}
+
+/* Fondo sólido cuando no hay imagen */
+.carrusel-contenido-full,
+.carrusel-link-full {
+  background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Información oculta (solo para referencia en el código, no visible al usuario) */
+.carrusel-info-oculta {
+  display: none;
+}
+
+/* Botones de navegación */
+.carrusel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #003DA5;
+  z-index: 20;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .carrusel-btn:hover {
-  background-color: #F2E8CF;
-  transform: scale(1.05);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  background: white;
+  transform: translateY(-50%) scale(1.1);
 }
 
-.carrusel-btn:active {
-  transform: scale(0.95);
+.carrusel-btn-prev {
+  left: 20px;
 }
 
-.indicadores {
+.carrusel-btn-next {
+  right: 20px;
+}
+
+/* Indicadores */
+.carrusel-indicadores {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+  gap: 1rem;
+  z-index: 20;
 }
 
 .indicador {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background-color: rgba(242, 232, 207, 0.5);
+  background: rgba(255, 255, 255, 0.5);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-}
-
-.indicador:hover {
-  background-color: rgba(242, 232, 207, 0.8);
-  transform: scale(1.1);
+  transition: all 0.3s;
 }
 
 .indicador.activo {
-  background-color: #F2E8CF;
-  width: 24px;
-  border-radius: 4px;
+  width: 30px;
+  border-radius: 6px;
+  background: #D6A600;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .anuncios-container {
-    padding: 0.75rem;
+  .hero-contenido h1 {
+    font-size: 2rem;
   }
-
-  .carrusel-wrapper {
-    aspect-ratio: 4 / 3;
-  }
-
-  .carrusel-btn {
-    width: 28px;
-    height: 28px;
+  
+  .hero-contenido p {
     font-size: 1rem;
+  }
+  
+  .carrusel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .carrusel-btn-prev {
+    left: 10px;
+  }
+  
+  .carrusel-btn-next {
+    right: 10px;
+  }
+  
+  .botones {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* En telefono, permitir scroll */
+  .carrusel-slide {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }

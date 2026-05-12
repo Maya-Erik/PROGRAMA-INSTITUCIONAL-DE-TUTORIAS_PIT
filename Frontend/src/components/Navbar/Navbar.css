@@ -4,7 +4,6 @@ section,
 [id="sobre-nosotros"], 
 [id="servicios"], 
 [id="divisiones"], 
-[id="avisos"], 
 [id="contacto"] {
   scroll-margin-top: 80px;
   min-height: 100vh;
@@ -25,13 +24,11 @@ section,
   width: 100%;
   z-index: 1000;
   box-sizing: border-box;
-
 }
 
 body {
-  padding-top: 80px; /* Mismo valor que scroll-margin-top */
+  padding-top: 80px;
 }
-
 
 /* ==================== LOGO ==================== */
 .logo {
@@ -69,35 +66,39 @@ body {
 /* ==================== MENÚ ==================== */
 .menu {
   display: flex;
-  gap: 25px;
+  gap: 20px;
   list-style: none;
   margin: 0;
   padding: 0;
   align-items: center;
 }
 
-/* ==================== ESTILOS UNIFICADOS PARA TODOS LOS BOTONES ==================== */
-/* Tanto nav-button como login-btn comparten los mismos estilos */
+.auth-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ==================== ESTILOS UNIFICADOS ==================== */
 .nav-button,
 .login-btn {
   background-color: transparent;
   text-decoration: none;
   color: #333;
   font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  padding: 8px 12px;
+  padding: 8px 14px;
   border-radius: 6px;
   transition: all 0.3s ease;
   border: none;
   outline: none;
   box-shadow: none;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
   display: inline-block;
+  white-space: nowrap;
 }
 
-/* HOVER para ambos */
 .nav-button:hover,
 .login-btn:hover {
   background: #D6A600;
@@ -105,7 +106,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* ACTIVO para ambos */
 .nav-button.active,
 .login-btn.active {
   background: #003DA5;
@@ -125,25 +125,27 @@ body {
 }
 
 /* ==================== RESPONSIVE MÓVIL ==================== */
+@media (max-width: 900px) {
+  .menu {
+    gap: 12px;
+  }
+  
+  .nav-button,
+  .login-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
 @media (max-width: 768px) {
   .navbar {
     padding: 12px 20px;
   }
 
-  /* Mostrar icono hamburguesa */
   .hamburger {
     display: block;
   }
 
-  /* Login se oculta en móvil (o puedes mostrarlo dentro del menú) */
-  .login-btn {
-    display: block; /* Cambiado de 'none' a 'block' para que aparezca en el menú */
-    width: 90%;
-    text-align: center;
-    margin-top: 10px;
-  }
-
-  /* Menú desplegable */
   .menu {
     position: absolute;
     top: 70px;
@@ -151,58 +153,71 @@ body {
     width: 100%;
     background: white;
     flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    padding: 20px 0;
+    align-items: stretch;
+    gap: 5px;
+    padding: 20px;
     display: none;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
   }
 
-  /* Cuando se abre */
   .menu.open {
     display: flex;
   }
 
-  /* Ajustar tamaño de los botones en móvil */
   .nav-button,
   .login-btn {
-    width: 90%;
+    width: 100%;
     text-align: center;
     padding: 12px;
     font-size: 16px;
+    white-space: normal;
   }
 
-  /* Logo un poco más pequeño */
+  .auth-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .auth-buttons button {
+    width: 100%;
+  }
+
   .logo {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .logo-icon {
-    width: 1.8rem;
-    height: 1.8rem;
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  
+  .logo-pit, .logo-fes {
+    font-size: 14px;
   }
 }
 
-/* ==================== RESPONSIVE TABLET ==================== */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (max-width: 480px) {
   .navbar {
-    padding: 15px 30px;
+    padding: 10px 15px;
+  }
+  
+  .logo {
+    font-size: 14px;
+  }
+  
+  .logo-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+  
+  .logo-pit, .logo-fes {
+    font-size: 12px;
   }
   
   .menu {
-    gap: 15px;
+    top: 60px;
+    padding: 15px;
   }
-  
-  .nav-button,
-  .login-btn {
-    padding: 6px 10px;
-    font-size: 14px;
-  }
-
-  .navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
 }

@@ -139,6 +139,43 @@
   text-align: center;
 }
 
+.email-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  background: white;
+}
+
+.email-input-wrapper input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.email-domain {
+  padding: 0 10px;
+  background: #f5f5f5;
+  color: #666;
+  font-size: 14px;
+  white-space: nowrap;
+  border-left: 1px solid #ddd;
+}
+
+.email-input-wrapper input:focus {
+  outline: none;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  color: #888;
+  font-size: 12px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -179,5 +216,15 @@
   
   .toggle-password .material-symbols-outlined {
     font-size: 18px;
+  }
+
+  .email-domain {
+    font-size: 11px;
+    padding: 0 6px;
+  }
+  
+  .email-input-wrapper input {
+    font-size: 14px;
+    padding: 8px;
   }
 }

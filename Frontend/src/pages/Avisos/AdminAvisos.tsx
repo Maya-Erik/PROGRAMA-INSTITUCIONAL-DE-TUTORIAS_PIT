@@ -1,66 +1,142 @@
-// AdminAvisos.jsx
-import React, { useState } from 'react';
+
+import { useState, useEffect } from 'react';
+import { 
+    obtenerAvisosAdmin, crearAviso, actualizarAviso, 
+    eliminarAviso, actualizarOrdenAvisos 
+} from '../../services/api';
 import './AdminAvisos.css';
 
+interface Aviso {
+  id_aviso: number;
+  titulo: string;
+  contenido: string;
+  imagen: string;
+  enlace: string;
+  color: string;
+  orden: number;
+  activo: boolean;
+}
+
 const AdminAvisos = () => {
-  const [avisos, setAvisos] = useState([
-    { id: 1, titulo: "", contenido: "", imagen: "", color: "#003DA6" },
-    { id: 2, titulo: "", contenido: "", imagen: "", color: "#001F54" },
-    { id: 3, titulo: "", contenido: "", imagen: "", color: "#D6A600" },
-  ]);
-  
+  const [avisos, setAvisos] = useState<Aviso[]>([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     titulo: '',
     contenido: '',
     imagen: '',
-    color: '#003DA6'
+    enlace: '',
+    color: '#003DA5',
+    orden: 0
   });
-  const [editandoId, setEditandoId] = useState(null);
+  const [editandoId, setEditandoId] = useState<number | null>(null);
 
-  const coloresDisponibles = ['#003DA6', '#001F54', '#D6A600', '#4A4A4A'];
+  const coloresDisponibles = ['#003DA5', '#001F54', '#D6A600', '#4A4A4A'];
 
-  const handleChange = (e) => {
+  const cargarAvisos = async () => {
+    setLoading(true);
+    try {
+      const data = await obtenerAvisosAdmin();
+      if (data.success) {
+        setAvisos(data.avisos || []);
+      }
+    } catch (error) {
+      console.error('Error al cargar avisos:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    cargarAvisos();
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (editandoId) {
-      setAvisos(avisos.map((aviso) => 
-        aviso.id === editandoId ? { ...formData, id: editandoId } : aviso
-      ));
-      setEditandoId(null);
-    } else {
-      setAvisos([...avisos, { ...formData, id: Date.now() }]);
+    
+    if (!formData.titulo || !formData.contenido) {
+      alert('Titulo y contenido son obligatorios');
+      return;
     }
-    setFormData({ titulo: '', contenido: '', imagen: '', color: '#003DA6' });
+
+    try {
+      let result;
+      if (editandoId) {
+        result = await actualizarAviso(editandoId, formData);
+      } else {
+        result = await crearAviso(formData);
+      }
+      
+      if (result.success) {
+        alert(`Aviso ${editandoId ? 'actualizado' : 'creado'} correctamente`);
+        setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5', orden: 0 });
+        setEditandoId(null);
+        cargarAvisos();
+      } else {
+        alert(result.error || 'Error al guardar aviso');
+      }
+    } catch (error) {
+      alert('Error al guardar aviso');
+    }
   };
 
-  const handleEdit = (aviso) => {
-    setFormData(aviso);
-    setEditandoId(aviso.id);
+  const handleEdit = (aviso: Aviso) => {
+    setFormData({
+      titulo: aviso.titulo,
+      contenido: aviso.contenido,
+      imagen: aviso.imagen || '',
+      enlace: aviso.enlace || '',
+      color: aviso.color,
+      orden: aviso.orden
+    });
+    setEditandoId(aviso.id_aviso);
   };
 
-  const handleDelete = (id) => {
-    setAvisos(avisos.filter((aviso) => aviso.id !== id));
+  const handleDelete = async (id: number) => {
+    if (window.confirm('¿Estas seguro de eliminar este aviso?')) {
+      try {
+        const result = await eliminarAviso(id);
+        if (result.success) {
+          alert('Aviso eliminado correctamente');
+          cargarAvisos();
+        } else {
+          alert(result.error || 'Error al eliminar aviso');
+        }
+      } catch (error) {
+        alert('Error al eliminar aviso');
+      }
+    }
   };
 
-  const moverArriba = (posicion) => {
+  const moverArriba = async (posicion: number) => {
     if (posicion === 0) return;
     const nuevosAvisos = [...avisos];
     [nuevosAvisos[posicion], nuevosAvisos[posicion - 1]] = [nuevosAvisos[posicion - 1], nuevosAvisos[posicion]];
     setAvisos(nuevosAvisos);
+    
+    const ordenActualizado = nuevosAvisos.map((aviso, idx) => ({ id_aviso: aviso.id_aviso, orden: idx }));
+    await actualizarOrdenAvisos(ordenActualizado);
   };
 
-  const moverAbajo = (posicion) => {
+  const moverAbajo = async (posicion: number) => {
     if (posicion === avisos.length - 1) return;
     const nuevosAvisos = [...avisos];
     [nuevosAvisos[posicion], nuevosAvisos[posicion + 1]] = [nuevosAvisos[posicion + 1], nuevosAvisos[posicion]];
     setAvisos(nuevosAvisos);
+    
+    const ordenActualizado = nuevosAvisos.map((aviso, idx) => ({ id_aviso: aviso.id_aviso, orden: idx }));
+    await actualizarOrdenAvisos(ordenActualizado);
   };
+
+  if (loading) {
+    return <div className="admin-container">Cargando avisos...</div>;
+  }
 
   return (
     <div className="admin-container">
@@ -70,23 +146,33 @@ const AdminAvisos = () => {
         <input
           type="text"
           name="titulo"
-          placeholder="Título del aviso"
+          placeholder="Titulo del aviso *"
           value={formData.titulo}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <textarea
           name="contenido"
-          placeholder="Contenido del aviso"
+          placeholder="Contenido del aviso *"
           value={formData.contenido}
           onChange={handleChange}
           className="form-textarea"
+          required
         />
         <input
           type="text"
           name="imagen"
           placeholder="URL de la imagen (opcional)"
           value={formData.imagen}
+          onChange={handleChange}
+          className="form-input"
+        />
+        <input
+          type="text"
+          name="enlace"
+          placeholder="URL del enlace (opcional)"
+          value={formData.enlace}
           onChange={handleChange}
           className="form-input"
         />
@@ -113,7 +199,7 @@ const AdminAvisos = () => {
           {editandoId && (
             <button type="button" onClick={() => {
               setEditandoId(null);
-              setFormData({ titulo: '', contenido: '', imagen: '', color: '#003DA6' });
+              setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5', orden: 0 });
             }} className="btn-cancelar">
               Cancelar
             </button>
@@ -129,15 +215,16 @@ const AdminAvisos = () => {
           <p className="sin-avisos">No hay avisos creados</p>
         ) : (
           avisos.map((aviso, posicion) => (
-            <div key={aviso.id} className="aviso-item">
+            <div key={aviso.id_aviso} className="aviso-item">
               <div className="aviso-info">
                 <div className="aviso-preview" style={{ backgroundColor: aviso.color }}>
                   <span className="preview-numero">{posicion + 1}</span>
                 </div>
                 <div className="aviso-detalles">
-                  <h3 className="item-titulo">{aviso.titulo || "Sin título"}</h3>
-                  <p className="item-contenido">{aviso.contenido || "Sin contenido"}</p>
-                  {aviso.imagen && <span className="item-imagen-text">📷 Con imagen</span>}
+                  <h3 className="item-titulo">{aviso.titulo}</h3>
+                  <p className="item-contenido">{aviso.contenido}</p>
+                  {aviso.imagen && <span className="item-imagen-text">Con imagen</span>}
+                  {aviso.enlace && <span className="item-enlace-text">Con enlace</span>}
                 </div>
               </div>
               <div className="aviso-acciones">
@@ -150,7 +237,7 @@ const AdminAvisos = () => {
                 <button onClick={() => handleEdit(aviso)} className="btn-editar">
                   Editar
                 </button>
-                <button onClick={() => handleDelete(aviso.id)} className="btn-eliminar">
+                <button onClick={() => handleDelete(aviso.id_aviso)} className="btn-eliminar">
                   Eliminar
                 </button>
               </div>

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Search, Bell, Plus, Filter, Download, Edit3, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Filter, Download, Edit3, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import './Usuarios.css';
 
 const Usuarios: React.FC = () => {
   const usuarios = [
-    { id: 1, nombre: 'Beatriz Elena Morales', email: 'b.morales@acatlan.unam.mx', rol: 'Administrador', division: 'Ciencias Exactas', estado: 'Activo', colorRol: '#003DA6', avatar: 'https://i.pravatar.cc/150?u=beatriz' },
+    { id: 1, nombre: 'Beatriz Elena Morales', email: 'b.morales@acatlan.unam.mx', rol: 'Administrador', division: 'Ciencias Exactas', estado: 'Activo', colorRol: '#003DA5', avatar: 'https://i.pravatar.cc/150?u=beatriz' },
     { id: 2, nombre: 'Jorge Ramírez Silva', email: 'jorge.ramirez@acatlan.unam.mx', rol: 'Tutor', division: 'Socioeconómicas', estado: 'Activo', colorRol: '#D6A600', avatar: 'https://i.pravatar.cc/150?u=jorge' },
     { id: 3, nombre: 'Claudia Ruiz Gómez', email: 'cruiz042@comunidad.unam.mx', rol: 'Alumno', division: 'Derecho', estado: 'Inactivo', colorRol: '#A0AEC0', avatar: 'https://i.pravatar.cc/150?u=claudia' },
     { id: 4, nombre: 'Marcos Herrera', email: 'm.herrera@acatlan.unam.mx', rol: 'Tutor', division: 'Humanidades y Artes', estado: 'Activo', colorRol: '#D6A600', avatar: 'https://i.pravatar.cc/150?u=marcos' },
@@ -16,7 +16,6 @@ const Usuarios: React.FC = () => {
       <Sidebar />
       
       <main className="usuarios-main">
-        {/* Topbar */}
         <header className="usuarios-topbar">
           <span className="usuarios-breadcrumb">Configuración › Usuarios</span>
           <div className="usuarios-topbar-right">
@@ -32,7 +31,6 @@ const Usuarios: React.FC = () => {
         </header>
 
         <div className="usuarios-content">
-          {/* BOTONES DE ACCIÓN SUPERIOR */}
           <div className="top-actions">
             <div className="left-group">
               <button className="white-btn"><Filter size={16} /> Filtros</button>
@@ -43,7 +41,6 @@ const Usuarios: React.FC = () => {
             </button>
           </div>
 
-          {/* TABLA DE USUARIOS */}
           <div className="table-card-users">
             <table className="user-table">
               <thead>
@@ -90,7 +87,6 @@ const Usuarios: React.FC = () => {
               </tbody>
             </table>
 
-            {/* PAGINACIÓN */}
             <footer className="table-footer">
               <span className="total-count">Mostrando 1-4 de 2,482 usuarios</span>
               <div className="pagination-ctrl">

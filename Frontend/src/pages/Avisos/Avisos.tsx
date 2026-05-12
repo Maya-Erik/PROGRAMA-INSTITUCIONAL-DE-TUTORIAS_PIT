@@ -1,92 +1,133 @@
-// Avisos.jsx
-import React, { useState, useEffect } from 'react';
+
+import { useState, useEffect } from 'react';
+import { obtenerAvisos } from '../../services/api';
 import './Avisos.css';
 
+interface Aviso {
+  id_aviso: number;
+  titulo: string;
+  contenido: string;
+  imagen: string;
+  enlace: string;
+  color: string;
+  orden: number;
+}
+
 const Avisos = () => {
-  const [avisos, setAvisos] = useState([
-    { id: 1, color: "#003DA6" },
-    { id: 2, color: "#001F54" },
-    { id: 3, color: "#D6A600" },
-  ]);
-  
+  const [avisos, setAvisos] = useState<Aviso[]>([]);
   const [avisoActual, setAvisoActual] = useState(0);
-  const [animando, setAnimando] = useState(false);
+  const [mostrarCarrusel, setMostrarCarrusel] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const intervalo = setInterval(() => {
-      siguienteAviso();
-    }, 5000);
+    const cargarAvisos = async () => {
+      try {
+        const data = await obtenerAvisos();
+        if (data.success) {
+          setAvisos(data.avisos || []);
+        }
+      } catch (error) {
+        console.error('Error al cargar avisos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarAvisos();
+  }, []);
 
-    return () => clearInterval(intervalo);
-  }, [avisos.length]);
+  useEffect(() => {
+    if (avisos.length === 0) return;
+    const timer = setTimeout(() => setMostrarCarrusel(true), 3000);
+    return () => clearTimeout(timer);
+  }, [avisos]);
 
-  const siguienteAviso = () => {
-    if (animando) return;
-    setAnimando(true);
-    setAvisoActual((prev) => (prev + 1) % avisos.length);
-    setTimeout(() => setAnimando(false), 500);
+  const cambiarAviso = (nuevoIndice: number) => {
+    if (nuevoIndice >= 0 && nuevoIndice < avisos.length) {
+      setAvisoActual(nuevoIndice);
+    }
   };
 
-  const anteriorAviso = () => {
-    if (animando) return;
-    setAnimando(true);
-    setAvisoActual((prev) => (prev - 1 + avisos.length) % avisos.length);
-    setTimeout(() => setAnimando(false), 500);
-  };
+  if (loading) {
+    return (
+      <div className="hero-contenido visible">
+        <h1>Programa de Tutorias</h1>
+        <p>Cargando contenido...</p>
+      </div>
+    );
+  }
 
-  const irAlAviso = (indice) => {
-    if (animando || indice === avisoActual) return;
-    setAnimando(true);
-    setAvisoActual(indice);
-    setTimeout(() => setAnimando(false), 500);
-  };
+  if (avisos.length === 0) {
+    return (
+      <div className="hero-contenido visible">
+        <h1>Programa de Tutorias</h1>
+        <p>Impulsando tu exito academico con el apoyo de nuestra comunidad universitaria.</p>
+        <div className="botones">
+          <a href="/servicios" className="btn-comenzar">Comencemos</a>
+          <a href="/sobre-nosotros" className="btn-info">Ver mas info</a>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div id="avisos" className="avisos-container">
-      <div className="carrusel-container">
-        <button 
-          className="carrusel-btn carrusel-btn-izquierdo" 
-          onClick={anteriorAviso}
-          aria-label="Aviso anterior"
-        >
-          ❮
-        </button>
+    <>
+      <div className={`hero-contenido ${!mostrarCarrusel ? 'visible' : 'oculto'}`}>
+        <h1>Programa de Tutorias</h1>
+        <p>Impulsando tu exito academico con el apoyo de nuestra comunidad universitaria.</p>
+        <div className="botones">
+          <a href="/servicios" className="btn-comenzar">Comencemos</a>
+          <a href="/sobre-nosotros" className="btn-info">Ver mas info</a>
+        </div>
+      </div>
+
+      <div className={`carrusel-container ${mostrarCarrusel ? 'visible' : 'oculto'}`}>
+        {avisos.length > 1 && (
+          <button className="carrusel-btn carrusel-btn-prev" onClick={() => cambiarAviso(avisoActual - 1)}>
+            ❮
+          </button>
+        )}
 
         <div className="carrusel-wrapper">
-          <div 
-            className={`carrusel-slide ${animando ? 'animando' : ''}`}
-            style={{ transform: `translateX(-${avisoActual * 100}%)` }}
-          >
+          <div className="carrusel-slides" style={{ transform: `translateX(-${avisoActual * 100}%)` }}>
             {avisos.map((aviso) => (
-              <div 
-                key={aviso.id} 
-                className="carrusel-item"
-                style={{ backgroundColor: aviso.color }}
-              />
+              <div key={aviso.id_aviso} className="carrusel-slide" style={{ backgroundColor: aviso.color }}>
+                {aviso.enlace ? (
+                  <a href={aviso.enlace} target="_blank" rel="noopener noreferrer" className="carrusel-link-full">
+                    {aviso.imagen && (
+                      <img src={aviso.imagen} alt={aviso.titulo} className="carrusel-imagen" />
+                    )}
+                  </a>
+                ) : (
+                  <>
+                    {aviso.imagen && (
+                      <img src={aviso.imagen} alt={aviso.titulo} className="carrusel-imagen" />
+                    )}
+                  </>
+                )}
+              </div>
             ))}
           </div>
         </div>
 
-        <button 
-          className="carrusel-btn carrusel-btn-derecho" 
-          onClick={siguienteAviso}
-          aria-label="Aviso siguiente"
-        >
-          ❯
-        </button>
-      </div>
+        {avisos.length > 1 && (
+          <button className="carrusel-btn carrusel-btn-next" onClick={() => cambiarAviso(avisoActual + 1)}>
+            ❯
+          </button>
+        )}
 
-      <div className="indicadores">
-        {avisos.map((_, indice) => (
-          <button
-            key={indice}
-            className={`indicador ${indice === avisoActual ? 'activo' : ''}`}
-            onClick={() => irAlAviso(indice)}
-            aria-label={`Ir al aviso ${indice + 1}`}
-          />
-        ))}
+        {avisos.length > 1 && (
+          <div className="carrusel-indicadores">
+            {avisos.map((_, index) => (
+              <button
+                key={index}
+                className={`indicador ${index === avisoActual ? 'activo' : ''}`}
+                onClick={() => cambiarAviso(index)}
+              />
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

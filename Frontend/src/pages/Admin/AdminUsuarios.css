@@ -1,0 +1,364 @@
+.admin-usuarios-container {
+    display: flex;
+    min-height: 100vh;
+    background: #F8F9FC;
+}
+
+.admin-usuarios-main {
+    margin-left: 200px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.admin-usuarios-topbar {
+    background: white;
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e8eaf0;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
+
+.admin-usuarios-breadcrumb {
+    font-size: 13px;
+    color: #888;
+}
+
+.admin-usuarios-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.admin-usuarios-topbar-bell {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.admin-usuarios-topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-usuarios-topbar-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    text-align: right;
+}
+
+.admin-usuarios-topbar-role {
+    font-size: 10px;
+    color: #888;
+    text-align: right;
+    letter-spacing: 0.5px;
+}
+
+.admin-usuarios-topbar-avatar {
+    width: 36px;
+    height: 36px;
+    background: #003DA5;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.admin-usuarios-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 40px 100px 40px;
+    width: 100%;
+}
+
+.admin-usuarios-top-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.admin-usuarios-left-group {
+    display: flex;
+    gap: 12px;
+}
+
+.admin-usuarios-white-btn {
+    background: white;
+    border: 1px solid #E2E8F0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    color: #4A5568;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.2s;
+}
+
+.admin-usuarios-white-btn:hover {
+    background: #F8F9FC;
+    border-color: #003DA5;
+}
+
+.admin-usuarios-gold-btn {
+    background: #D6A600;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.2s;
+}
+
+.admin-usuarios-gold-btn:hover {
+    background: #c09500;
+}
+
+.admin-usuarios-table-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 0;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.03);
+}
+
+.admin-usuarios-user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-usuarios-user-table th {
+    text-align: left;
+    padding: 20px 30px;
+    font-size: 11px;
+    color: #A0AEC0;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #F7FAFC;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 700;
+}
+
+.admin-usuarios-user-table td {
+    padding: 20px 30px;
+    border-bottom: 1px solid #F7FAFC;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.admin-usuarios-user-cell {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-usuarios-u-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.admin-usuarios-u-name {
+    display: block;
+    font-weight: 800;
+    color: #001F54;
+    font-size: 14px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.admin-usuarios-role-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #4A5568;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.admin-usuarios-dot-role {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.admin-usuarios-status-pill {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.admin-usuarios-status-pill.activo {
+    background: #E6FFFA;
+    color: #00897B;
+}
+
+.admin-usuarios-status-pill.inactivo {
+    background: #F4F7FE;
+    color: #A0AEC0;
+}
+
+.admin-usuarios-action-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.admin-usuarios-icon-action {
+    background: none;
+    border: none;
+    color: #A0AEC0;
+    cursor: pointer;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+}
+
+.admin-usuarios-icon-action:hover {
+    color: #003DA5;
+}
+
+/* Modal styles */
+.admin-usuarios-modal-titulo {
+    background-color: #003DA5;
+    color: white;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 600;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-usuarios-modal-close {
+    color: white;
+    padding: 4px;
+}
+
+.admin-usuarios-modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .admin-usuarios-main {
+        margin-left: 0;
+    }
+    
+    .admin-usuarios-content {
+        padding: 20px;
+    }
+    
+    .admin-usuarios-table-card {
+        overflow-x: auto;
+    }
+    
+    .admin-usuarios-user-table {
+        min-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-usuarios-topbar {
+        padding: 12px 20px;
+    }
+    
+    .admin-usuarios-topbar-name,
+    .admin-usuarios-topbar-role {
+        display: none;
+    }
+    
+    .admin-usuarios-content {
+        padding: 20px 15px;
+    }
+    
+    .admin-usuarios-top-actions {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .admin-usuarios-left-group {
+        justify-content: center;
+    }
+    
+    .admin-usuarios-gold-btn {
+        justify-content: center;
+    }
+    
+    .admin-usuarios-user-table th,
+    .admin-usuarios-user-table td {
+        padding: 15px;
+    }
+    
+    .admin-usuarios-user-cell {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 650px) {
+    .admin-usuarios-user-table thead {
+        display: none;
+    }
+    
+    .admin-usuarios-user-table tbody tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 15px;
+        background: white;
+    }
+    
+    .admin-usuarios-user-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid #F7FAFC;
+    }
+    
+    .admin-usuarios-user-table td:last-child {
+        border-bottom: none;
+    }
+    
+    .admin-usuarios-user-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #A0AEC0;
+        font-size: 11px;
+        min-width: 100px;
+    }
+    
+    .admin-usuarios-user-cell {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .admin-usuarios-action-btns {
+        justify-content: flex-end;
+    }
+}
