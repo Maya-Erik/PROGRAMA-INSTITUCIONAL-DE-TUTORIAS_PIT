@@ -3,7 +3,7 @@ import {
     Container, Typography, Box, Button, Paper, Table, TableHead, TableRow, 
     TableCell, TableBody, TableContainer, IconButton, Chip, Dialog, 
     DialogTitle, DialogContent, DialogActions, TextField, MenuItem, 
-    FormControl, InputLabel, Select, Alert, Snackbar, Switch, FormControlLabel
+    FormControl, InputLabel, Select, Alert, Snackbar
 } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Block as BlockIcon, CheckCircle as CheckCircleIcon } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar/Sidebar';
