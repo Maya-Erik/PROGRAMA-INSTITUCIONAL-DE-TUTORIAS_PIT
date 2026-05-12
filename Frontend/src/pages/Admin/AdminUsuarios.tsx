@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
     Button, Dialog, DialogTitle, DialogContent, DialogActions,
     TextField, MenuItem, FormControl, InputLabel, Select,
-    IconButton, Alert, Snackbar, Avatar
+    IconButton, Alert, Snackbar, Avatar, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Block as BlockIcon, CheckCircle as CheckCircleIcon, Add as AddIcon } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -34,12 +34,26 @@ interface Rol {
 }
 
 const carreras = [
-    "Actuaria", "Arquitectura", "Ciencia de Datos",
-    "Ciencias Politicas y Administracion Publica", "Comunicacion",
-    "Derecho", "Diseno Grafico", "Economia", "Ensenanza de Ingles",
-    "Filosofia", "Historia", "Ingenieria Civil",
-    "Lengua y Literatura Hispanicas", "Matematicas Aplicadas y Computacion",
-    "Pedagogia", "Relaciones Internacionales", "Sociologia"
+    "Actuaria",
+    "Arquitectura",
+    "Ciencias Politicas y Administracion Publica",
+    "Comunicacion",
+    "Derecho",
+    "Diseño Grafico",
+    "Economia",
+    "Enseñanza de (Español) (Inglés) Como Lengua Extranjera",
+    "Enseñanza de Ingles",
+    "Filosofia",
+    "Historia",
+    "Ingenieria Civil",
+    "Lengua y Literaturas Hispanicas",
+    "Matematicas Aplicadas y Computacion",
+    "Pedagogia",
+    "Relaciones Internacionales",
+    "Sociologia",
+    "Derecho (SUAyED)",
+    "Relaciones Internacionales (SUAyED)",
+    "LICEL"
 ];
 
 const coloresPerfil = ['#003DA5', '#D6A600', '#001F54', '#4A4A4A', '#00897B', '#c62828', '#6a1b9a', '#00695c'];
@@ -264,87 +278,87 @@ const AdminUsuarios: React.FC = () => {
                     </div>
 
                     <div className="admin-usuarios-table-card">
-                        <table className="admin-usuarios-user-table">
-                            <thead>
-                                <tr>
-                                    <th>USUARIO</th>
-                                    <th>CORREO</th>
-                                    <th>NUMERO CUENTA</th>
-                                    <th>CARRERA</th>
-                                    <th>ROL</th>
-                                    <th>ESTADO</th>
-                                    <th>ACCIONES</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
-                                    <tr>
-                                        <td colSpan={7} style={{ textAlign: 'center', padding: '40px' }}>
-                                            Cargando usuarios...
-                                        </td>
-                                    </tr>
-                                ) : usuarios.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={7} style={{ textAlign: 'center', padding: '40px' }}>
-                                            No hay usuarios registrados
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    usuarios.map((usuario) => (
-                                        <tr key={usuario.id_user}>
-                                            <td data-label="USUARIO">
-                                                <div className="admin-usuarios-user-cell">
-                                                    <Avatar 
-                                                        sx={{ 
-                                                            width: 45, 
-                                                            height: 45, 
-                                                            bgcolor: getColorPerfil(usuario.id_user),
-                                                            fontSize: '1.2rem',
-                                                            fontWeight: 'bold'
-                                                        }}
-                                                    >
-                                                        {getInitials(usuario.nombre_completo || usuario.correo)}
-                                                    </Avatar>
-                                                    <div>
+                        <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+                            <Table className="admin-usuarios-user-table" sx={{ minWidth: 800 }}>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>USUARIO</TableCell>
+                                        <TableCell>CORREO</TableCell>
+                                        <TableCell>NUMERO CUENTA</TableCell>
+                                        <TableCell>CARRERA</TableCell>
+                                        <TableCell>ROL</TableCell>
+                                        <TableCell>ESTADO</TableCell>
+                                        <TableCell>ACCIONES</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {loading ? (
+                                        <TableRow>
+                                            <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                                                Cargando usuarios...
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : usuarios.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                                                No hay usuarios registrados
+                                            </TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        usuarios.map((usuario) => (
+                                            <TableRow key={usuario.id_user}>
+                                                <TableCell>
+                                                    <div className="admin-usuarios-user-cell">
+                                                        <Avatar 
+                                                            sx={{ 
+                                                                width: 40, 
+                                                                height: 40, 
+                                                                bgcolor: getColorPerfil(usuario.id_user),
+                                                                fontSize: '1rem',
+                                                                fontWeight: 'bold'
+                                                            }}
+                                                        >
+                                                            {getInitials(usuario.nombre_completo || usuario.correo)}
+                                                        </Avatar>
                                                         <div className="admin-usuarios-u-name">{usuario.nombre_completo || 'Sin nombre'}</div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td data-label="CORREO">{usuario.correo}</td>
-                                            <td data-label="NUMERO CUENTA">{usuario.n_cuenta}</td>
-                                            <td data-label="CARRERA">{usuario.carrera || 'Sin carrera'}</td>
-                                            <td data-label="ROL">
-                                                <div className="admin-usuarios-role-cell">
-                                                    <span className="admin-usuarios-dot-role" style={{ backgroundColor: getRolColor(usuario.rol) }}></span>
-                                                    {usuario.rol}
-                                                </div>
-                                            </td>
-                                            <td data-label="ESTADO">
-                                                <span className={`admin-usuarios-status-pill ${usuario.activo ? 'activo' : 'inactivo'}`}>
-                                                    {usuario.activo ? 'Activo' : 'Inactivo'}
-                                                </span>
-                                            </td>
-                                            <td data-label="ACCIONES">
-                                                <div className="admin-usuarios-action-btns">
-                                                    <button className="admin-usuarios-icon-action" onClick={() => handleOpenEditModal(usuario)} title="Editar">
-                                                        <EditIcon fontSize="small" />
-                                                    </button>
-                                                    <button className="admin-usuarios-icon-action" onClick={() => handleCambiarEstado(usuario)} title={usuario.activo ? 'Desactivar' : 'Activar'}>
-                                                        {usuario.activo ? <BlockIcon fontSize="small" /> : <CheckCircleIcon fontSize="small" />}
-                                                    </button>
-                                                    <button className="admin-usuarios-icon-action" onClick={() => handleOpenRolModal(usuario)} title="Cambiar rol">
-                                                        👤
-                                                    </button>
-                                                    <button className="admin-usuarios-icon-action" onClick={() => handleEliminar(usuario)} title="Eliminar" style={{ color: '#dc3545' }}>
-                                                        <DeleteIcon fontSize="small" />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                                                </TableCell>
+                                                <TableCell sx={{ maxWidth: 200, wordBreak: 'break-word' }}>{usuario.correo}</TableCell>
+                                                <TableCell>{usuario.n_cuenta}</TableCell>
+                                                <TableCell sx={{ maxWidth: 180, wordBreak: 'break-word' }}>{usuario.carrera || 'Sin carrera'}</TableCell>
+                                                <TableCell>
+                                                    <div className="admin-usuarios-role-cell">
+                                                        <span className="admin-usuarios-dot-role" style={{ backgroundColor: getRolColor(usuario.rol) }}></span>
+                                                        {usuario.rol}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <span className={`admin-usuarios-status-pill ${usuario.activo ? 'activo' : 'inactivo'}`}>
+                                                        {usuario.activo ? 'Activo' : 'Inactivo'}
+                                                    </span>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="admin-usuarios-action-btns">
+                                                        <IconButton size="small" onClick={() => handleOpenEditModal(usuario)} title="Editar">
+                                                            <EditIcon fontSize="small" />
+                                                        </IconButton>
+                                                        <IconButton size="small" onClick={() => handleCambiarEstado(usuario)} title={usuario.activo ? 'Desactivar' : 'Activar'}>
+                                                            {usuario.activo ? <BlockIcon fontSize="small" /> : <CheckCircleIcon fontSize="small" />}
+                                                        </IconButton>
+                                                        <IconButton size="small" onClick={() => handleOpenRolModal(usuario)} title="Cambiar rol">
+                                                            👤
+                                                        </IconButton>
+                                                        <IconButton size="small" onClick={() => handleEliminar(usuario)} title="Eliminar" sx={{ color: '#dc3545' }}>
+                                                            <DeleteIcon fontSize="small" />
+                                                        </IconButton>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </div>
                 </div>
             </main>
