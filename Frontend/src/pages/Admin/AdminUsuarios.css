@@ -109,7 +109,7 @@
 
 .admin-usuarios-white-btn:hover {
     background: #F8F9FC;
-    border-color: #003DA6;
+    border-color: #003DA5;
 }
 
 .admin-usuarios-gold-btn {
@@ -170,7 +170,11 @@
     width: 45px;
     height: 45px;
     border-radius: 12px;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
 .admin-usuarios-u-name {
@@ -227,19 +231,66 @@
     transition: color 0.2s;
     display: flex;
     align-items: center;
+    padding: 4px;
 }
 
 .admin-usuarios-icon-action:hover {
     color: #003DA5;
 }
 
-@media (max-width: 768px) {
+/* Modal styles */
+.admin-usuarios-modal-titulo {
+    background-color: #003DA5;
+    color: white;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 600;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-usuarios-modal-close {
+    color: white;
+    padding: 4px;
+}
+
+.admin-usuarios-modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
     .admin-usuarios-main {
         margin-left: 0;
     }
     
     .admin-usuarios-content {
         padding: 20px;
+    }
+    
+    .admin-usuarios-table-card {
+        overflow-x: auto;
+    }
+    
+    .admin-usuarios-user-table {
+        min-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-usuarios-topbar {
+        padding: 12px 20px;
+    }
+    
+    .admin-usuarios-topbar-name,
+    .admin-usuarios-topbar-role {
+        display: none;
+    }
+    
+    .admin-usuarios-content {
+        padding: 20px 15px;
     }
     
     .admin-usuarios-top-actions {
@@ -258,7 +309,7 @@
     
     .admin-usuarios-user-table th,
     .admin-usuarios-user-table td {
-        padding: 12px;
+        padding: 15px;
     }
     
     .admin-usuarios-user-cell {
@@ -279,13 +330,14 @@
         border: 1px solid #E2E8F0;
         border-radius: 12px;
         padding: 15px;
+        background: white;
     }
     
     .admin-usuarios-user-table td {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px;
+        padding: 12px;
         border-bottom: 1px solid #F7FAFC;
     }
     
@@ -298,10 +350,15 @@
         font-weight: 700;
         color: #A0AEC0;
         font-size: 11px;
+        min-width: 100px;
     }
     
     .admin-usuarios-user-cell {
         flex-direction: row;
         align-items: center;
+    }
+    
+    .admin-usuarios-action-btns {
+        justify-content: flex-end;
     }
 }

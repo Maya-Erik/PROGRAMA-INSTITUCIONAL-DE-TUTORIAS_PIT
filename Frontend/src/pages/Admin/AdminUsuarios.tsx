@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Container, Box, Button, Paper, Table, TableHead, TableRow,
-    TableCell, TableBody, TableContainer, IconButton, Chip, Dialog,
-    DialogTitle, DialogContent, DialogActions, TextField, MenuItem,
-    FormControl, InputLabel, Select, Alert, Snackbar, Avatar
+    Box, Button, Dialog, DialogTitle, DialogContent, DialogActions,
+    TextField, MenuItem, FormControl, InputLabel, Select,
+    IconButton, Alert, Snackbar, Avatar
 } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Block as BlockIcon, CheckCircle as CheckCircleIcon, Add as AddIcon } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -310,8 +309,6 @@ const AdminUsuarios: React.FC = () => {
                                                         <div className="admin-usuarios-u-name">{usuario.nombre_completo || 'Sin nombre'}</div>
                                                     </div>
                                                 </div>
-                                             </Fragment>
-                                            </div>
                                             </td>
                                             <td data-label="CORREO">{usuario.correo}</td>
                                             <td data-label="NUMERO CUENTA">{usuario.n_cuenta}</td>
@@ -321,15 +318,11 @@ const AdminUsuarios: React.FC = () => {
                                                     <span className="admin-usuarios-dot-role" style={{ backgroundColor: getRolColor(usuario.rol) }}></span>
                                                     {usuario.rol}
                                                 </div>
-                                            </Fragment>
-                                            </div>
                                             </td>
                                             <td data-label="ESTADO">
                                                 <span className={`admin-usuarios-status-pill ${usuario.activo ? 'activo' : 'inactivo'}`}>
                                                     {usuario.activo ? 'Activo' : 'Inactivo'}
                                                 </span>
-                                            </Fragment>
-                                            </div>
                                             </td>
                                             <td data-label="ACCIONES">
                                                 <div className="admin-usuarios-action-btns">
@@ -346,13 +339,7 @@ const AdminUsuarios: React.FC = () => {
                                                         <DeleteIcon fontSize="small" />
                                                     </button>
                                                 </div>
-                                             </Fragment>
-                                            </div>
                                             </td>
-                                        </Fragment>
-                                            </div>
-                                        </Fragment>
-                                            </div>
                                         </tr>
                                     ))
                                 )}
