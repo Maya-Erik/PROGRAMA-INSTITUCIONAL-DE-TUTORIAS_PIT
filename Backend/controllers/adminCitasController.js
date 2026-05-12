@@ -1,7 +1,5 @@
-
 const db = require("../connection");
 
-// Obtener todas las citas
 exports.obtenerCitas = async (req, res) => {
     try {
         const result = await db.query(`
@@ -12,20 +10,15 @@ exports.obtenerCitas = async (req, res) => {
         `);
         res.json({ success: true, citas: result.rows });
     } catch (error) {
-        console.error("Error al obtener citas:", error);
+        console.error("Error:", error);
         res.status(500).json({ success: false, error: "Error al obtener citas" });
     }
 };
 
-// Crear cita
 exports.crearCita = async (req, res) => {
     try {
         const { materia, tutor_nombre, fecha, hora, capacidad, tipo, carrera } = req.body;
         const userId = req.user.id;
-        
-        if (!materia || !tutor_nombre || !fecha || !hora) {
-            return res.status(400).json({ success: false, error: "Todos los campos son obligatorios" });
-        }
         
         const result = await db.query(`
             INSERT INTO tr_citas (materia, tutor_nombre, fecha, hora, capacidad, tipo, carrera, id_creador)
@@ -35,12 +28,11 @@ exports.crearCita = async (req, res) => {
         
         res.json({ success: true, cita: result.rows[0] });
     } catch (error) {
-        console.error("Error al crear cita:", error);
-        res.status(500).json({ success: false, error: "Error al crear cita" });
+        console.error("Error:", error);
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 
-// Actualizar cita
 exports.actualizarCita = async (req, res) => {
     try {
         const { id } = req.params;
@@ -56,28 +48,25 @@ exports.actualizarCita = async (req, res) => {
         
         res.json({ success: true, cita: result.rows[0] });
     } catch (error) {
-        console.error("Error al actualizar cita:", error);
-        res.status(500).json({ success: false, error: "Error al actualizar cita" });
+        console.error("Error:", error);
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 
-// Eliminar cita
 exports.eliminarCita = async (req, res) => {
     try {
         const { id } = req.params;
         
-        // Eliminar inscripciones primero
         await db.query("DELETE FROM tr_citas_inscritos WHERE id_cita = $1", [id]);
         await db.query("DELETE FROM tr_citas WHERE id_cita = $1", [id]);
         
         res.json({ success: true, message: "Cita eliminada correctamente" });
     } catch (error) {
-        console.error("Error al eliminar cita:", error);
-        res.status(500).json({ success: false, error: "Error al eliminar cita" });
+        console.error("Error:", error);
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 
-// Asignar salon (solo admin)
 exports.asignarLugar = async (req, res) => {
     try {
         const { id } = req.params;
@@ -89,7 +78,7 @@ exports.asignarLugar = async (req, res) => {
         
         res.json({ success: true, cita: result.rows[0] });
     } catch (error) {
-        console.error("Error al asignar lugar:", error);
-        res.status(500).json({ success: false, error: "Error al asignar lugar" });
+        console.error("Error:", error);
+        res.status(500).json({ success: false, error: error.message });
     }
 };
