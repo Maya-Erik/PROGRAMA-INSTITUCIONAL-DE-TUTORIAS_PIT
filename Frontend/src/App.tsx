@@ -13,7 +13,6 @@ import Bitacora from "./pages/Permisos/Bitacora/Bitacora"
 import Divisiones from "./pages/Divisiones/Divisiones"
 import Accesos from "./pages/Permisos/Accesos/Accesos"
 import Roles from "./pages/Permisos/Roles/Roles"
-import Usuarios from "./pages/Permisos/Usuarios/Usuarios"
 import ProtectedRoute from "./components/ProtectedRoute"
 import AdminCitas from "./pages/Admin/AdminCitas";
 import AdminUsuarios from "./pages/Admin/AdminUsuarios";
