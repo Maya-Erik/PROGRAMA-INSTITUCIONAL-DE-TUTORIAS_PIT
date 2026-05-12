@@ -12,7 +12,7 @@ const verifyToken = (req, res, next) => {
 
     try {
         // Verificar y decodificar el token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'llave_secreta_por_defecto');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'pit_fes_acatlan_secret_key_2026');
 
         // Adjuntar el payload decodificado (que incluye el rol) al objeto request
         req.user = decoded;

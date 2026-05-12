@@ -2,6 +2,7 @@ const db = require("../connection");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -53,7 +54,7 @@ const login = async (req, res) => {
             nombre: user.nombre_completo
         };
 
-        const secretKey = process.env.JWT_SECRET || 'llave_secreta_desarrollo_pit';
+        const secretKey = process.env.JWT_SECRET || 'pit_fes_acatlan_secret_key_2026';
         const token = jwt.sign(tokenPayload, secretKey, { expiresIn: '8h' });
 
         return res.status(200).json({
