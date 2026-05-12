@@ -11,12 +11,14 @@ const getHeaders = () => {
 
 //Autenticacion
 export const login = async (email: string, password: string) => {
-    const res = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     });
-    return res.json();
+    const data = await response.json();
+    console.log('Login API response:', data);
+    return data;
 };
 
 export const register = async (userData: {
