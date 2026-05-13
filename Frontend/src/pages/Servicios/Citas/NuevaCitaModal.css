@@ -231,3 +231,15 @@
 .btn-cancel:hover {
   color: #333;
 }
+
+.helper-text {
+  display: block;
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.form-group input[readonly] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
