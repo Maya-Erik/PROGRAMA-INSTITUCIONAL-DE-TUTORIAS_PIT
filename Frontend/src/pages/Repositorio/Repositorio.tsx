@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
-import { obtenerMaterialesPorCategoria, obtenerCategorias } from '../../services/api';
+import { obtenerMaterialesPorCategoria, obtenerMaterialesPorCarrera, obtenerCategorias } from '../../services/api';
 import './Repositorio.css';
 
 interface Material {
@@ -14,18 +14,11 @@ interface Material {
     tamano: string;
 }
 
-interface Categoria {
-    id_categoria: number;
-    nombre: string;
-    descripcion: string;
-}
-
 const Repositorio = () => {
     const navigate = useNavigate();
     const [seccionActiva, setSeccionActiva] = useState('documentos');
     const [materialesDoc, setMaterialesDoc] = useState<Material[]>([]);
     const [materialesFormacion, setMaterialesFormacion] = useState<Material[]>([]);
-    const [categorias, setCategorias] = useState<Categoria[]>([]);
     const [loading, setLoading] = useState(true);
 
     const carreras = [
@@ -43,15 +36,13 @@ const Repositorio = () => {
 
     const cargarDatos = async () => {
         setLoading(true);
-        const [docRes, formacionRes, catsRes] = await Promise.all([
+        const [docRes, formacionRes] = await Promise.all([
             obtenerMaterialesPorCategoria('documentos_institucionales'),
-            obtenerMaterialesPorCategoria('recursos_formacion'),
-            obtenerCategorias()
+            obtenerMaterialesPorCategoria('recursos_formacion')
         ]);
         
         if (docRes.success) setMaterialesDoc(docRes.materiales || []);
         if (formacionRes.success) setMaterialesFormacion(formacionRes.materiales || []);
-        if (catsRes.success) setCategorias(catsRes.categorias || []);
         
         setLoading(false);
     };
