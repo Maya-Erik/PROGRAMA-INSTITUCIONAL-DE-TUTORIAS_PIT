@@ -45,6 +45,7 @@ const Agenda: React.FC = () => {
   const [userRole, setUserRole] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [userCarrera, setUserCarrera] = useState<string>('');
+  const [userId, setUserId] = useState<number>(0);
   const [filtroCarrera, setFiltroCarrera] = useState<string>('');
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
 
@@ -57,6 +58,7 @@ const Agenda: React.FC = () => {
           setUserRole(user.role || '');
           setUserName(user.nombre || user.nombre_completo || user.email?.split('@')[0] || 'Usuario');
           setUserCarrera(user.carrera || '');
+          setUserId(user.id || 0);
         }
         await Promise.all([cargarCitas(), cargarMisCitas()]);
       } catch (error) {
@@ -107,7 +109,17 @@ const Agenda: React.FC = () => {
     return misCitasList.some(c => c.id_cita === citaId);
   };
 
-  const citasFiltradas = () => {
+  // Verificar si el usuario es el creador de la cita (para tutores y tutorados)
+  const esCreador = (cita: Cita) => {
+    return cita.id_creador === userId;
+  };
+
+  // Filtrar citas que el usuario puede ver (las que creo o las que esta inscrito)
+  const misCitasFiltradas = misCitasList.filter(cita => {
+    return estaInscrito(cita.id_cita) || esCreador(cita);
+  });
+
+  const citasDisponibles = () => {
     let filtradas = citas;
     if (filtroCarrera && userRole === 'alumno') {
       filtradas = filtradas.filter(c => c.carrera === filtroCarrera);
@@ -182,7 +194,7 @@ const Agenda: React.FC = () => {
                 </Box>
 
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
-                  {citasFiltradas().map((cita) => (
+                  {citasDisponibles().map((cita) => (
                     <Card key={cita.id_cita} className="agenda-tutoria-card">
                       <CardContent>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
@@ -233,24 +245,46 @@ const Agenda: React.FC = () => {
 
             {tabValue === 1 && (
               <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
-                {misCitasList.map((cita) => (
-                  <Card key={cita.id_cita} className="agenda-tutoria-card">
-                    <CardContent>
-                      <Typography variant="h6">{cita.materia}</Typography>
-                      <Typography variant="body2" color="textSecondary">{cita.tutor_nombre}</Typography>
-                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                        📅 {new Date(cita.fecha).toLocaleDateString('es-MX')}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">⏰ {cita.hora}</Typography>
-                      <Typography variant="body2" color="textSecondary">📍 {cita.lugar || 'Por asignar'}</Typography>
-                      <Chip 
-                        label={cita.estado === 'disponible' ? 'Activa' : 'Completada'}
-                        size="small" 
-                        sx={{ mt: 1 }}
-                      />
-                    </CardContent>
-                  </Card>
-                ))}
+                {misCitasFiltradas.length === 0 ? (
+                  <Box sx={{ textAlign: 'center', py: 4, width: '100%' }}>
+                    <Typography variant="body1" color="textSecondary">
+                      No tienes tutorias registradas
+                    </Typography>
+                  </Box>
+                ) : (
+                  misCitasFiltradas.map((cita) => (
+                    <Card key={cita.id_cita} className="agenda-tutoria-card">
+                      <CardContent>
+                        <Typography variant="h6">{cita.materia}</Typography>
+                        <Typography variant="body2" color="textSecondary">{cita.tutor_nombre}</Typography>
+                        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                          📅 {new Date(cita.fecha).toLocaleDateString('es-MX')}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">⏰ {cita.hora}</Typography>
+                        <Typography variant="body2" color="textSecondary">📍 {cita.lugar || 'Por asignar'}</Typography>
+                        {esCreador(cita) && (
+                          <Chip 
+                            label="Creada por ti" 
+                            size="small" 
+                            sx={{ mt: 1, bgcolor: '#D6A600', color: '#001F54' }}
+                          />
+                        )}
+                        {estaInscrito(cita.id_cita) && !esCreador(cita) && (
+                          <Chip 
+                            label="Inscrito" 
+                            size="small" 
+                            sx={{ mt: 1, bgcolor: '#28a745', color: 'white' }}
+                          />
+                        )}
+                        <Chip 
+                          label={cita.estado === 'disponible' ? 'Activa' : 'Completada'}
+                          size="small" 
+                          sx={{ mt: 1, ml: 1 }}
+                        />
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
               </Box>
             )}
           </Container>
