@@ -14,12 +14,13 @@ exports.obtenerCitas = async (req, res) => {
             SELECT c.*, u.nombre_completo as creador_nombre
             FROM tr_citas c
             LEFT JOIN tr_user u ON c.id_creador = u.id_user
-            WHERE c.estado = "disponible"
+            WHERE c.estado = 'disponible'
         `;
+        
         const params = [];
         
         // Si es alumno, solo ver citas de su carrera
-        if (userRole === 'alumno') {
+        if (userRole === 'alumno' && userCarrera) {
             query += ` AND c.carrera = $1`;
             params.push(userCarrera);
             console.log("Filtrando por carrera:", userCarrera);
@@ -28,11 +29,9 @@ exports.obtenerCitas = async (req, res) => {
         query += ` ORDER BY c.fecha ASC, c.hora ASC`;
         
         console.log("Query:", query);
-        console.log("Params:", params);
         
         const result = await db.query(query, params);
         console.log("Citas encontradas:", result.rows.length);
-        console.log("Citas:", result.rows);
         
         res.json({ success: true, citas: result.rows });
     } catch (error) {
@@ -40,6 +39,7 @@ exports.obtenerCitas = async (req, res) => {
         res.status(500).json({ success: false, error: "Error al obtener citas" });
     }
 };
+
 
 // Crear cita (solo tutor, tutorado y admin)
 exports.crearCita = async (req, res) => {
@@ -135,12 +135,10 @@ exports.inscribirseCita = async (req, res) => {
         const userId = req.user.id;
         const userRole = req.user.role;
         
-        // Solo alumnos o tutorados pueden inscribirse
         if (!['alumno', 'tutorado'].includes(userRole)) {
             return res.status(403).json({ success: false, error: "No tienes permisos para inscribirte" });
         }
         
-        // Verificar si ya está inscrito
         const checkInscripcion = await db.query(
             `SELECT * FROM tr_citas_inscritos WHERE id_cita = $1 AND id_usuario = $2`,
             [id, userId]
@@ -150,14 +148,13 @@ exports.inscribirseCita = async (req, res) => {
             return res.status(400).json({ success: false, error: "Ya estás inscrito en esta cita" });
         }
         
-        // Obtener cita y verificar capacidad
         const citaQuery = await db.query(
-            `SELECT capacidad, inscritos FROM tr_citas WHERE id_cita = $1`,
+            `SELECT capacidad, inscritos FROM tr_citas WHERE id_cita = $1 AND estado = 'disponible'`,
             [id]
         );
         
         if (citaQuery.rows.length === 0) {
-            return res.status(404).json({ success: false, error: "Cita no encontrada" });
+            return res.status(404).json({ success: false, error: "Cita no encontrada o no disponible" });
         }
         
         const cita = citaQuery.rows[0];
@@ -166,13 +163,11 @@ exports.inscribirseCita = async (req, res) => {
             return res.status(400).json({ success: false, error: "No hay cupos disponibles" });
         }
         
-        // Inscribir usuario
         await db.query(
             `INSERT INTO tr_citas_inscritos (id_cita, id_usuario) VALUES ($1, $2)`,
             [id, userId]
         );
         
-        // Actualizar contador de inscritos
         await db.query(
             `UPDATE tr_citas SET inscritos = inscritos + 1 WHERE id_cita = $1`,
             [id]
@@ -189,9 +184,8 @@ exports.inscribirseCita = async (req, res) => {
 exports.misCitas = async (req, res) => {
     try {
         const userId = req.user.id;
-        const userRole = req.user.role;
         
-        let query = `
+        const query = `
             SELECT DISTINCT c.* FROM tr_citas c
             LEFT JOIN tr_citas_inscritos i ON c.id_cita = i.id_cita
             WHERE i.id_usuario = $1 OR c.id_creador = $1
@@ -199,8 +193,6 @@ exports.misCitas = async (req, res) => {
         `;
         
         const result = await db.query(query, [userId]);
-        console.log("misCitas - usuario:", userId);
-        console.log("misCitas - resultado:", result.rows.length);
         
         res.json({ success: true, citas: result.rows });
     } catch (error) {
