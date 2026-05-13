@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom"
 import "./GestionCitas.css"
 
 function GestionCitas() {
+  console.log("=== GestionCitas renderizado ===")
+  
   const [openModal, setOpenModal] = useState(false)
   const [citas, setCitas] = useState<any[]>([])
   const [busqueda, setBusqueda] = useState("")
@@ -16,16 +18,17 @@ function GestionCitas() {
 
   useEffect(() => {
     const role = getUserRole()
+    console.log("useEffect - rol obtenido:", role)
     setUserRole(role || '')
-    
-    if (role === 'admin') {
-      navigate('/admin/citas')
-    } else {
-      cargarCitas()
-    }
+    cargarCitas()
   }, [])
 
+  useEffect(() => {
+    console.log("openModal cambió a:", openModal)
+  }, [openModal])
+
   const cargarCitas = async () => {
+    console.log("Cargando citas...")
     setLoading(true)
     try {
       const data = await obtenerCitas()
@@ -40,10 +43,12 @@ function GestionCitas() {
   }
 
   const handleOpenModal = () => {
+    console.log("handleOpenModal - Abriendo modal")
     setOpenModal(true)
   }
 
   const handleCloseModal = () => {
+    console.log("handleCloseModal - Cerrando modal")
     setOpenModal(false)
     cargarCitas()
   }
@@ -121,7 +126,7 @@ function GestionCitas() {
             <h1>Gestion de Citas de Tutoria</h1>
             <p>Administra y programa las sesiones academicas de acompañamiento.</p>
           </div>
-          {(userRole === 'admin' || userRole === 'tutor' || userRole === 'tutorado') && (
+          {userRole && (userRole === 'admin' || userRole === 'tutor' || userRole === 'tutorado') && (
             <button className="gc-btn-nueva" onClick={handleOpenModal}>
               + Nueva Cita
             </button>
