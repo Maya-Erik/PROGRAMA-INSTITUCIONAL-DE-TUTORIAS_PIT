@@ -45,6 +45,7 @@ const Agenda: React.FC = () => {
   const [userRole, setUserRole] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [userCarrera, setUserCarrera] = useState<string>('');
+  const [userId, setUserId] = useState<number>(0);
   const [filtroCarrera, setFiltroCarrera] = useState<string>('');
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
 
@@ -57,6 +58,7 @@ const Agenda: React.FC = () => {
           setUserRole(user.role || '');
           setUserName(user.nombre || user.nombre_completo || user.email?.split('@')[0] || 'Usuario');
           setUserCarrera(user.carrera || '');
+          setUserId(user.id || 0);
         }
         await Promise.all([cargarCitas(), cargarMisCitas()]);
       } catch (error) {
@@ -116,17 +118,41 @@ const Agenda: React.FC = () => {
     return misCitasList.some(c => c.id_cita === citaId);
   };
 
-  const citasDisponibles = () => {
-    let filtradas = citas;
-    if (filtroCarrera) {
-      filtradas = filtradas.filter(c => c.carrera === filtroCarrera);
-    } else if (userRole === 'alumno') {
-      filtradas = filtradas.filter(c => c.carrera === userCarrera);
-    }
-    return filtradas;
+  const esCreador = (cita: Cita) => {
+    return cita.id_creador === userId;
   };
 
-  const misCitasFiltradas = misCitasList;
+  // Para alumnos: filtrar citas disponibles por su carrera
+  const citasDisponibles = () => {
+    if (userRole === 'alumno') {
+      if (filtroCarrera) {
+        return citas.filter(c => c.carrera === filtroCarrera);
+      }
+      return citas.filter(c => c.carrera === userCarrera);
+    }
+    return citas;
+  };
+
+  // Para alumnos: solo mostrar citas donde está inscrito
+  const misCitasFiltradas = () => {
+    if (userRole === 'alumno') {
+      return misCitasList;
+    }
+    // Para admin, tutor, tutorado: mostrar citas donde está inscrito o es creador
+    return misCitasList.filter(cita => {
+      return estaInscrito(cita.id_cita) || esCreador(cita);
+    });
+  };
+
+  const getEstadoUsuario = (cita: Cita) => {
+    if (esCreador(cita)) {
+      return { label: 'Creador', color: '#D6A600', bgColor: '#FFF3E0' };
+    }
+    if (estaInscrito(cita.id_cita)) {
+      return { label: 'Inscrito', color: '#28a745', bgColor: '#E8F5E9' };
+    }
+    return null;
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -171,101 +197,93 @@ const Agenda: React.FC = () => {
                   <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <SearchIcon color="primary" /> Tutorias Disponibles
                   </Typography>
-                  <FormControl size="small" sx={{ minWidth: 200 }}>
-                    <Select
-                      value={filtroCarrera}
-                      onChange={(e) => setFiltroCarrera(e.target.value)}
-                      displayEmpty
-                    >
-                      <MenuItem value="">Mi carrera ({userCarrera})</MenuItem>
-                      <MenuItem value="Actuaria">Actuaria</MenuItem>
-                      <MenuItem value="Arquitectura">Arquitectura</MenuItem>
-                      <MenuItem value="Ciencias Politicas y Administracion Publica">Ciencias Politicas</MenuItem>
-                      <MenuItem value="Comunicacion">Comunicacion</MenuItem>
-                      <MenuItem value="Derecho">Derecho</MenuItem>
-                      <MenuItem value="Diseño Grafico">Diseño Grafico</MenuItem>
-                      <MenuItem value="Economia">Economia</MenuItem>
-                      <MenuItem value="Enseñanza de Ingles">Enseñanza de Ingles</MenuItem>
-                      <MenuItem value="Filosofia">Filosofia</MenuItem>
-                      <MenuItem value="Historia">Historia</MenuItem>
-                      <MenuItem value="Ingenieria Civil">Ingenieria Civil</MenuItem>
-                      <MenuItem value="Lengua y Literaturas Hispanicas">Lengua y Literaturas</MenuItem>
-                      <MenuItem value="Matematicas Aplicadas y Computacion">Matematicas Aplicadas</MenuItem>
-                      <MenuItem value="Pedagogia">Pedagogia</MenuItem>
-                      <MenuItem value="Relaciones Internacionales">Relaciones Internacionales</MenuItem>
-                      <MenuItem value="Sociologia">Sociologia</MenuItem>
-                    </Select>
-                  </FormControl>
+                  {userRole === 'alumno' && (
+                    <FormControl size="small" sx={{ minWidth: 200 }}>
+                      <Select
+                        value={filtroCarrera}
+                        onChange={(e) => setFiltroCarrera(e.target.value)}
+                        displayEmpty
+                      >
+                        <MenuItem value="">Mi carrera ({userCarrera})</MenuItem>
+                        <MenuItem value="Actuaria">Actuaria</MenuItem>
+                        <MenuItem value="Arquitectura">Arquitectura</MenuItem>
+                        <MenuItem value="Ciencias Politicas y Administracion Publica">Ciencias Politicas</MenuItem>
+                        <MenuItem value="Comunicacion">Comunicacion</MenuItem>
+                        <MenuItem value="Derecho">Derecho</MenuItem>
+                        <MenuItem value="Diseño Grafico">Diseño Grafico</MenuItem>
+                        <MenuItem value="Economia">Economia</MenuItem>
+                        <MenuItem value="Enseñanza de Ingles">Enseñanza de Ingles</MenuItem>
+                        <MenuItem value="Filosofia">Filosofia</MenuItem>
+                        <MenuItem value="Historia">Historia</MenuItem>
+                        <MenuItem value="Ingenieria Civil">Ingenieria Civil</MenuItem>
+                        <MenuItem value="Lengua y Literaturas Hispanicas">Lengua y Literaturas</MenuItem>
+                        <MenuItem value="Matematicas Aplicadas y Computacion">Matematicas Aplicadas</MenuItem>
+                        <MenuItem value="Pedagogia">Pedagogia</MenuItem>
+                        <MenuItem value="Relaciones Internacionales">Relaciones Internacionales</MenuItem>
+                        <MenuItem value="Sociologia">Sociologia</MenuItem>
+                      </Select>
+                    </FormControl>
+                  )}
                 </Box>
 
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
-                  {citasDisponibles().length === 0 ? (
-                    <Box sx={{ textAlign: 'center', py: 4, width: '100%' }}>
-                      <Typography variant="body1" color="textSecondary">
-                        No hay tutorias disponibles para {filtroCarrera || userCarrera}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    citasDisponibles().map((cita) => (
-                      <Card key={cita.id_cita} className="agenda-tutoria-card">
-                        <CardContent>
-                          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                            <Box className="agenda-icon-box">
-                              <span role="img" aria-label="evento">📅</span>
-                            </Box>
-                            <Chip 
-                              label={(cita.inscritos || 0) >= (cita.capacidad || 1) ? "LLENO" : `${cita.inscritos || 0}/${cita.capacidad || 1} lugares`}
-                              size="small" 
-                              sx={{ 
-                                fontWeight: 'bold',
-                                backgroundColor: (cita.inscritos || 0) >= (cita.capacidad || 1) ? '#ffebee' : '#e8f5e9',
-                                color: (cita.inscritos || 0) >= (cita.capacidad || 1) ? '#c62828' : '#2e7d32'
-                              }} 
-                            />
+                  {citasDisponibles().map((cita) => (
+                    <Card key={cita.id_cita} className="agenda-tutoria-card">
+                      <CardContent>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                          <Box className="agenda-icon-box">
+                            <span role="img" aria-label="evento">📅</span>
                           </Box>
-                          <Typography variant="h6">{cita.materia}</Typography>
-                          <Typography variant="body2" color="textSecondary">{cita.tutor_nombre}</Typography>
-                          <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                            📅 {new Date(cita.fecha).toLocaleDateString('es-MX')}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">⏰ {cita.hora}</Typography>
-                          <Typography variant="body2" color="textSecondary">📍 {cita.lugar || 'Por asignar'}</Typography>
-                          <Typography variant="body2" color="textSecondary">🎓 {cita.carrera}</Typography>
-                        </CardContent>
-                        <Box sx={{ p: 2 }}>
-                          {!estaInscrito(cita.id_cita) && (
-                            <Button 
-                              variant="contained" 
-                              size="small"
-                              fullWidth
-                              disabled={(cita.inscritos || 0) >= (cita.capacidad || 1)}
-                              onClick={() => handleInscribirse(cita.id_cita)}
-                              sx={{ bgcolor: '#003DA5' }}
-                            >
-                              {(cita.inscritos || 0) >= (cita.capacidad || 1) ? 'Sin cupo' : 'Inscribirse'}
-                            </Button>
-                          )}
-                          {estaInscrito(cita.id_cita) && (
-                            <Chip label="Ya estas inscrito" color="success" size="small" sx={{ width: '100%' }} />
-                          )}
+                          <Chip 
+                            label={(cita.inscritos || 0) >= (cita.capacidad || 1) ? "LLENO" : `${cita.inscritos || 0}/${cita.capacidad || 1} lugares`}
+                            size="small" 
+                            sx={{ 
+                              fontWeight: 'bold',
+                              backgroundColor: (cita.inscritos || 0) >= (cita.capacidad || 1) ? '#ffebee' : '#e8f5e9',
+                              color: (cita.inscritos || 0) >= (cita.capacidad || 1) ? '#c62828' : '#2e7d32'
+                            }} 
+                          />
                         </Box>
-                      </Card>
-                    ))
-                  )}
+                        <Typography variant="h6">{cita.materia}</Typography>
+                        <Typography variant="body2" color="textSecondary">{cita.tutor_nombre}</Typography>
+                        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                          📅 {new Date(cita.fecha).toLocaleDateString('es-MX')}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">⏰ {cita.hora}</Typography>
+                        <Typography variant="body2" color="textSecondary">📍 {cita.lugar || 'Por asignar'}</Typography>
+                        <Typography variant="body2" color="textSecondary">🎓 {cita.carrera}</Typography>
+                      </CardContent>
+                      <Box sx={{ p: 2 }}>
+                        {(userRole === 'alumno' || userRole === 'tutorado') && !estaInscrito(cita.id_cita) && !esCreador(cita) && (
+                          <Button 
+                            variant="contained" 
+                            size="small"
+                            fullWidth
+                            disabled={(cita.inscritos || 0) >= (cita.capacidad || 1)}
+                            onClick={() => handleInscribirse(cita.id_cita)}
+                            sx={{ bgcolor: '#003DA5' }}
+                          >
+                            {(cita.inscritos || 0) >= (cita.capacidad || 1) ? 'Sin cupo' : 'Inscribirse'}
+                          </Button>
+                        )}
+                        {estaInscrito(cita.id_cita) && (
+                          <Chip label="Inscrito" color="success" size="small" sx={{ width: '100%' }} />
+                        )}
+                        {esCreador(cita) && (
+                          <Chip label="Creada por ti" size="small" sx={{ width: '100%', bgcolor: '#D6A600', color: '#001F54' }} />
+                        )}
+                      </Box>
+                    </Card>
+                  ))}
                 </Box>
               </>
             )}
 
             {tabValue === 1 && (
               <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
-                {misCitasFiltradas.length === 0 ? (
-                  <Box sx={{ textAlign: 'center', py: 4, width: '100%' }}>
-                    <Typography variant="body1" color="textSecondary">
-                      No estas inscrito en ninguna tutoria
-                    </Typography>
-                  </Box>
-                ) : (
-                  misCitasFiltradas.map((cita) => (
+                {misCitasFiltradas().map((cita) => {
+                  const estado = getEstadoUsuario(cita);
+                  return (
                     <Card key={cita.id_cita} className="agenda-tutoria-card">
                       <CardContent>
                         <Typography variant="h6">{cita.materia}</Typography>
@@ -275,19 +293,28 @@ const Agenda: React.FC = () => {
                         </Typography>
                         <Typography variant="body2" color="textSecondary">⏰ {cita.hora}</Typography>
                         <Typography variant="body2" color="textSecondary">📍 {cita.lugar || 'Por asignar'}</Typography>
-                        <Chip 
-                          label="Inscrito" 
-                          size="small" 
-                          sx={{ mt: 1, bgcolor: '#28a745', color: 'white' }}
-                        />
+                        {estado && (
+                          <Chip 
+                            label={estado.label} 
+                            size="small" 
+                            sx={{ mt: 1, bgcolor: estado.bgColor, color: estado.color, fontWeight: 'bold' }}
+                          />
+                        )}
                         <Chip 
                           label={cita.estado === 'disponible' ? 'Activa' : 'Completada'}
                           size="small" 
-                          sx={{ mt: 1, ml: 1 }}
+                          sx={{ mt: 1, ml: estado ? 1 : 0 }}
                         />
                       </CardContent>
                     </Card>
-                  ))
+                  );
+                })}
+                {misCitasFiltradas().length === 0 && (
+                  <Box sx={{ textAlign: 'center', py: 4, width: '100%' }}>
+                    <Typography variant="body1" color="textSecondary">
+                      No hay tutorias registradas
+                    </Typography>
+                  </Box>
                 )}
               </Box>
             )}
