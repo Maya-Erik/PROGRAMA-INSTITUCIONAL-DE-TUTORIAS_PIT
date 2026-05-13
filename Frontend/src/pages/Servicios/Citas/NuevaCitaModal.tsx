@@ -1,14 +1,15 @@
 import "./NuevaCitaModal.css"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ReactDOM from "react-dom"
 import { crearCita, getUserRole } from "../../../services/api"
 
 interface Props {
   isOpen: boolean
   onClose: () => void
+  onCitaCreada?: () => void
 }
 
-function NuevaCitaModal({ isOpen, onClose }: Props) {
+function NuevaCitaModal({ isOpen, onClose, onCitaCreada }: Props) {
   const [form, setForm] = useState({
     tema: "",
     tutor_nombre: "",
@@ -21,6 +22,7 @@ function NuevaCitaModal({ isOpen, onClose }: Props) {
   })
 
   const [loading, setLoading] = useState(false)
+  const [cerrando, setCerrando] = useState(false)
   const userRole = getUserRole()
   const userStr = localStorage.getItem('user')
   let userName = ""
@@ -29,6 +31,12 @@ function NuevaCitaModal({ isOpen, onClose }: Props) {
     const user = JSON.parse(userStr)
     userName = user.nombre || user.nombre_completo || user.email?.split('@')[0] || ""
   }
+
+  useEffect(() => {
+    if (form.tipo === 'individual') {
+      setForm(prev => ({ ...prev, capacidad: 1 }))
+    }
+  }, [form.tipo])
 
   const carreras = [
     "Actuaria", "Arquitectura", "Ciencias Politicas y Administracion Publica",
@@ -40,7 +48,16 @@ function NuevaCitaModal({ isOpen, onClose }: Props) {
   ]
 
   const handleChange = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setForm({ ...form, [name]: value })
+  }
+
+  const handleClose = () => {
+    setCerrando(true)
+    setTimeout(() => {
+      onClose()
+      setCerrando(false)
+    }, 300)
   }
 
   const handleSubmit = async (e: any) => {
@@ -67,7 +84,8 @@ function NuevaCitaModal({ isOpen, onClose }: Props) {
       const result = await crearCita(citaData)
       if (result.success) {
         alert("Cita creada correctamente")
-        onClose()
+        if (onCitaCreada) onCitaCreada()
+        handleClose()
       } else {
         alert(result.error || "Error al crear cita")
       }
@@ -81,7 +99,7 @@ function NuevaCitaModal({ isOpen, onClose }: Props) {
   if (!isOpen) return null
 
   return ReactDOM.createPortal(
-    <div className="modal-overlay" onClick={onClose}>
+    <div className={`modal-overlay ${cerrando ? 'cerrando' : ''}`} onClick={handleClose}>
       <div className="modal-cita" onClick={(e) => e.stopPropagation()}>
         <div className="modal-left">
           <span className="badge">NUEVA TUTORIA</span>
@@ -100,6 +118,10 @@ function NuevaCitaModal({ isOpen, onClose }: Props) {
         </div>
 
         <form className="modal-right" onSubmit={handleSubmit}>
+          <button type="button" className="modal-close-btn" onClick={handleClose}>
+            ✕
+          </button>
+
           <div className="form-row">
             <div className="form-group">
               <label>TEMA *</label>
@@ -188,11 +210,17 @@ function NuevaCitaModal({ isOpen, onClose }: Props) {
                   onChange={handleChange} 
                   min="1" 
                   max="20"
+                  disabled={form.tipo === 'individual'}
                   required
                 />
                 <span className="input-icon">👥</span>
               </div>
-              <small className="helper-text">Maximo 20 personas para tutorias grupales</small>
+              {form.tipo === 'individual' && (
+                <small className="helper-text">Las tutorias individuales tienen capacidad de 1 persona</small>
+              )}
+              {form.tipo === 'grupal' && (
+                <small className="helper-text">Maximo 20 personas para tutorias grupales</small>
+              )}
             </div>
           </div>
 
@@ -228,7 +256,7 @@ function NuevaCitaModal({ isOpen, onClose }: Props) {
             <button type="submit" className="btn-submit" disabled={loading}>
               {loading ? 'Creando...' : '📅 Crear Tutoria'}
             </button>
-            <button type="button" className="btn-cancel" onClick={onClose}>
+            <button type="button" className="btn-cancel" onClick={handleClose}>
               Cancelar
             </button>
           </div>
