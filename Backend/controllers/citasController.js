@@ -7,6 +7,7 @@ exports.obtenerCitas = async (req, res) => {
         const userRole = req.user.role;
         const userCarrera = req.user.carrera;
         
+        console.log("=== obtenerCitas ===");
         console.log("Usuario:", { userId, userRole, userCarrera });
         
         let query = `
@@ -15,16 +16,23 @@ exports.obtenerCitas = async (req, res) => {
             LEFT JOIN tr_user u ON c.id_creador = u.id_user
             WHERE c.estado = 'disponible'
         `;
+        const params = [];
         
-        // Alumno solo ve citas de su carrera
+        // Si es alumno, solo ver citas de su carrera
         if (userRole === 'alumno') {
-            query += ` AND c.carrera = '${userCarrera}'`;
+            query += ` AND c.carrera = $1`;
+            params.push(userCarrera);
+            console.log("Filtrando por carrera:", userCarrera);
         }
         
-        query += ` ORDER BY c.fecha DESC, c.hora DESC`;
+        query += ` ORDER BY c.fecha ASC, c.hora ASC`;
         
-        const result = await db.query(query);
+        console.log("Query:", query);
+        console.log("Params:", params);
+        
+        const result = await db.query(query, params);
         console.log("Citas encontradas:", result.rows.length);
+        console.log("Citas:", result.rows);
         
         res.json({ success: true, citas: result.rows });
     } catch (error) {
