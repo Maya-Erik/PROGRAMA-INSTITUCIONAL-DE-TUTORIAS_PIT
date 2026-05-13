@@ -219,6 +219,66 @@
     background-color: #002c7a !important;
 }
 
+.bitacora-cita-info {
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.bitacora-cita-titulo {
+    font-weight: 600;
+    color: #003DA5;
+    margin-bottom: 12px;
+}
+
+.bitacora-cita-detalles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bitacora-section-titulo {
+    font-weight: 600;
+    color: #003DA5;
+    margin-top: 8px;
+}
+
+.bitacora-section-subtitulo {
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.bitacora-personal-input {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+}
+
+.bitacora-alumno-nombre {
+    font-weight: 600;
+    color: #001F54;
+    margin-bottom: 8px;
+}
+
+.bitacora-personal-item {
+    margin-bottom: 8px;
+}
+
+.bitacora-personal-nota {
+    color: #555;
+    margin-top: 4px;
+    padding-left: 12px;
+    border-left: 3px solid #D6A600;
+}
+
+.bitacora-sin-notas {
+    color: #999;
+    font-style: italic;
+    font-size: 13px;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     .bitacora-main {

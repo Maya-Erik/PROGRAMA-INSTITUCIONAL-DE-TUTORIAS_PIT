@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const bitacoraController = require('../controllers/bitacoraController');
-const { verifyToken, requireRole } = require('../middlewares/roleAuth');
+const { verifyToken } = require('../middlewares/roleAuth');
 
-// Todas las rutas requieren autenticacion
 router.use(verifyToken);
 
-// Rutas para notas de una cita especifica
-router.get('/cita/:id_cita', bitacoraController.obtenerNotasPorCita);
-router.post('/cita/:id_cita', bitacoraController.agregarNota);
+// Obtener citas del usuario
+router.get('/mis-citas', bitacoraController.obtenerCitasUsuario);
 
-// Rutas para editar/eliminar notas especificas
-router.put('/:id_bitacora', bitacoraController.editarNota);
-router.delete('/:id_bitacora', bitacoraController.eliminarNota);
+// Obtener inscritos por cita
+router.get('/cita/:id_cita/inscritos', bitacoraController.obtenerInscritosPorCita);
 
-// Admin puede ver todas las notas
-router.get('/todas', requireRole(['admin']), bitacoraController.obtenerTodasNotas);
+// Agregar nota completa (general + personales)
+router.post('/nota-completa', bitacoraController.agregarNotaCompleta);
+
+// Obtener todas las notas
+router.get('/todas', bitacoraController.obtenerTodasNotasCompleto);
 
 module.exports = router;

@@ -221,9 +221,9 @@ export const adminAsignarLugar = async (id: number, lugar: string) => {
 
 
 //Bitacora
-export const obtenerNotasPorCita = async (id_cita: number) => {
+export const obtenerMisCitasBitacora = async () => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/bitacora/cita/${id_cita}`, {
+    const response = await fetch(`${API_URL}/bitacora/mis-citas`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token ? `Bearer ${token}` : ''
@@ -232,44 +232,35 @@ export const obtenerNotasPorCita = async (id_cita: number) => {
     return response.json();
 };
 
-export const agregarNota = async (id_cita: number, nota: string) => {
+export const obtenerInscritosPorCita = async (id_cita: number) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/bitacora/cita/${id_cita}`, {
+    const response = await fetch(`${API_URL}/bitacora/cita/${id_cita}/inscritos`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+        }
+    });
+    return response.json();
+};
+
+export const agregarNotaCompleta = async (data: {
+    id_cita: number;
+    nota_general: string;
+    notas_personales: { id_alumno: number; nota: string }[];
+}) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/bitacora/nota-completa`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token ? `Bearer ${token}` : ''
         },
-        body: JSON.stringify({ nota })
+        body: JSON.stringify(data)
     });
     return response.json();
 };
 
-export const editarNota = async (id_bitacora: number, nota: string) => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/bitacora/${id_bitacora}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : ''
-        },
-        body: JSON.stringify({ nota })
-    });
-    return response.json();
-};
-
-export const eliminarNota = async (id_bitacora: number) => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/bitacora/${id_bitacora}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': token ? `Bearer ${token}` : ''
-        }
-    });
-    return response.json();
-};
-
-export const obtenerTodasNotas = async () => {
+export const obtenerTodasNotasBitacora = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/bitacora/todas`, {
         headers: {
