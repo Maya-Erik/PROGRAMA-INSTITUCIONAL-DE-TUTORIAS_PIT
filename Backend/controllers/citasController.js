@@ -183,19 +183,22 @@ exports.inscribirseCita = async (req, res) => {
     }
 };
 
-// Obtener citas donde el usuario está inscrito
+// Obtener citas donde el usuario está inscrito o que creo
 exports.misCitas = async (req, res) => {
     try {
         const userId = req.user.id;
         
         const query = `
-            SELECT c.* FROM tr_citas c
-            JOIN tr_citas_inscritos i ON c.id_cita = i.id_cita
-            WHERE i.id_usuario = $1
+            SELECT DISTINCT c.* FROM tr_citas c
+            LEFT JOIN tr_citas_inscritos i ON c.id_cita = i.id_cita
+            WHERE i.id_usuario = $1 OR c.id_creador = $1
             ORDER BY c.fecha DESC, c.hora DESC
         `;
         
         const result = await db.query(query, [userId]);
+        console.log("misCitas - usuario:", userId);
+        console.log("misCitas - resultado:", result.rows);
+        
         res.json({ success: true, citas: result.rows });
     } catch (error) {
         console.error("Error al obtener mis citas:", error);
