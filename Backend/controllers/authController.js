@@ -51,7 +51,8 @@ const login = async (req, res) => {
             role: user.role_name,
             id_rol: user.id_rol,
             n_cuenta: user.n_cuenta,
-            nombre: user.nombre_completo
+            nombre: user.nombre_completo,
+            carrera: user.carrera
         };
 
         const secretKey = process.env.JWT_SECRET || 'pit_fes_acatlan_secret_key_2026';
@@ -67,7 +68,8 @@ const login = async (req, res) => {
                 role: user.role_name,
                 id_rol: user.id_rol,
                 n_cuenta: user.n_cuenta,
-                nombre: user.nombre_completo
+                nombre: user.nombre_completo,
+                carrera: user.carrera
             }
         });
 

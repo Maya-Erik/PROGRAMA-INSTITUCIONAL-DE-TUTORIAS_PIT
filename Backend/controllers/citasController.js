@@ -144,7 +144,7 @@ exports.inscribirseCita = async (req, res) => {
         
         // Obtener cita y verificar capacidad
         const citaQuery = await db.query(
-            `SELECT capacidad, inscritos, tipo FROM tr_citas WHERE id_cita = $1`,
+            `SELECT capacidad, inscritos FROM tr_citas WHERE id_cita = $1`,
             [id]
         );
         
@@ -177,12 +177,13 @@ exports.inscribirseCita = async (req, res) => {
     }
 };
 
-// Obtener citas donde el usuario está inscrito o que creo
+// Obtener citas donde el usuario está inscrito o es el creador
 exports.misCitas = async (req, res) => {
     try {
         const userId = req.user.id;
+        const userRole = req.user.role;
         
-        const query = `
+        let query = `
             SELECT DISTINCT c.* FROM tr_citas c
             LEFT JOIN tr_citas_inscritos i ON c.id_cita = i.id_cita
             WHERE i.id_usuario = $1 OR c.id_creador = $1
@@ -191,7 +192,7 @@ exports.misCitas = async (req, res) => {
         
         const result = await db.query(query, [userId]);
         console.log("misCitas - usuario:", userId);
-        console.log("misCitas - resultado:", result.rows);
+        console.log("misCitas - resultado:", result.rows.length);
         
         res.json({ success: true, citas: result.rows });
     } catch (error) {
