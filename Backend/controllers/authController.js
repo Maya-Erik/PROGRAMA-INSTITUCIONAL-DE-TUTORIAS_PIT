@@ -15,7 +15,7 @@ const login = async (req, res) => {
 
     try {
         const query = `
-            SELECT u.id_user, u.correo, u.password, u.n_cuenta, u.nombre_completo, 
+            SELECT u.id_user, u.correo, u.password, u.n_cuenta, u.nombre_completo, u.carrera,
                    r.id_rol, r.nombre_rol AS role_name
             FROM tr_user u
             INNER JOIN tr_roles r ON u.id_rol = r.id_rol
@@ -23,8 +23,6 @@ const login = async (req, res) => {
         `;
 
         const result = await db.query(query, [email]);
-
-        console.log('Usuario encontrado:', result.rows.length > 0 ? 'Sí' : 'No');
 
         if (result.rows.length === 0) {
             return res.status(404).json({
@@ -35,8 +33,6 @@ const login = async (req, res) => {
 
         const user = result.rows[0];
         const validPassword = await bcrypt.compare(password, user.password);
-
-        console.log('Contraseña válida:', validPassword);
 
         if (!validPassword) {
             return res.status(401).json({
@@ -52,7 +48,7 @@ const login = async (req, res) => {
             id_rol: user.id_rol,
             n_cuenta: user.n_cuenta,
             nombre: user.nombre_completo,
-            carrera: user.carrera
+            carrera: user.carrera || ''  // Incluir carrera, vacío si no tiene
         };
 
         const secretKey = process.env.JWT_SECRET || 'pit_fes_acatlan_secret_key_2026';
@@ -69,7 +65,7 @@ const login = async (req, res) => {
                 id_rol: user.id_rol,
                 n_cuenta: user.n_cuenta,
                 nombre: user.nombre_completo,
-                carrera: user.carrera
+                carrera: user.carrera || ''
             }
         });
 
