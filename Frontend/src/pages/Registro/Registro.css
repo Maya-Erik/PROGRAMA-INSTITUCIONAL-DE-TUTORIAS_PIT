@@ -15,7 +15,6 @@
   animation: registroFadeIn 0.3s ease;
 }
 
-/* Contenido del modal */
 .registro-modal-content {
   background-color: white;
   border-radius: 16px;
@@ -89,16 +88,39 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.registro-form-group input,
-.registro-form-group select {
+.registro-input-wrapper,
+.registro-select-wrapper {
+  position: relative;
   width: 100%;
-  padding: 10px 12px;
+}
+
+.registro-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.registro-input-wrapper input,
+.registro-select-wrapper select {
+  width: 100%;
+  padding: 10px 12px 10px 42px;
   border: 1.5px solid #e0e0e0;
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.3s;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
+  background-color: white;
+}
+
+.registro-input-wrapper input:focus,
+.registro-select-wrapper select:focus {
+  outline: none;
+  border-color: #003DA5;
 }
 
 .registro-form-group input:focus,
@@ -120,7 +142,13 @@
 }
 
 .registro-password-wrapper input {
-  padding-right: 40px;
+  width: 100%;
+  padding: 10px 40px 10px 42px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .registro-toggle-password {
@@ -140,10 +168,6 @@
 
 .registro-toggle-password:hover {
   color: #003DA5;
-}
-
-.registro-toggle-password .material-symbols-outlined {
-  font-size: 20px;
 }
 
 .registro-error-message {
@@ -204,6 +228,7 @@
 }
 
 .registro-email-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   border: 1.5px solid #e0e0e0;
@@ -217,10 +242,16 @@
   border-color: #003DA5;
 }
 
+.registro-email-wrapper .registro-input-icon {
+  position: absolute;
+  left: 12px;
+  z-index: 1;
+}
+
 .registro-email-wrapper input {
   flex: 1;
   border: none;
-  padding: 10px 12px;
+  padding: 10px 12px 10px 42px;
   font-size: 14px;
   outline: none;
   font-family: 'Montserrat', sans-serif;
@@ -234,13 +265,6 @@
   white-space: nowrap;
   border-left: 1px solid #e0e0e0;
   font-family: 'Montserrat', sans-serif;
-}
-
-.registro-form-group small {
-  display: block;
-  margin-top: 5px;
-  color: #888;
-  font-size: 11px;
 }
 
 @keyframes registroFadeIn {
@@ -274,20 +298,25 @@
     font-size: 24px;
   }
   
-  .registro-form-group input,
-  .registro-form-group select {
+  .registro-input-wrapper input,
+  .registro-select-wrapper select,
+  .registro-password-wrapper input {
     font-size: 13px;
-    padding: 8px 10px;
+    padding: 8px 10px 8px 35px;
+  }
+  
+  .registro-input-icon {
+    font-size: 16px;
+    left: 10px;
+  }
+  
+  .registro-email-wrapper input {
+    font-size: 13px;
+    padding: 8px 10px 8px 35px;
   }
   
   .registro-btn-submit {
     font-size: 14px;
     padding: 10px;
   }
-
-  .registro-email-wrapper input {
-    font-size: 13px;
-    padding: 8px 10px;
-  }
 }
-

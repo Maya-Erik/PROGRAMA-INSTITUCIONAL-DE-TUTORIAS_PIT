@@ -1,6 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { obtenerAvisos } from '../../services/api';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import './Avisos.css';
 
 interface Aviso {
@@ -50,7 +51,7 @@ const Avisos = () => {
   if (loading) {
     return (
       <div className="hero-contenido visible">
-        <h1>Programa de Tutorias</h1>
+        <h1>Programa de Tutorías</h1>
         <p>Cargando contenido...</p>
       </div>
     );
@@ -59,11 +60,11 @@ const Avisos = () => {
   if (avisos.length === 0) {
     return (
       <div className="hero-contenido visible">
-        <h1>Programa de Tutorias</h1>
-        <p>Impulsando tu exito academico con el apoyo de nuestra comunidad universitaria.</p>
+        <h1>Programa de Tutorías</h1>
+        <p>Impulsando tu éxito académico con el apoyo de nuestra comunidad universitaria.</p>
         <div className="botones">
           <a href="/servicios" className="btn-comenzar">Comencemos</a>
-          <a href="/sobre-nosotros" className="btn-info">Ver mas info</a>
+          <a href="/sobre-nosotros" className="btn-info">Ver más info</a>
         </div>
       </div>
     );
@@ -72,18 +73,18 @@ const Avisos = () => {
   return (
     <>
       <div className={`hero-contenido ${!mostrarCarrusel ? 'visible' : 'oculto'}`}>
-        <h1>Programa de Tutorias</h1>
-        <p>Impulsando tu exito academico con el apoyo de nuestra comunidad universitaria.</p>
+        <h1>Programa de Tutorías</h1>
+        <p>Impulsando tu éxito académico con el apoyo de nuestra comunidad universitaria.</p>
         <div className="botones">
           <a href="/servicios" className="btn-comenzar">Comencemos</a>
-          <a href="/sobre-nosotros" className="btn-info">Ver mas info</a>
+          <a href="/sobre-nosotros" className="btn-info">Ver más info</a>
         </div>
       </div>
 
       <div className={`carrusel-container ${mostrarCarrusel ? 'visible' : 'oculto'}`}>
         {avisos.length > 1 && (
           <button className="carrusel-btn carrusel-btn-prev" onClick={() => cambiarAviso(avisoActual - 1)}>
-            ❮
+            <ChevronLeftIcon />
           </button>
         )}
 
@@ -111,7 +112,7 @@ const Avisos = () => {
 
         {avisos.length > 1 && (
           <button className="carrusel-btn carrusel-btn-next" onClick={() => cambiarAviso(avisoActual + 1)}>
-            ❯
+            <ChevronRightIcon />
           </button>
         )}
 

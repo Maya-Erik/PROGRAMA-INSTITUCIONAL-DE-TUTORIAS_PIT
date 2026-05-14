@@ -1,0 +1,152 @@
+.repo-carrera-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.repo-carrera-section {
+    flex: 1;
+    padding: 120px 20px 60px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #eef2f7 100%);
+}
+
+.repo-carrera-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.repo-carrera-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #003DA5;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.repo-carrera-back:hover {
+    transform: translateX(-4px);
+    color: #D6A600;
+}
+
+.repo-carrera-título {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #003DA5;
+    margin-bottom: 0.5rem;
+    font-family: 'Lexend', sans-serif;
+}
+
+.repo-carrera-subtítulo {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #D6A600;
+    margin-bottom: 2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.repo-carrera-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.repo-carrera-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: white;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.repo-carrera-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: #003DA5;
+}
+
+.card-icon {
+    font-size: 2rem;
+    min-width: 60px;
+    text-align: center;
+    color: #003DA5;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-título {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #003DA5;
+    margin-bottom: 0.3rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.card-descripción {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.8rem;
+}
+
+.card-meta {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.card-tamaño {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.card-btn {
+    display: inline-block;
+    background: #D6A600;
+    color: #001F54;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.card-btn:hover {
+    background: #003DA5;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.loading-text, .empty-text {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-family: 'Montserrat', sans-serif;
+}
+
+@media (max-width: 768px) {
+    .repo-carrera-section {
+        padding: 100px 15px 40px;
+    }
+    
+    .repo-carrera-título {
+        font-size: 1.8rem;
+    }
+    
+    .repo-carrera-subtítulo {
+        font-size: 1.2rem;
+    }
+    
+    .repo-carrera-grid {
+        grid-template-columns: 1fr;
+    }
+}

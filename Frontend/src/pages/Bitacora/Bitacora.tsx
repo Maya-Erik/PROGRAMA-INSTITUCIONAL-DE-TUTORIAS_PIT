@@ -9,9 +9,12 @@ import {
 } from '@mui/material';
 import {
     Add as AddIcon,
-    ExpandMore as ExpandMoreIcon, Person as PersonIcon,
-    Schedule as ScheduleIcon, LocationOn as LocationIcon,
-    Download as DownloadIcon
+    ExpandMore as ExpandMoreIcon,
+    Person as PersonIcon,
+    Schedule as ScheduleIcon,
+    LocationOn as LocationIcon,
+    Download as DownloadIcon,
+    Close as CloseIcon
 } from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import {
@@ -83,7 +86,6 @@ const Bitacora: React.FC = () => {
     const [userRole, setUserRole] = useState<string>('');
     const [userName, setUserName] = useState<string>('');
     
-    // Estados para exportación
     const [fechaInicio, setFechaInicio] = useState('');
     const [fechaFin, setFechaFin] = useState('');
     const [citasSeleccionadasExport, setCitasSeleccionadasExport] = useState<number[]>([]);
@@ -111,7 +113,6 @@ const Bitacora: React.FC = () => {
     const cargarCitas = async () => {
         try {
             const data = await obtenerMisCitasBitacora();
-            console.log('Citas response:', data);
             if (data.success && data.citas) {
                 setCitas(data.citas);
             } else if (data.citas) {
@@ -128,7 +129,6 @@ const Bitacora: React.FC = () => {
     const cargarNotas = async () => {
         try {
             const data = await obtenerTodasNotasBitacora();
-            console.log('Notas response:', data);
             if (data.success && data.notas) {
                 setNotas(data.notas);
             } else if (data.notas) {
@@ -270,7 +270,7 @@ const Bitacora: React.FC = () => {
             
             <main className="bitacora-main">
                 <header className="bitacora-topbar">
-                    <span className="bitacora-breadcrumb">Configuracion › Bitacora</span>
+                    <span className="bitacora-breadcrumb">Configuración › Bitácora</span>
                     <div className="bitacora-topbar-right">
                         <div className="bitacora-topbar-user">
                             <div>
@@ -291,8 +291,8 @@ const Bitacora: React.FC = () => {
                 <div className="bitacora-content">
                     <div className="bitacora-header">
                         <div className="bitacora-title-section">
-                            <h1>Bitacora de Tutorias</h1>
-                            <p>Registro de notas generales y personales sobre las tutorias impartidas</p>
+                            <h1>Bitácora de Tutorías</h1>
+                            <p>Registro de notas generales y personales sobre las tutorías impartidas</p>
                         </div>
                         <div className="bitacora-header-buttons">
                             {puedeAgregarNotas() && (
@@ -315,7 +315,7 @@ const Bitacora: React.FC = () => {
                                         <TableCell>TEMA</TableCell>
                                         <TableCell>TUTOR</TableCell>
                                         <TableCell>FECHA CITA</TableCell>
-                                        <TableCell>TIPO TUTORIA</TableCell>
+                                        <TableCell>TIPO TUTORÍA</TableCell>
                                         <TableCell>CANALIZADO</TableCell>
                                         <TableCell>NOTA GENERAL</TableCell>
                                         <TableCell>NOTAS PERSONALES</TableCell>
@@ -348,14 +348,14 @@ const Bitacora: React.FC = () => {
                                                         size="small"
                                                         sx={{ 
                                                             bgcolor: nota.tipo_tutoria === 'Informativa' ? '#2196f3' : 
-                                                                    nota.tipo_tutoria === 'Orientacion' ? '#ff9800' : '#4caf50',
+                                                                    nota.tipo_tutoria === 'Orientación' ? '#ff9800' : '#4caf50',
                                                             color: 'white'
                                                         }}
                                                     />
                                                 </TableCell>
                                                 <TableCell>
                                                     <Chip 
-                                                        label={nota.canalizado ? 'Si' : 'No'} 
+                                                        label={nota.canalizado ? 'Sí' : 'No'} 
                                                         size="small"
                                                         sx={{ bgcolor: nota.canalizado ? '#f44336' : '#9e9e9e', color: 'white' }}
                                                     />
@@ -414,9 +414,9 @@ const Bitacora: React.FC = () => {
             {/* Modal Agregar Nota */}
             <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)} maxWidth="md" fullWidth>
                 <DialogTitle className="bitacora-modal-titulo">
-                    Agregar Nota de Bitacora
+                    Agregar Nota de Bitácora
                     <IconButton onClick={() => setOpenAddModal(false)} className="bitacora-modal-close">
-                        ✕
+                        <CloseIcon />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
@@ -438,7 +438,7 @@ const Bitacora: React.FC = () => {
                     {citaInfo && (
                         <Box className="bitacora-cita-info">
                             <Typography variant="subtitle1" className="bitacora-cita-titulo">
-                                Informacion de la Cita
+                                Información de la Cita
                             </Typography>
                             <Box className="bitacora-cita-detalles">
                                 <Chip icon={<ScheduleIcon />} label={`Fecha: ${formatFecha(citaInfo.fecha)} ${citaInfo.hora}`} size="small" />
@@ -460,21 +460,21 @@ const Bitacora: React.FC = () => {
                         value={notaGeneral}
                         onChange={(e) => setNotaGeneral(e.target.value)}
                         margin="normal"
-                        placeholder="Escribe aqui la nota general sobre la tutoria..."
+                        placeholder="Escribe aquí la nota general sobre la tutoría..."
                         required
                     />
 
                     <Divider sx={{ my: 2 }} />
 
                     <FormControl fullWidth margin="normal">
-                        <InputLabel>Tipo de Tutoria</InputLabel>
+                        <InputLabel>Tipo de Tutoría</InputLabel>
                         <Select
                             value={tipoTutoria}
                             onChange={(e) => setTipoTutoria(e.target.value)}
                         >
                             <MenuItem value="Informativa">Informativa</MenuItem>
-                            <MenuItem value="Orientacion">De orientacion</MenuItem>
-                            <MenuItem value="Formacion">De formacion</MenuItem>
+                            <MenuItem value="Orientación">De orientación</MenuItem>
+                            <MenuItem value="Formación">De formación</MenuItem>
                         </Select>
                     </FormControl>
 
@@ -496,7 +496,7 @@ const Bitacora: React.FC = () => {
                                 Notas Personales (Opcional)
                             </Typography>
                             <Typography variant="body2" className="bitacora-section-subtitulo">
-                                Agrega notas especificas por alumno
+                                Agrega notas específicas por alumno
                             </Typography>
                             
                             {inscritos.map((alumno) => (
@@ -529,9 +529,9 @@ const Bitacora: React.FC = () => {
             {/* Modal Exportar CSV */}
             <Dialog open={openExportModal} onClose={() => setOpenExportModal(false)} maxWidth="sm" fullWidth>
                 <DialogTitle className="bitacora-modal-titulo">
-                    Exportar Bitacora a CSV
+                    Exportar Bitácora a CSV
                     <IconButton onClick={() => setOpenExportModal(false)} className="bitacora-modal-close">
-                        ✕
+                        <CloseIcon />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>

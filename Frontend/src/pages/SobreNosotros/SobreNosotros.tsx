@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import "./SobreNosotros.css";
-
-// Importar iconos
 import SchoolIcon from "@mui/icons-material/School";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
@@ -18,7 +16,6 @@ const SobreNosotros = () => {
   const [countStudents, setCountStudents] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Función para formatear números (50+, 999+, etc.)
   const formatNumber = (num: number, max: number) => {
     if (num > max) {
       return `${max}+`;
@@ -35,12 +32,11 @@ const SobreNosotros = () => {
         
         if (data.success) {
           setStats({
-            teachers: data.data.maestros,  // Maestros = tutores + tutorados
-            tutors: data.data.tutores,     // Solo tutores (no tutorados)
-            students: data.data.alumnos,   // Solo alumnos normales
+            teachers: data.data.maestros,
+            tutors: data.data.tutores,
+            students: data.data.alumnos,
           });
         } else {
-          // Si hay error, usar valores por defecto
           setStats({
             teachers: 52,
             tutors: 128,
@@ -49,7 +45,6 @@ const SobreNosotros = () => {
         }
       } catch (error) {
         console.error("Error al cargar estadísticas:", error);
-        // Valores por defecto en caso de error
         setStats({
           teachers: 52,
           tutors: 128,
@@ -94,7 +89,6 @@ const SobreNosotros = () => {
     };
   }, [stats]);
 
-  // Mostrar loading mientras se cargan los datos
   if (loading) {
     return (
       <section id="sobre-nosotros" className="sobre-nosotros">
@@ -152,7 +146,6 @@ const SobreNosotros = () => {
             </div>
           </div>
 
-          
           <div className="counters-wrapper">
             <div className="counter-card primary">
               <p className="counter-number primary">

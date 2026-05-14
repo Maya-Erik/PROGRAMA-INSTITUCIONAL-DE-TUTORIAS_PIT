@@ -178,9 +178,8 @@
   border-color: var(--dorado-principal);
 }
 
-/* Estilo para links visitados */
 .link-carrera:visited {
-  color: #002c7a; /* Versión más oscura del azul principal */
+  color: #002c7a;
 }
 
 /* Ajustes responsivos */
@@ -208,7 +207,6 @@
   }
 }
 
-/* Asegura que la barra de navegación no cause errores */
 .navbar + .divisiones-container {
   margin-top: 1rem;
 }

@@ -1,11 +1,16 @@
-import Navbar from "../../components/Navbar/Navbar"
-import './Contacto.css'
+import Navbar from "../../components/Navbar/Navbar";
+import EmailIcon from '@mui/icons-material/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import './Contacto.css';
 
 const Contacto = () => {
   const ubicacion = {
     nombre: "FES Acatlán, UNAM",
     direccion: "Av. Alcanfores y San Juan Totoltepec s/n, Sta Cruz Acatlán, 53150 Naucalpan de Juárez, Estado de México"
-  }
+  };
 
   return (
     <div>
@@ -19,7 +24,7 @@ const Contacto = () => {
             <div className="contacto-card">
               <div className="contacto-item">
                 <div className="contacto-icon email-icon">
-                  <i className="fas fa-envelope"></i>
+                  <EmailIcon />
                 </div>
                 <div className="contacto-info">
                   <h3 className="info-label">CORREO ELECTRÓNICO</h3>
@@ -31,10 +36,9 @@ const Contacto = () => {
 
               <div className="contacto-divider"></div>
 
-              {/* Facebook */}
               <div className="contacto-item">
                 <div className="contacto-icon facebook-icon">
-                  <i className="fab fa-facebook-f"></i>
+                  <FacebookIcon />
                 </div>
                 <div className="contacto-info">
                   <h3 className="info-label">FACEBOOK</h3>
@@ -51,10 +55,9 @@ const Contacto = () => {
 
               <div className="contacto-divider"></div>
 
-              {/* Instagram */}
               <div className="contacto-item">
                 <div className="contacto-icon instagram-icon">
-                  <i className="fab fa-instagram"></i>
+                  <InstagramIcon />
                 </div>
                 <div className="contacto-info">
                   <h3 className="info-label">INSTAGRAM</h3>
@@ -73,7 +76,7 @@ const Contacto = () => {
 
               <div className="contacto-item">
                 <div className="contacto-icon location-icon">
-                  <i className="fas fa-map-marker-alt"></i>
+                  <LocationOnIcon />
                 </div>
                 <div className="contacto-info">
                   <h3 className="info-label">UBICACIÓN</h3>
@@ -95,7 +98,7 @@ const Contacto = () => {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
+                />
               </div>
               <div className="mapa-info">
                 <a 
@@ -104,7 +107,7 @@ const Contacto = () => {
                   rel="noopener noreferrer"
                   className="btn-mapa"
                 >
-                  <i className="fas fa-external-link-alt"></i> Abrir en Google Maps
+                  <OpenInNewIcon fontSize="small" /> Abrir en Google Maps
                 </a>
               </div>
             </div>
@@ -112,7 +115,7 @@ const Contacto = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default Contacto
+export default Contacto;

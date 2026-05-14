@@ -1,4 +1,11 @@
 import React, { useState } from 'react';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import SchoolIcon from '@mui/icons-material/School';
+import BadgeIcon from '@mui/icons-material/Badge';
+import LockIcon from '@mui/icons-material/Lock';
 import './Registro.css';
 
 interface RegistroProps {
@@ -24,23 +31,12 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const carreras = [
-    "Actuaría",
-    "Arquitectura",
-    "Ciencia de Datos",
-    "Ciencias Políticas y Administración Pública",
-    "Comunicación",
-    "Derecho",
-    "Diseño Gráfico",
-    "Economía",
-    "Enseñanza de Inglés",
-    "Filosofía",
-    "Historia",
-    "Ingeniería Civil",
-    "Lengua y Literatura Hispánicas",
-    "Matemáticas Aplicadas y Computación",
-    "Pedagogía",
-    "Relaciones Internacionales",
-    "Sociología"
+    "Actuaría", "Arquitectura", "Ciencia de Datos",
+    "Ciencias Políticas y Administración Pública", "Comunicación",
+    "Derecho", "Diseño Gráfico", "Economía", "Enseñanza de Inglés",
+    "Filosofía", "Historia", "Ingeniería Civil",
+    "Lengua y Literatura Hispánicas", "Matemáticas Aplicadas y Computación",
+    "Pedagogía", "Relaciones Internacionales", "Sociología"
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -90,7 +86,6 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
     const emailCompleto = `${formData.usuario}@pcpuma.acatlan.unam.mx`;
 
     try {
-      //const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
       const API_URL = 'https://programa-institucional-de-tutorias-pit.onrender.com/api';
       
       const response = await fetch(`${API_URL}/auth/register`, {
@@ -138,20 +133,24 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
         <form onSubmit={handleSubmit}>
           <div className="registro-form-group">
             <label htmlFor="nombre">Nombre completo *</label>
-            <input
-              type="text"
-              id="nombre"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
-              placeholder="Ej: Juan Pérez García"
-              required
-            />
+            <div className="registro-input-wrapper">
+              <PersonIcon className="registro-input-icon" />
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                placeholder="Ej: Juan Pérez García"
+                required
+              />
+            </div>
           </div>
 
           <div className="registro-form-group">
             <label htmlFor="usuario">Usuario (correo institucional) *</label>
             <div className="registro-email-wrapper">
+              <EmailIcon className="registro-input-icon" />
               <input
                 type="text"
                 id="usuario"
@@ -168,52 +167,61 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
 
           <div className="registro-form-group">
             <label htmlFor="carrera">Carrera *</label>
-            <select
-              id="carrera"
-              name="carrera"
-              value={formData.carrera}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Selecciona tu carrera</option>
-              {carreras.map((carrera, index) => (
-                <option key={index} value={carrera}>{carrera}</option>
-              ))}
-            </select>
+            <div className="registro-select-wrapper">
+              <SchoolIcon className="registro-input-icon" />
+              <select
+                id="carrera"
+                name="carrera"
+                value={formData.carrera}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Selecciona tu carrera</option>
+                {carreras.map((carrera, index) => (
+                  <option key={index} value={carrera}>{carrera}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="registro-form-group">
             <label htmlFor="rol">Tipo de usuario *</label>
-            <select
-              id="rol"
-              name="rol"
-              value={formData.rol}
-              onChange={handleChange}
-              required
-            >
-              <option value="4">Alumno</option>
-              <option value="3">Tutorado</option>
-              <option value="2">Tutor</option>
-            </select>
+            <div className="registro-select-wrapper">
+              <select
+                id="rol"
+                name="rol"
+                value={formData.rol}
+                onChange={handleChange}
+                required
+              >
+                <option value="4">Alumno</option>
+                <option value="3">Tutorado</option>
+                <option value="2">Tutor</option>
+              </select>
+            </div>
             <small>Selecciona el tipo de usuario que serás</small>
           </div>
 
           <div className="registro-form-group">
             <label htmlFor="numeroCuenta">Número de cuenta *</label>
-            <input
-              type="text"
-              id="numeroCuenta"
-              name="numeroCuenta"
-              value={formData.numeroCuenta}
-              onChange={handleChange}
-              placeholder="Ej: 123456789"
-              required
-            />
+            <div className="registro-input-wrapper">
+              <BadgeIcon className="registro-input-icon" />
+              <input
+                type="text"
+                id="numeroCuenta"
+                name="numeroCuenta"
+                value={formData.numeroCuenta}
+                onChange={handleChange}
+                placeholder="Ej: 123456789"
+                required
+              />
+            </div>
           </div>
 
           <div className="registro-form-group">
             <label htmlFor="password">Contraseña *</label>
             <div className="registro-password-wrapper">
+              <LockIcon className="registro-input-icon" />
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -228,9 +236,7 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
                 className="registro-toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                <span className="material-symbols-outlined">
-                  {showPassword ? 'visibility_off' : 'visibility'}
-                </span>
+                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </button>
             </div>
           </div>
@@ -238,6 +244,7 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
           <div className="registro-form-group">
             <label htmlFor="confirmPassword">Confirmar contraseña *</label>
             <div className="registro-password-wrapper">
+              <LockIcon className="registro-input-icon" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
@@ -252,9 +259,7 @@ const Registro: React.FC<RegistroProps> = ({ isOpen, onClose, onRegistroSuccess 
                 className="registro-toggle-password"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
-                <span className="material-symbols-outlined">
-                  {showConfirmPassword ? 'visibility_off' : 'visibility'}
-                </span>
+                {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </button>
             </div>
           </div>

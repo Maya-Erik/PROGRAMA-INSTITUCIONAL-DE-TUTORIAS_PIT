@@ -4,7 +4,10 @@ import {
     TextField, MenuItem, FormControl, InputLabel, Select,
     IconButton, Alert, Snackbar, Avatar, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 } from '@mui/material';
-import { Edit as EditIcon, Delete as DeleteIcon, Block as BlockIcon, CheckCircle as CheckCircleIcon, Add as AddIcon } from '@mui/icons-material';
+import { 
+    Edit as EditIcon, Delete as DeleteIcon, Block as BlockIcon, 
+    CheckCircle as CheckCircleIcon, Add as AddIcon, Person as PersonIcon 
+} from '@mui/icons-material';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import {
     adminObtenerUsuarios,
@@ -34,23 +37,23 @@ interface Rol {
 }
 
 const carreras = [
-    "Actuaria",
+    "Actuaría",
     "Arquitectura",
-    "Ciencias Politicas y Administracion Publica",
-    "Comunicacion",
+    "Ciencias Políticas y Administración Pública",
+    "Comunicación",
     "Derecho",
-    "Diseño Grafico",
-    "Economia",
+    "Diseño Gráfico",
+    "Economía",
     "Enseñanza de (Español) (Inglés) Como Lengua Extranjera",
-    "Enseñanza de Ingles",
-    "Filosofia",
+    "Enseñanza de Inglés",
+    "Filosofía",
     "Historia",
-    "Ingenieria Civil",
-    "Lengua y Literaturas Hispanicas",
-    "Matematicas Aplicadas y Computacion",
-    "Pedagogia",
+    "Ingeniería Civil",
+    "Lengua y Literaturas Hispánicas",
+    "Matemáticas Aplicadas y Computación",
+    "Pedagogía",
     "Relaciones Internacionales",
-    "Sociologia",
+    "Sociología",
     "Derecho (SUAyED)",
     "Relaciones Internacionales (SUAyED)",
     "LICEL"
@@ -228,7 +231,7 @@ const AdminUsuarios: React.FC = () => {
     };
 
     const handleEliminar = async (usuario: Usuario) => {
-        if (window.confirm(`¿Estas seguro de eliminar al usuario ${usuario.nombre_completo}?`)) {
+        if (window.confirm(`¿Estás seguro de eliminar al usuario ${usuario.nombre_completo}?`)) {
             const result = await adminEliminarUsuario(usuario.id_user);
             if (result.success) {
                 setSnackbar({ open: true, message: 'Usuario eliminado correctamente', severity: 'success' });
@@ -254,7 +257,7 @@ const AdminUsuarios: React.FC = () => {
             
             <main className="admin-usuarios-main">
                 <header className="admin-usuarios-topbar">
-                    <span className="admin-usuarios-breadcrumb">Configuracion › Usuarios</span>
+                    <span className="admin-usuarios-breadcrumb">Configuración › Usuarios</span>
                     <div className="admin-usuarios-topbar-right">
                         <span className="admin-usuarios-topbar-bell">🔔</span>
                         <div className="admin-usuarios-topbar-user">
@@ -284,7 +287,7 @@ const AdminUsuarios: React.FC = () => {
                                     <TableRow>
                                         <TableCell>USUARIO</TableCell>
                                         <TableCell>CORREO</TableCell>
-                                        <TableCell>NUMERO CUENTA</TableCell>
+                                        <TableCell>NÚMERO CUENTA</TableCell>
                                         <TableCell>CARRERA</TableCell>
                                         <TableCell>ROL</TableCell>
                                         <TableCell>ESTADO</TableCell>
@@ -346,7 +349,7 @@ const AdminUsuarios: React.FC = () => {
                                                             {usuario.activo ? <BlockIcon fontSize="small" /> : <CheckCircleIcon fontSize="small" />}
                                                         </IconButton>
                                                         <IconButton size="small" onClick={() => handleOpenRolModal(usuario)} title="Cambiar rol">
-                                                            👤
+                                                            <PersonIcon fontSize="small" />
                                                         </IconButton>
                                                         <IconButton size="small" onClick={() => handleEliminar(usuario)} title="Eliminar" sx={{ color: '#dc3545' }}>
                                                             <DeleteIcon fontSize="small" />
@@ -363,7 +366,7 @@ const AdminUsuarios: React.FC = () => {
                 </div>
             </main>
 
-            {/* Modal Agregar Usuario */}
+            {/* Modales... (se mantienen igual) */}
             <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)} maxWidth="sm" fullWidth>
                 <DialogTitle sx={{ bgcolor: '#003DA5', color: 'white' }}>
                     Nuevo Usuario
@@ -374,7 +377,7 @@ const AdminUsuarios: React.FC = () => {
                 <DialogContent>
                     <TextField
                         fullWidth
-                        label="Numero de cuenta"
+                        label="Número de cuenta"
                         value={addForm.n_cuenta}
                         onChange={(e) => setAddForm({ ...addForm, n_cuenta: e.target.value })}
                         margin="normal"
@@ -386,7 +389,7 @@ const AdminUsuarios: React.FC = () => {
                         value={addForm.correo}
                         onChange={(e) => setAddForm({ ...addForm, correo: e.target.value })}
                         margin="normal"
-                        helperText="El correo se completara automaticamente con @pcpuma.acatlan.unam.mx"
+                        helperText="El correo se completará automáticamente con @pcpuma.acatlan.unam.mx"
                         required
                     />
                     <TextField
@@ -439,7 +442,6 @@ const AdminUsuarios: React.FC = () => {
                 </DialogActions>
             </Dialog>
 
-            {/* Modal Editar Usuario */}
             <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)} maxWidth="sm" fullWidth>
                 <DialogTitle sx={{ bgcolor: '#003DA5', color: 'white' }}>
                     Editar Usuario
@@ -475,7 +477,6 @@ const AdminUsuarios: React.FC = () => {
                 </DialogActions>
             </Dialog>
 
-            {/* Modal Cambiar Rol */}
             <Dialog open={openRolModal} onClose={() => setOpenRolModal(false)} maxWidth="sm" fullWidth>
                 <DialogTitle sx={{ bgcolor: '#003DA5', color: 'white' }}>
                     Cambiar Rol

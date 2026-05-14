@@ -1,9 +1,14 @@
-
 import { useState, useEffect } from 'react';
 import { 
     obtenerAvisosAdmin, crearAviso, actualizarAviso, 
     eliminarAviso, actualizarOrdenAvisos 
 } from '../../services/api';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ImageIcon from '@mui/icons-material/Image';
+import LinkIcon from '@mui/icons-material/Link';
 import './AdminAvisos.css';
 
 interface Aviso {
@@ -61,7 +66,7 @@ const AdminAvisos = () => {
     e.preventDefault();
     
     if (!formData.titulo || !formData.contenido) {
-      alert('Titulo y contenido son obligatorios');
+      alert('Título y contenido son obligatorios');
       return;
     }
 
@@ -99,7 +104,7 @@ const AdminAvisos = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (window.confirm('¿Estas seguro de eliminar este aviso?')) {
+    if (window.confirm('¿Estás seguro de eliminar este aviso?')) {
       try {
         const result = await eliminarAviso(id);
         if (result.success) {
@@ -146,7 +151,7 @@ const AdminAvisos = () => {
         <input
           type="text"
           name="titulo"
-          placeholder="Titulo del aviso *"
+          placeholder="Título del aviso *"
           value={formData.titulo}
           onChange={handleChange}
           className="form-input"
@@ -223,22 +228,30 @@ const AdminAvisos = () => {
                 <div className="aviso-detalles">
                   <h3 className="item-titulo">{aviso.titulo}</h3>
                   <p className="item-contenido">{aviso.contenido}</p>
-                  {aviso.imagen && <span className="item-imagen-text">Con imagen</span>}
-                  {aviso.enlace && <span className="item-enlace-text">Con enlace</span>}
+                  {aviso.imagen && (
+                    <span className="item-imagen-text">
+                      <ImageIcon fontSize="small" /> Con imagen
+                    </span>
+                  )}
+                  {aviso.enlace && (
+                    <span className="item-enlace-text">
+                      <LinkIcon fontSize="small" /> Con enlace
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="aviso-acciones">
                 <button onClick={() => moverArriba(posicion)} className="btn-mover" disabled={posicion === 0}>
-                  ↑
+                  <ArrowUpwardIcon fontSize="small" />
                 </button>
                 <button onClick={() => moverAbajo(posicion)} className="btn-mover" disabled={posicion === avisos.length - 1}>
-                  ↓
+                  <ArrowDownwardIcon fontSize="small" />
                 </button>
                 <button onClick={() => handleEdit(aviso)} className="btn-editar">
-                  Editar
+                  <EditIcon fontSize="small" /> Editar
                 </button>
                 <button onClick={() => handleDelete(aviso.id_aviso)} className="btn-eliminar">
-                  Eliminar
+                  <DeleteIcon fontSize="small" /> Eliminar
                 </button>
               </div>
             </div>
