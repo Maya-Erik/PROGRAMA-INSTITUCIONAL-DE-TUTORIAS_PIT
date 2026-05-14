@@ -110,6 +110,7 @@ const SobreNosotros = () => {
       <div className="container">
         <div className="grid">
           
+          {/* Columna izquierda - Información */}
           <div className="info-wrapper">
             <h2 className="section-title">Conócenos</h2>
             <h3 className="section-subtitle">Nuestra misión es tu excelencia</h3>
@@ -146,31 +147,32 @@ const SobreNosotros = () => {
             </div>
           </div>
 
+          {/* Columna derecha - Contadores */}
           <div className="counters-wrapper">
             <div className="counter-card primary">
-              <p className="counter-number primary">
+              <div className="counter-number primary">
                 {formatNumber(countStudents, 999)}
-              </p>
-              <p className="counter-label">Alumnos</p>
+              </div>
+              <div className="counter-label">Alumnos</div>
             </div>
             
-            <div className="counter-card secondary top-offset">
-              <p className="counter-number secondary">
+            <div className="counter-card secondary">
+              <div className="counter-number secondary">
                 {formatNumber(countTeachers, 250)}
-              </p>
-              <p className="counter-label">Maestros</p>
+              </div>
+              <div className="counter-label">Maestros</div>
             </div>
             
-            <div className="counter-card primary bottom-offset">
-              <p className="counter-number primary">
+            <div className="counter-card primary">
+              <div className="counter-number primary">
                 {formatNumber(countTutors, 500)}
-              </p>
-              <p className="counter-label">Tutores</p>
+              </div>
+              <div className="counter-label">Tutores</div>
             </div>
             
             <div className="excellence-card">
               <AutoAwesomeIcon className="excellence-icon" />
-              <p className="excellence-text">Excelencia</p>
+              <div className="excellence-text">Excelencia</div>
             </div>
           </div>
         </div>
