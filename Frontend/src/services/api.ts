@@ -236,7 +236,7 @@ export const obtenerMisCitasBitacora = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/bitacora/mis-citas`, {
         headers: {
-            'Content-Type': application/json',
+            'Content-Type': 'application/json',  // ← Comilla simple corregida
             'Authorization': token ? `Bearer ${token}` : ''
         }
     });
