@@ -1,6 +1,5 @@
 * {
   margin: 0;
-  margin-top: 50px;
   padding: 0;
   box-sizing: border-box;
 }
@@ -9,6 +8,7 @@
   padding: 6rem 0;
   background-color: var(--bg-white);
   font-family: var(--font-secondary);
+  margin-top: 0;
 }
 
 .container {
@@ -32,7 +32,7 @@
 .grid {
   display: grid;
   gap: 4rem;
-  align-items: center;
+  align-items: start;
 }
 
 @media (min-width: 1024px) {
@@ -122,11 +122,12 @@
 .counters-wrapper {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  gap: 1.5rem;
+  align-items: start;
 }
 
 .counter-card {
-  padding: var(--spacing-2xl);
+  padding: 2rem;
   text-align: center;
   border-radius: var(--border-radius-md);
   transition: all var(--transition-normal);
@@ -148,12 +149,13 @@
   border: 1px solid rgba(214, 166, 0, 0.1);
 }
 
+/* Eliminar los offsets que causaban el encimamiento */
 .counter-card.top-offset {
-  margin-top: var(--spacing-2xl);
+  margin-top: 0;
 }
 
 .counter-card.bottom-offset {
-  margin-top: calc(-1 * var(--spacing-2xl));
+  margin-top: 0;
 }
 
 .counter-number {
@@ -175,10 +177,11 @@
   color: #475569;
 }
 
-/* Tarjeta de Excelencia */
+/* Tarjeta de Excelencia - ocupa toda la fila en móvil */
 .excellence-card {
+  grid-column: span 2;
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-2xl);
+  padding: 2rem;
   text-align: center;
   color: white;
   box-shadow: var(--shadow-xl);
@@ -215,6 +218,20 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .counters-wrapper {
+    gap: 1rem;
+  }
+  
+  .counter-card {
+    padding: 1.5rem;
+  }
+  
+  .counter-number {
+    font-size: 1.8rem;
+  }
+}
+
 @media (max-width: 768px) {
   .sobre-nosotros {
     padding: 3rem 0;
@@ -228,17 +245,25 @@
     font-size: 1rem;
   }
   
-  .counter-number {
-    font-size: 1.875rem;
+  .counters-wrapper {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .counter-card {
-    padding: var(--spacing-lg);
+    padding: 1.2rem;
   }
-
-  .counter-card.top-offset,
-  .counter-card.bottom-offset {
-    margin-top: 0;
+  
+  .counter-number {
+    font-size: 1.8rem;
+  }
+  
+  .excellence-card {
+    grid-column: span 1;
+  }
+  
+  .grid {
+    gap: 2rem;
   }
 }
 
@@ -247,12 +272,7 @@
     grid-template-columns: 1fr;
   }
   
-  .counter-card.top-offset,
-  .counter-card.bottom-offset {
-    margin-top: 0;
-  }
-  
   .grid {
-    gap: var(--spacing-2xl);
+    gap: 2rem;
   }
 }
