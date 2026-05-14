@@ -3,6 +3,7 @@ import {
   Dialog, DialogContent, DialogActions,
   TextField, Button, Box, Avatar, Alert, CircularProgress
 } from '@mui/material';
+import { useTheme } from '../ThemeWrapper';
 import './PerfilUsuario.css';
 
 interface PerfilUsuarioProps {
@@ -23,6 +24,7 @@ const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }
     carrera: '',
     role: ''
   });
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     if (open) {
@@ -98,7 +100,7 @@ const PerfilUsuario: React.FC<PerfilUsuarioProps> = ({ open, onClose, onUpdate }
       onClose={onClose} 
       maxWidth="sm" 
       fullWidth
-      className="perfil-dialog"
+      className={`perfil-dialog ${darkMode ? 'dark-mode' : ''}`}
       PaperProps={{ className: 'perfil-dialog-paper' }}
     >
       <div className="perfil-header">

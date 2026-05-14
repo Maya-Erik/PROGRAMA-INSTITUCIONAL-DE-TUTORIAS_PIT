@@ -1,4 +1,3 @@
-/* PerfilUsuario.css */
 
 .perfil-dialog .MuiDialog-paper {
   border-radius: 20px;
@@ -76,6 +75,28 @@
   color: #666;
 }
 
+/* Modo oscuro */
+.perfil-dialog.dark-mode .perfil-content {
+  background-color: #1e1e2e;
+}
+
+.perfil-dialog.dark-mode .perfil-field .MuiInputLabel-root {
+  color: #D6A600;
+}
+
+.perfil-dialog.dark-mode .perfil-field .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #444;
+}
+
+.perfil-dialog.dark-mode .perfil-field .MuiInputBase-input {
+  color: #e0e0e0;
+}
+
+.perfil-dialog.dark-mode .perfil-field .MuiInputBase-input.Mui-disabled {
+  background-color: #2d2d3d;
+  color: #a0a0a0;
+}
+
 .perfil-actions {
   padding: 16px 24px 24px !important;
   display: flex;
@@ -83,6 +104,11 @@
   justify-content: flex-end;
   border-top: 1px solid #e0e0e0;
   background-color: #fafafa;
+}
+
+.perfil-dialog.dark-mode .perfil-actions {
+  border-top-color: #333;
+  background-color: #2d2d3d;
 }
 
 .perfil-btn-cancelar {
@@ -126,7 +152,6 @@
   margin-bottom: 20px;
 }
 
-/* Loading state */
 .perfil-loading {
   display: flex;
   justify-content: center;
