@@ -4,17 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import MenuIcon from '@mui/icons-material/Menu';
-import LoginIcon from '@mui/icons-material/Login';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
-import SchoolIcon from '@mui/icons-material/School';
-import CategoryIcon from '@mui/icons-material/Category';
-import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
-import EventNoteIcon from '@mui/icons-material/EventNote';
 import { IconButton, Tooltip } from '@mui/material';
-import { useTheme } from '../ThemeWrapper';
+import { useTheme } from '../components/ThemeWrapper';
 import Logo from "../../assets/icons/unam_logo.svg";
 import Login from "../../pages/Login/Login";
 import Registro from "../../pages/Registro/Registro";
@@ -175,38 +166,32 @@ function Navbar({ onLoginClick }: NavbarProps) {
         <ul className={`menu ${menuOpen ? "open" : ""}`}>
           <li>
             <button className={`nav-button ${isActive("inicio") ? "active" : ""}`} onClick={() => handleClick("inicio")}>
-              <HomeIcon fontSize="small" sx={{ marginRight: '6px' }} />
               Inicio
             </button>
           </li>
           <li>
             <button className={`nav-button ${isActive("sobre-nosotros") ? "active" : ""}`} onClick={() => handleClick("sobre-nosotros")}>
-              <InfoIcon fontSize="small" sx={{ marginRight: '6px' }} />
               Sobre Nosotros
             </button>
           </li>
           <li>
             <button className={`nav-button ${isActive("servicios") ? "active" : ""}`} onClick={() => handleClick("servicios")}>
-              <SchoolIcon fontSize="small" sx={{ marginRight: '6px' }} />
               Servicios
             </button>
           </li>
           <li>
             <button className={`nav-button ${isActive("divisiones") ? "active" : ""}`} onClick={() => handleClick("divisiones")}>
-              <CategoryIcon fontSize="small" sx={{ marginRight: '6px' }} />
               Divisiones
             </button>
           </li>
           <li>
             <button className={`nav-button ${isActive("contacto") ? "active" : ""}`} onClick={() => handleClick("contacto")}>
-              <ContactPhoneIcon fontSize="small" sx={{ marginRight: '6px' }} />
               Contacto
             </button>
           </li>
           {isLoggedIn && (
             <li>
               <button className="nav-button" onClick={() => { setMenuOpen(false); navigate("/citas"); }}>
-                <EventNoteIcon fontSize="small" sx={{ marginRight: '6px' }} />
                 Citas
               </button>
             </li>
@@ -214,17 +199,14 @@ function Navbar({ onLoginClick }: NavbarProps) {
           <li>
             {isLoggedIn ? (
               <button className="login-btn" onClick={handleLogoutClick}>
-                <LogoutIcon fontSize="small" sx={{ marginRight: '6px' }} />
                 Cerrar Sesión
               </button>
             ) : (
               <div className="auth-buttons">
                 <button className="login-btn" onClick={handleLoginClick}>
-                  <LoginIcon fontSize="small" sx={{ marginRight: '6px' }} />
                   Iniciar Sesión
                 </button>
                 <button className="nav-button" onClick={handleRegistroClick}>
-                  <AppRegistrationIcon fontSize="small" sx={{ marginRight: '6px' }} />
                   Registrarse
                 </button>
               </div>
