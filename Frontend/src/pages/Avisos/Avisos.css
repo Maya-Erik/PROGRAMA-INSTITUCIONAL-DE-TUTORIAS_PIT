@@ -1,6 +1,4 @@
-
-
- 
+/* Hero contenido */
 .hero-contenido {
   position: relative;
   z-index: 10;
@@ -26,13 +24,13 @@
 
 .hero-contenido h1 {
   font-size: 3.5rem;
-  margin-bottom: 1rem;
-  font-family: 'Lexend', sans-serif;
+  margin-bottom: var(--spacing-md);
+  font-family: var(--font-primary);
 }
 
 .hero-contenido p {
   font-size: 1.2rem;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-2xl);
   line-height: 1.6;
 }
 
@@ -44,35 +42,35 @@
 }
 
 .hero-contenido .btn-comenzar {
-  background: #D6A600;
+  background: var(--color-secondary);
   color: white;
   padding: 12px 25px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   text-decoration: none;
   font-weight: 600;
-  transition: 0.3s;
+  transition: var(--transition-normal);
 }
 
 .hero-contenido .btn-comenzar:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .hero-contenido .btn-info {
   border: 2px solid white;
   padding: 12px 25px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   text-decoration: none;
   color: white;
-  transition: 0.3s;
+  transition: var(--transition-normal);
 }
 
 .hero-contenido .btn-info:hover {
   background: white;
-  color: #003DA5;
+  color: var(--color-primary);
 }
 
-/* Carrusel*/
+/* Carrusel */
 .carrusel-container {
   position: absolute;
   top: 0;
@@ -112,63 +110,10 @@
   min-width: 100%;
   height: 100%;
   position: relative;
-  overflow: auto; 
+  overflow: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
-}
-
-/* Contenido */
-.carrusel-contenido-full,
-.carrusel-link-full {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  cursor: pointer;
-  background-color: #ffffff;
-}
-
-/* Imagen dentro del slide - mantiene tamaño original */
-.carrusel-contenido-full img,
-.carrusel-link-full img {
-  max-width: none;
-  max-height: none;
-  width: auto;
-  height: auto;
-  display: block;
-  object-fit: contain;
-}
-
-/* Si la imagen es más grande que el hero, permitir scroll y centrar */
-.carrusel-slide::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.carrusel-slide::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.carrusel-slide::-webkit-scrollbar-thumb {
-  background: #D6A600;
-  border-radius: 4px;
-}
-
-/* Fondo sólido cuando no hay imagen */
-.carrusel-contenido-full,
-.carrusel-link-full {
-  background-size: auto;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* Información oculta (solo para referencia en el código, no visible al usuario) */
-.carrusel-info-oculta {
-  display: none;
 }
 
 /* Botones de navegación */
@@ -180,12 +125,12 @@
   border: none;
   width: 50px;
   height: 50px;
-  border-radius: 50%;
+  border-radius: var(--border-radius-circle);
   cursor: pointer;
   font-size: 1.5rem;
-  color: #003DA5;
+  color: var(--color-primary);
   z-index: 20;
-  transition: all 0.3s;
+  transition: all var(--transition-normal);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -207,29 +152,29 @@
 /* Indicadores */
 .carrusel-indicadores {
   position: absolute;
-  bottom: 30px;
+  bottom: var(--spacing-xl);
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
   z-index: 20;
 }
 
 .indicador {
   width: 12px;
   height: 12px;
-  border-radius: 50%;
+  border-radius: var(--border-radius-circle);
   background: rgba(255, 255, 255, 0.5);
   border: none;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all var(--transition-normal);
 }
 
 .indicador.activo {
   width: 30px;
   border-radius: 6px;
-  background: #D6A600;
+  background: var(--color-secondary);
 }
 
 /* Responsive */
@@ -259,11 +204,5 @@
   .botones {
     flex-direction: column;
     align-items: center;
-  }
-  
-  /* En telefono, permitir scroll */
-  .carrusel-slide {
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
   }
 }

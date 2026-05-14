@@ -1,91 +1,73 @@
-
 * {
   margin: 0;
-  margin-top: 50px;
   padding: 0;
   box-sizing: border-box;
 }
 
 .sobre-nosotros {
-  padding: 6rem 0;
-  background-color: white;
-  font-family: "Montserrat", "Lexend", sans-serif;
+  padding: 80px 0;
+  background-color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .container {
-  max-width: 80rem;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 20px;
 }
 
-@media (min-width: 640px) {
-  .container {
-    padding: 0 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    padding: 0 2rem;
-  }
-}
-
+/* Grid de dos columnas en desktop */
 .grid {
   display: grid;
-  gap: 4rem;
-  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
 }
 
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Lado izquierdo - Información */
+/* Columna izquierda */
 .info-wrapper {
   width: 100%;
 }
 
 .section-title {
-  color: #003da5;
+  color: #003DA5;
   font-weight: bold;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-size: 0.875rem;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 .section-subtitle {
   font-size: 2.25rem;
   font-weight: bold;
   color: #0f172a;
-  margin-bottom: 1.5rem;
-  font-family: "Lexend", "Montserrat", sans-serif;
+  margin-bottom: 24px;
+  font-family: 'Lexend', sans-serif;
 }
 
 .description {
   color: #475569;
   font-size: 1.125rem;
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
   line-height: 1.625;
 }
 
 .mission-vision {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .mv-item {
   display: flex;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .icon-box {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,23 +76,23 @@
 
 .icon-box.primary {
   background-color: rgba(0, 61, 165, 0.1);
-  color: #003da5;
+  color: #003DA5;
 }
 
 .icon-box.secondary {
   background-color: rgba(214, 166, 0, 0.1);
-  color: #d6a600;
+  color: #D6A600;
 }
 
 .icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 24px;
+  height: 24px;
 }
 
 .mv-title {
   font-weight: bold;
   color: #0f172a;
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;
   font-size: 1.125rem;
 }
 
@@ -119,19 +101,20 @@
   line-height: 1.5;
 }
 
-/* Lado derecho - Contadores */
+/* Columna derecha - Contadores en grid de 2x2 */
 .counters-wrapper {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
 .counter-card {
-  padding: 2rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px 20px;
   text-align: center;
-  border-radius: 1rem;
   transition: all 0.3s ease;
-  cursor: pointer;
 }
 
 .counter-card:hover {
@@ -139,36 +122,26 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.counter-card.primary {
-  background-color: rgba(0, 61, 165, 0.05);
-  border: 1px solid rgba(0, 61, 165, 0.1);
+.counter-card.primary:hover {
+  border-color: #003DA5;
 }
 
-.counter-card.secondary {
-  background-color: rgba(214, 166, 0, 0.05);
-  border: 1px solid rgba(214, 166, 0, 0.1);
-}
-
-.counter-card.top-offset {
-  margin-top: 2rem;
-}
-
-.counter-card.bottom-offset {
-  margin-top: -2rem;
+.counter-card.secondary:hover {
+  border-color: #D6A600;
 }
 
 .counter-number {
-  font-size: 2.25rem;
+  font-size: 2.5rem;
   font-weight: 900;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 
 .counter-number.primary {
-  color: #003da5;
+  color: #003DA5;
 }
 
 .counter-number.secondary {
-  color: #d6a600;
+  color: #D6A600;
 }
 
 .counter-label {
@@ -178,29 +151,27 @@
 
 /* Tarjeta de Excelencia */
 .excellence-card {
-  border-radius: 1rem;
-  padding: 2rem;
+  background: linear-gradient(135deg, #D6A600 0%, #b89200 100%);
+  border-radius: 16px;
+  padding: 32px 20px;
   text-align: center;
   color: white;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  background-color: #d6a600;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  cursor: pointer;
 }
 
 .excellence-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .excellence-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  margin-bottom: 0.5rem;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
 }
 
 .excellence-text {
@@ -208,22 +179,25 @@
   font-size: 1rem;
 }
 
-
-.loading-container {
-  text-align: center;
-  padding: 50px;
-  color: #003DA5;
-  font-size: 1.2rem;
+/* Responsive */
+@media (max-width: 968px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .counters-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .sobre-nosotros {
-    padding: 3rem 0;
+    padding: 50px 0;
   }
   
   .section-subtitle {
-    font-size: 1.875rem;
+    font-size: 1.8rem;
   }
   
   .description {
@@ -231,30 +205,25 @@
   }
   
   .counter-number {
-    font-size: 1.875rem;
+    font-size: 2rem;
   }
   
   .counter-card {
-    padding: 1.5rem;
-  }
-
-  .counter-card.top-offset,
-  .counter-card.bottom-offset {
-    margin-top: 0;
+    padding: 20px 15px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 550px) {
   .counters-wrapper {
     grid-template-columns: 1fr;
-  }
-  
-  .counter-card.top-offset,
-  .counter-card.bottom-offset {
-    margin-top: 0;
+    gap: 15px;
   }
   
   .grid {
-    gap: 2rem;
+    gap: 30px;
+  }
+  
+  .section-subtitle {
+    font-size: 1.5rem;
   }
 }

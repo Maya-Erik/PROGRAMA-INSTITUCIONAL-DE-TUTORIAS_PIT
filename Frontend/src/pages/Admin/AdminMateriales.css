@@ -1,92 +1,98 @@
 .admin-materiales-container {
-    display: flex;
-    min-height: 100vh;
-    background: #F8F9FC;
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-body);
 }
 
 .admin-materiales-main {
-    margin-left: 200px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  margin-left: 200px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-materiales-topbar {
-    background: white;
-    padding: 14px 32px;
-    display: flex;
-    justify-content: flex-end;
-    border-bottom: 1px solid #e8eaf0;
+  background: var(--bg-white);
+  padding: 14px 32px;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid var(--bg-gray);
 }
 
 .admin-materiales-topbar-avatar {
-    width: 36px;
-    height: 36px;
-    background: #003DA5;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--border-radius-circle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .admin-materiales-content {
-    padding: 30px 40px;
+  padding: var(--spacing-xl) var(--spacing-2xl);
 }
 
 .admin-materiales-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
 }
 
 .admin-materiales-header h1 {
-    font-size: 28px;
-    color: #003DA5;
-    margin: 0;
+  font-size: 28px;
+  color: var(--color-primary);
+  margin: 0;
 }
 
 .admin-materiales-add-btn {
-    background: #D6A600;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
+  background: var(--color-secondary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
 }
 
 .admin-materiales-add-btn:hover {
-    background: #c09500;
+  background: var(--color-secondary-dark);
 }
 
 .admin-materiales-table-container {
-    border-radius: 16px;
-    overflow: hidden;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
 }
 
 .url-cell a {
-    color: #003DA5;
-    text-decoration: none;
+  color: var(--color-primary);
+  text-decoration: none;
 }
 
 .url-cell a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
+/* Responsive */
 @media (max-width: 1024px) {
-    .admin-materiales-main {
-        margin-left: 0;
-    }
-    
-    .admin-materiales-content {
-        padding: 20px;
-    }
-    
-    .admin-materiales-table-container {
-        overflow-x: auto;
-    }
+  .admin-materiales-main {
+    margin-left: 0;
+  }
+  
+  .admin-materiales-content {
+    padding: 20px;
+  }
+  
+  .admin-materiales-table-container {
+    overflow-x: auto;
+  }
+
+  .tu-clase-main {
+    margin-left: 0 !important;
+  }
 }

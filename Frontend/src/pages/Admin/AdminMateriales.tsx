@@ -36,18 +36,18 @@ interface Categoria {
 }
 
 const carreras = [
-    "Actuaria", "Arquitectura", "Ciencias Politicas y Administracion Publica",
-    "Comunicacion", "Derecho", "Diseño Grafico", "Economia",
-    "Enseñanza de (Español) (Inglés) Como Lengua Extranjera", "Enseñanza de Ingles",
-    "Filosofia", "Historia", "Ingenieria Civil", "Lengua y Literaturas Hispanicas",
-    "Matematicas Aplicadas y Computacion", "Pedagogia", "Relaciones Internacionales",
-    "Sociologia", "Derecho (SUAyED)", "Relaciones Internacionales (SUAyED)", "LICEL"
+    "Actuaría", "Arquitectura", "Ciencias Políticas y Administración Pública",
+    "Comunicación", "Derecho", "Diseño Gráfico", "Economía",
+    "Enseñanza de (Español) (Inglés) Como Lengua Extranjera", "Enseñanza de Inglés",
+    "Filosofía", "Historia", "Ingeniería Civil", "Lengua y Literaturas Hispánicas",
+    "Matemáticas Aplicadas y Computación", "Pedagogía", "Relaciones Internacionales",
+    "Sociología", "Derecho (SUAyED)", "Relaciones Internacionales (SUAyED)", "LICEL"
 ];
 
 const tiposMaterial = [
     { value: 'documento_institucional', label: 'Documento Institucional' },
-    { value: 'material_academico', label: 'Material Academico' },
-    { value: 'recurso_formacion', label: 'Recurso de Formacion' }
+    { value: 'material_academico', label: 'Material Académico' },
+    { value: 'recurso_formacion', label: 'Recurso de Formación' }
 ];
 
 const AdminMateriales: React.FC = () => {
@@ -120,7 +120,7 @@ const AdminMateriales: React.FC = () => {
 
     const handleSubmit = async () => {
         if (!formData.titulo || !formData.tipo || !formData.archivo_url) {
-            setSnackbar({ open: true, message: 'Titulo, tipo y URL son obligatorios', severity: 'error' });
+            setSnackbar({ open: true, message: 'Título, tipo y URL son obligatorios', severity: 'error' });
             return;
         }
 
@@ -141,7 +141,7 @@ const AdminMateriales: React.FC = () => {
     };
 
     const handleEliminar = async (id: number) => {
-        if (window.confirm('¿Estas seguro de eliminar este material?')) {
+        if (window.confirm('¿Estás seguro de eliminar este material?')) {
             const result = await eliminarMaterial(id);
             if (result.success) {
                 setSnackbar({ open: true, message: 'Material eliminado correctamente', severity: 'success' });
@@ -163,7 +163,7 @@ const AdminMateriales: React.FC = () => {
             
             <main className="admin-materiales-main">
                 <header className="admin-materiales-topbar">
-                    <span className="admin-materiales-breadcrumb">Administracion › Materiales</span>
+                    <span className="admin-materiales-breadcrumb">Administración › Materiales</span>
                     <div className="admin-materiales-topbar-right">
                         <div className="admin-materiales-topbar-user">
                             <div className="admin-materiales-topbar-avatar">AD</div>
@@ -173,7 +173,7 @@ const AdminMateriales: React.FC = () => {
 
                 <div className="admin-materiales-content">
                     <div className="admin-materiales-header">
-                        <h1>Gestion de Materiales</h1>
+                        <h1>Gestión de Materiales</h1>
                         <button className="admin-materiales-add-btn" onClick={() => handleOpenModal()}>
                             <AddIcon /> Agregar Material
                         </button>
@@ -184,9 +184,9 @@ const AdminMateriales: React.FC = () => {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>TITULO</TableCell>
+                                        <TableCell>TÍTULO</TableCell>
                                         <TableCell>TIPO</TableCell>
-                                        <TableCell>CATEGORIA</TableCell>
+                                        <TableCell>CATEGORÍA</TableCell>
                                         <TableCell>CARRERA</TableCell>
                                         <TableCell>URL</TableCell>
                                         <TableCell>ESTADO</TableCell>
@@ -235,13 +235,12 @@ const AdminMateriales: React.FC = () => {
                 </div>
             </main>
 
-            {/* Modal Agregar/Editar */}
             <Dialog open={openModal} onClose={() => setOpenModal(false)} maxWidth="md" fullWidth>
                 <DialogTitle>{editando ? 'Editar Material' : 'Nuevo Material'}</DialogTitle>
                 <DialogContent>
                     <TextField
                         fullWidth
-                        label="Titulo"
+                        label="Título"
                         value={formData.titulo}
                         onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
                         margin="normal"
@@ -249,7 +248,7 @@ const AdminMateriales: React.FC = () => {
                     />
                     <TextField
                         fullWidth
-                        label="Descripcion"
+                        label="Descripción"
                         value={formData.descripcion}
                         onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
                         margin="normal"
@@ -268,7 +267,7 @@ const AdminMateriales: React.FC = () => {
                         </Select>
                     </FormControl>
                     <FormControl fullWidth margin="normal">
-                        <InputLabel>Categoria</InputLabel>
+                        <InputLabel>Categoría</InputLabel>
                         <Select
                             value={formData.categoria}
                             onChange={(e) => setFormData({ ...formData, categoria: e.target.value })}

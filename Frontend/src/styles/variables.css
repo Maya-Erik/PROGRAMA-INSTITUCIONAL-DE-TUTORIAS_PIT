@@ -1,0 +1,170 @@
+/* ============================================
+   VARIABLES GLOBALES - PIT FES Acatlán
+   ============================================ */
+
+:root {
+  /* ===== COLORES PRINCIPALES ===== */
+  --color-primary: #003DA5;
+  --color-primary-dark: #002c7a;
+  --color-primary-light: #2a6bc9;
+  --color-primary-rgb: 0, 61, 165;
+  
+  --color-secondary: #D6A600;
+  --color-secondary-dark: #c09500;
+  --color-secondary-light: #e6c44d;
+  --color-secondary-rgb: 214, 166, 0;
+  
+  /* ===== COLORES DE FONDO ===== */
+  --bg-body: #F8F9FC;
+  --bg-white: #ffffff;
+  --bg-gray-light: #f5f5f5;
+  --bg-gray: #e8eaf0;
+  --bg-dark: #0d1b3e;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* ===== COLORES DE TEXTO ===== */
+  --text-primary: #1a1a2e;
+  --text-secondary: #4A5568;
+  --text-muted: #888;
+  --text-white: #ffffff;
+  --text-dark: #333;
+  
+  /* ===== COLORES DE ESTADO ===== */
+  --color-success: #28a745;
+  --color-success-light: #e8f5e9;
+  --color-error: #dc3545;
+  --color-error-light: #ffebee;
+  --color-warning: #ffc107;
+  --color-warning-light: #fff3e0;
+  --color-info: #17a2b8;
+  --color-info-light: #e8f0fe;
+  
+  /* ===== BORDES Y SOMBRAS ===== */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-2xl: 20px;
+  --border-radius-3xl: 30px;
+  --border-radius-circle: 50%;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+  
+  /* ===== ESPACIADO ===== */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 40px;
+  --spacing-3xl: 48px;
+  
+  /* ===== TIPOGRAFÍA ===== */
+  --font-primary: 'Lexend', sans-serif;
+  --font-secondary: 'Montserrat', sans-serif;
+  
+  /* ===== TRANSICIONES ===== */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* ===== Z-INDEX ===== */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal: 1000;
+  --z-popover: 1100;
+  --z-tooltip: 1200;
+  --z-toast: 1300;
+}
+
+/* ============================================
+   RESET Y ESTILOS BASE
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-secondary);
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ===== TIPOGRAFÍA GLOBAL ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+  font-weight: 600;
+}
+
+/* ===== SCROLLBAR PERSONALIZADA ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-gray);
+  border-radius: var(--border-radius-lg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--border-radius-lg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+/* ===== UTILIDADES ===== */
+.text-center { text-align: center; }
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-success { color: var(--color-success); }
+.text-error { color: var(--color-error); }
+.text-muted { color: var(--text-muted); }
+
+.bg-primary { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-white { background-color: var(--bg-white); }
+.bg-gray { background-color: var(--bg-gray-light); }
+
+/* ===== ANIMACIONES GLOBALES ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+/* Móvil: hasta 768px */
+/* Tablet: 769px - 1024px */
+/* Desktop: más de 1024px */

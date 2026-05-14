@@ -1,40 +1,37 @@
-/* Modal overlay - asegurar que esté por encima de todo */
 .modal-overlay-nueva {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   bottom: 0 !important;
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  background-color: var(--bg-overlay) !important;
   backdrop-filter: blur(5px) !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 99999 !important;
+  z-index: var(--z-modal) !important;
 }
 
-/* Contenido del modal */
 .modal-cita-nueva {
-  background: white !important;
+  background: var(--bg-white) !important;
   width: 90% !important;
   max-width: 550px !important;
   max-height: 85vh !important;
   overflow-y: auto !important;
-  border-radius: 16px !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+  border-radius: var(--border-radius-xl) !important;
+  box-shadow: var(--shadow-2xl) !important;
   position: relative !important;
-  z-index: 100000 !important;
+  z-index: calc(var(--z-modal) + 1) !important;
 }
 
-/* Header */
 .modal-header-nueva {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
-  padding: 16px 20px !important;
-  background: #003DA5 !important;
+  padding: var(--spacing-md) 20px !important;
+  background: var(--color-primary) !important;
   color: white !important;
-  border-radius: 16px 16px 0 0 !important;
+  border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0 !important;
   position: sticky !important;
   top: 0 !important;
   z-index: 10 !important;
@@ -58,14 +55,13 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border-radius: 50% !important;
+  border-radius: var(--border-radius-circle) !important;
 }
 
 .modal-close-btn-nueva:hover {
   background: rgba(255, 255, 255, 0.2) !important;
 }
 
-/* Formulario */
 .modal-form-nueva {
   padding: 20px !important;
 }
@@ -86,7 +82,7 @@
 .form-group-nueva label {
   font-size: 12px !important;
   font-weight: 600 !important;
-  color: #003DA5 !important;
+  color: var(--color-primary) !important;
   text-transform: uppercase !important;
 }
 
@@ -94,27 +90,21 @@
 .form-group-nueva select {
   padding: 10px 12px !important;
   border: 1.5px solid #e0e0e0 !important;
-  border-radius: 8px !important;
+  border-radius: var(--border-radius-md) !important;
   font-size: 14px !important;
 }
 
 .form-group-nueva input:focus,
 .form-group-nueva select:focus {
   outline: none !important;
-  border-color: #003DA5 !important;
+  border-color: var(--color-primary) !important;
 }
 
 .form-group-nueva input:disabled {
-  background-color: #f5f5f5 !important;
+  background-color: var(--bg-gray-light) !important;
   cursor: not-allowed !important;
 }
 
-.form-group-nueva small {
-  font-size: 10px !important;
-  color: #888 !important;
-}
-
-/* Acciones */
 .acciones-nueva {
   display: flex !important;
   gap: 12px !important;
@@ -127,9 +117,9 @@
   flex: 1 !important;
   padding: 10px !important;
   background: #e0e0e0 !important;
-  color: #333 !important;
+  color: var(--text-dark) !important;
   border: none !important;
-  border-radius: 8px !important;
+  border-radius: var(--border-radius-md) !important;
   font-weight: 600 !important;
   cursor: pointer !important;
 }
@@ -137,10 +127,10 @@
 .btn-submit-nueva {
   flex: 2 !important;
   padding: 10px !important;
-  background: #003DA5 !important;
+  background: var(--color-primary) !important;
   color: white !important;
   border: none !important;
-  border-radius: 8px !important;
+  border-radius: var(--border-radius-md) !important;
   font-weight: 600 !important;
   cursor: pointer !important;
 }
@@ -150,7 +140,6 @@
   cursor: not-allowed !important;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .form-row-nueva {
     flex-direction: column !important;

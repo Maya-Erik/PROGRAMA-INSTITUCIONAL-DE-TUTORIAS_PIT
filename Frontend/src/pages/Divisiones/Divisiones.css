@@ -3,12 +3,12 @@
 
 /* Colores */
 :root {
-  --azul-principal: #003DA5;
-  --dorado-principal: #D6A600;
-  --blanco: #FFFFFF;
+  --azul-principal: var(--color-primary);
+  --dorado-principal: var(--color-secondary);
+  --blanco: var(--bg-white);
   --fondo-claro: #F5F7FA;
-  --texto-oscuro: #333333;
-  --texto-claro: #666666;
+  --texto-oscuro: var(--text-primary);
+  --texto-claro: var(--text-secondary);
 }
 
 * {
@@ -19,9 +19,9 @@
 
 .divisiones-container {
   max-width: 1200px;
-  margin: 2rem auto;
-  padding: 2rem;
-  font-family: 'Montserrat', 'Lexend', sans-serif;
+  margin: var(--spacing-2xl) auto;
+  padding: var(--spacing-2xl);
+  font-family: var(--font-secondary);
   background-color: var(--blanco);
 }
 
@@ -31,16 +31,16 @@
   margin-bottom: 0.5rem;
   color: var(--azul-principal);
   text-align: center;
-  font-family: 'Lexend', 'Montserrat', sans-serif;
+  font-family: var(--font-primary);
   letter-spacing: -0.02em;
 }
 
 .subtitulo-divisiones {
   font-size: 1.2rem;
   color: var(--texto-claro);
-  margin-bottom: 3rem;
+  margin-bottom: var(--spacing-3xl);
   border-left: 4px;
-  padding-left: 1rem;
+  padding-left: var(--spacing-md);
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -51,12 +51,12 @@
 .grid-tarjetas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
+  gap: var(--spacing-2xl);
 }
 
 .tarjeta {
   background: var(--blanco);
-  border-radius: 16px;
+  border-radius: var(--border-radius-xl);
   padding: 1.8rem;
   box-shadow: 0 10px 30px rgba(0, 61, 165, 0.08);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -77,7 +77,7 @@
   height: 100%;
   background: var(--dorado-principal);
   opacity: 0.3;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
 }
 
 .tarjeta:hover {
@@ -96,14 +96,14 @@
   margin-bottom: 0.5rem;
   color: var(--azul-principal);
   font-weight: 700;
-  font-family: 'Lexend', 'Montserrat', sans-serif;
+  font-family: var(--font-primary);
   letter-spacing: -0.02em;
 }
 
 .descripcion-tarjeta {
   font-size: 0.95rem;
   color: var(--texto-claro);
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-lg);
   line-height: 1.5;
   font-weight: 500;
 }
@@ -115,8 +115,8 @@
   transform: translateY(20px);
   transition: all 0.4s ease;
   background: rgba(0, 61, 165, 0.02);
-  border-radius: 12px;
-  padding: 0 1rem;
+  border-radius: var(--border-radius-lg);
+  padding: 0 var(--spacing-md);
   overflow: hidden;
 }
 
@@ -124,11 +124,11 @@
   opacity: 1;
   max-height: 400px;
   transform: translateY(0);
-  padding: 1rem;
-  margin-top: 1rem;
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
   border: 1px solid rgba(0, 61, 165, 0.2);
   background: var(--blanco);
-  box-shadow: 0 4px 12px rgba(0, 61, 165, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .lista-carreras h4 {
@@ -138,7 +138,7 @@
   letter-spacing: 0.05em;
   margin-bottom: 0.75rem;
   font-weight: 700;
-  font-family: 'Lexend', 'Montserrat', sans-serif;
+  font-family: var(--font-primary);
 }
 
 .lista-carreras ul {
@@ -163,10 +163,10 @@
   font-size: 0.9rem;
   border-radius: 20px;
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
   border: 1px solid transparent;
   font-weight: 600;
-  font-family: 'Montserrat', 'Lexend', sans-serif;
+  font-family: var(--font-secondary);
   cursor: pointer;
 }
 
@@ -174,20 +174,19 @@
   background: var(--dorado-principal);
   color: var(--blanco);
   transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(214, 166, 0, 0.3);
+  box-shadow: var(--shadow-sm);
   border-color: var(--dorado-principal);
 }
 
-/* Estilo para links visitados */
 .link-carrera:visited {
-  color: #002c7a; /* Versión más oscura del azul principal */
+  color: #002c7a;
 }
 
 /* Ajustes responsivos */
 @media (max-width: 768px) {
   .divisiones-container {
-    padding: 1rem;
-    margin: 1rem auto;
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) auto;
   }
   
   .titulo-divisiones {
@@ -196,7 +195,7 @@
   
   .grid-tarjetas {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: var(--spacing-lg);
   }
   
   .lista-carreras ul {
@@ -204,11 +203,10 @@
   }
   
   .tarjeta {
-    padding: 1.5rem;
+    padding: var(--spacing-lg);
   }
 }
 
-/* Asegura que la barra de navegación no cause errores */
 .navbar + .divisiones-container {
-  margin-top: 1rem;
+  margin-top: var(--spacing-md);
 }

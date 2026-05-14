@@ -236,7 +236,7 @@ export const obtenerMisCitasBitacora = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/bitacora/mis-citas`, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json',  // ← Comilla simple corregida
             'Authorization': token ? `Bearer ${token}` : ''
         }
     });
@@ -258,6 +258,8 @@ export const agregarNotaCompleta = async (data: {
     id_cita: number;
     nota_general: string;
     notas_personales: { id_alumno: number; nota: string }[];
+    tipo_tutoria: string;
+    canalizado: boolean;
 }) => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/bitacora/nota-completa`, {
@@ -280,6 +282,33 @@ export const obtenerTodasNotasBitacora = async () => {
         }
     });
     return response.json();
+};
+
+export const exportarBitacora = async (filtros: {
+    fecha_inicio?: string;
+    fecha_fin?: string;
+    citas_ids?: number[];
+}) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/bitacora/exportar`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+        },
+        body: JSON.stringify(filtros)
+    });
+    
+    // Para CSV, obtener blob
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `bitacora_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
 };
 
 

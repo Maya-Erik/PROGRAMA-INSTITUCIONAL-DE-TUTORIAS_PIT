@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/api';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
 import './Login.css';
 
 interface LoginProps {
@@ -30,34 +34,24 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose, onLoginSuccess }) => {
 
     const emailCompleto = `${usuario}@pcpuma.acatlan.unam.mx`;
 
-    console.log('📧 Intentando login con:', emailCompleto);
-    console.log('🔑 Contraseña:', password);
+    console.log('Intentando login con:', emailCompleto);
 
     try {
       const data = await login(emailCompleto, password);
-      console.log('📥 Respuesta del servidor:', data);
+      console.log('Respuesta del servidor:', data);
       
       if (data.success) {
-        // Guardar token y datos del usuario
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('userId', String(data.user.id)); //Esta se eliminara(solo es prueba)
+        localStorage.setItem('userId', String(data.user.id));
         
         console.log('Login exitoso:', data.user);
         
         onClose();
         if (onLoginSuccess) onLoginSuccess();
         
-        // Redirigir según el rol
-        if (data.user.role === 'admin') {
-          navigate("/agenda");
-        } else if (data.user.role === 'tutor' || data.user.role === 'tutorado') {
-          navigate('/agenda');
-        } else {
-          navigate('/agenda');
-        }
-        
-        window.location.reload(); // Recargar para actualizar navbar
+        navigate('/agenda');
+        window.location.reload();
       } else {
         setError(data.message || 'Usuario o contraseña incorrectos');
       }
@@ -85,6 +79,7 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose, onLoginSuccess }) => {
           <div className="form-group">
             <label htmlFor="usuario">Usuario (correo institucional):</label>
             <div className="email-input-wrapper">
+              <EmailIcon className="input-icon-left" />
               <input
                 type="text"
                 id="usuario"
@@ -101,6 +96,7 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose, onLoginSuccess }) => {
           <div className="form-group">
             <label htmlFor="password">Contraseña:</label>
             <div className="password-wrapper">
+              <LockIcon className="input-icon-left" />
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -110,9 +106,7 @@ const Login: React.FC<LoginProps> = ({ isOpen, onClose, onLoginSuccess }) => {
                 required
               />
               <button type="button" className="toggle-password" onClick={togglePasswordVisibility}>
-                <span className="material-symbols-outlined">
-                  {showPassword ? 'visibility_off' : 'visibility'}
-                </span>
+                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </button>
             </div>
           </div>

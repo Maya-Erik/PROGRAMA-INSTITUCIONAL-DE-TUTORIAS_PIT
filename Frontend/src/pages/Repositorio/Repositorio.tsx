@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import { obtenerMaterialesPorCategoria } from '../../services/api';
+import DescriptionIcon from '@mui/icons-material/Description';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import SchoolIcon from '@mui/icons-material/School';
 import './Repositorio.css';
 
 interface Material {
@@ -22,12 +25,12 @@ const Repositorio = () => {
     const [loading, setLoading] = useState(true);
 
     const carreras = [
-        "Actuaria", "Arquitectura", "Ciencias Politicas y Administracion Publica",
-        "Comunicacion", "Derecho", "Diseño Grafico", "Economia",
-        "Enseñanza de (Español) (Inglés) Como Lengua Extranjera", "Enseñanza de Ingles",
-        "Filosofia", "Historia", "Ingenieria Civil", "Lengua y Literaturas Hispanicas",
-        "Matematicas Aplicadas y Computacion", "Pedagogia", "Relaciones Internacionales",
-        "Sociologia", "Derecho (SUAyED)", "Relaciones Internacionales (SUAyED)", "LICEL"
+        "Actuaría", "Arquitectura", "Ciencias Políticas y Administración Pública",
+        "Comunicación", "Derecho", "Diseño Gráfico", "Economía",
+        "Enseñanza de (Español) (Inglés) Como Lengua Extranjera", "Enseñanza de Inglés",
+        "Filosofía", "Historia", "Ingeniería Civil", "Lengua y Literaturas Hispánicas",
+        "Matemáticas Aplicadas y Computación", "Pedagogía", "Relaciones Internacionales",
+        "Sociología", "Derecho (SUAyED)", "Relaciones Internacionales (SUAyED)", "LICEL"
     ];
 
     useEffect(() => {
@@ -57,9 +60,9 @@ const Repositorio = () => {
             
             <section className="repositorio-section">
                 <div className="repositorio-container">
-                    <h1 className="repositorio-titulo">Repositorio Academico</h1>
+                    <h1 className="repositorio-titulo">Repositorio Académico</h1>
                     <p className="repositorio-subtitulo">
-                        Accede a documentos institucionales, materiales academicos y recursos de formacion
+                        Accede a documentos institucionales, materiales académicos y recursos de formación
                     </p>
 
                     <div className="repositorio-tabs">
@@ -73,13 +76,13 @@ const Repositorio = () => {
                             className={`repositorio-tab ${seccionActiva === 'materiales' ? 'activo' : ''}`}
                             onClick={() => setSeccionActiva('materiales')}
                         >
-                            Materiales Academicos
+                            Materiales Académicos
                         </button>
                         <button 
                             className={`repositorio-tab ${seccionActiva === 'formacion' ? 'activo' : ''}`}
                             onClick={() => setSeccionActiva('formacion')}
                         >
-                            Recursos de Formacion
+                            Recursos de Formación
                         </button>
                     </div>
 
@@ -87,7 +90,7 @@ const Repositorio = () => {
                         <div className="repositorio-seccion">
                             <h2 className="seccion-titulo">Documentos Institucionales</h2>
                             <p className="seccion-descripcion">
-                                Documentos oficiales, reglamentos y formatos del Programa Institucional de Tutorias
+                                Documentos oficiales, reglamentos y formatos del Programa Institucional de Tutorías
                             </p>
                             {loading ? (
                                 <div className="loading-text">Cargando documentos...</div>
@@ -97,13 +100,13 @@ const Repositorio = () => {
                                 <div className="repositorio-grid">
                                     {materialesDoc.map((doc) => (
                                         <div key={doc.id_material} className="repositorio-card">
-                                            <div className="card-icon">📄</div>
+                                            <div className="card-icon"><DescriptionIcon /></div>
                                             <div className="card-content">
                                                 <h3 className="card-titulo">{doc.titulo}</h3>
                                                 {doc.descripcion && <p className="card-descripcion">{doc.descripcion}</p>}
                                                 <div className="card-meta">
                                                     <span className="card-tipo">{doc.tipo}</span>
-                                                    {doc.tamano && <span className="card-tamanio">{doc.tamano}</span>}
+                                                    {doc.tamano && <span className="card-tamaño">{doc.tamano}</span>}
                                                 </div>
                                                 <a href={doc.archivo_url} target="_blank" rel="noopener noreferrer" className="card-btn">
                                                     Ver documento
@@ -118,16 +121,16 @@ const Repositorio = () => {
 
                     {seccionActiva === 'materiales' && (
                         <div className="repositorio-seccion">
-                            <h2 className="seccion-titulo">Materiales Academicos por Carrera</h2>
+                            <h2 className="seccion-titulo">Materiales Académicos por Carrera</h2>
                             <p className="seccion-descripcion">
-                                Selecciona tu carrera para acceder a materiales academicos especificos
+                                Selecciona tu carrera para acceder a materiales académicos específicos
                             </p>
                             <div className="carreras-grid">
                                 {carreras.map((carrera, index) => (
                                     <div key={index} className="carrera-card" onClick={() => handleCarreraClick(carrera)}>
-                                        <div className="carrera-icon">📚</div>
+                                        <div className="carrera-icon"><MenuBookIcon /></div>
                                         <h3 className="carrera-nombre">{carrera}</h3>
-                                        <p className="carrera-descripcion">Ver materiales academicos</p>
+                                        <p className="carrera-descripcion">Ver materiales académicos</p>
                                     </div>
                                 ))}
                             </div>
@@ -136,9 +139,9 @@ const Repositorio = () => {
 
                     {seccionActiva === 'formacion' && (
                         <div className="repositorio-seccion">
-                            <h2 className="seccion-titulo">Recursos de Formacion</h2>
+                            <h2 className="seccion-titulo">Recursos de Formación</h2>
                             <p className="seccion-descripcion">
-                                Cursos, talleres y guias para la formacion continua de tutores y estudiantes
+                                Cursos, talleres y guías para la formación continua de tutores y estudiantes
                             </p>
                             {loading ? (
                                 <div className="loading-text">Cargando recursos...</div>
@@ -148,13 +151,13 @@ const Repositorio = () => {
                                 <div className="repositorio-grid">
                                     {materialesFormacion.map((recurso) => (
                                         <div key={recurso.id_material} className="repositorio-card">
-                                            <div className="card-icon">🎓</div>
+                                            <div className="card-icon"><SchoolIcon /></div>
                                             <div className="card-content">
                                                 <h3 className="card-titulo">{recurso.titulo}</h3>
                                                 {recurso.descripcion && <p className="card-descripcion">{recurso.descripcion}</p>}
                                                 <div className="card-meta">
                                                     <span className="card-tipo">{recurso.tipo}</span>
-                                                    {recurso.tamano && <span className="card-tamanio">{recurso.tamano}</span>}
+                                                    {recurso.tamano && <span className="card-tamaño">{recurso.tamano}</span>}
                                                 </div>
                                                 <a href={recurso.archivo_url} target="_blank" rel="noopener noreferrer" className="card-btn">
                                                     Ver recurso

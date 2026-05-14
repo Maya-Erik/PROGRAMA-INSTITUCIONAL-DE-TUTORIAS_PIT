@@ -1,4 +1,3 @@
-
 import "./Divisiones.css";
 import Navbar from "../../components/Navbar/Navbar"
 

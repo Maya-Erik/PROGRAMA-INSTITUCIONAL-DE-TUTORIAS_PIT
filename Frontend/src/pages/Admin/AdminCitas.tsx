@@ -58,12 +58,12 @@ const AdminCitas: React.FC = () => {
     const [lugarData, setLugarData] = useState({ lugar: '' });
 
     const carreras = [
-        "Actuaria", "Arquitectura", "Ciencia de Datos",
-        "Ciencias Politicas y Administracion Publica", "Comunicacion",
-        "Derecho", "Diseno Grafico", "Economia", "Ensenanza de Ingles",
-        "Filosofia", "Historia", "Ingenieria Civil",
-        "Lengua y Literatura Hispanicas", "Matematicas Aplicadas y Computacion",
-        "Pedagogia", "Relaciones Internacionales", "Sociologia"
+        "Actuaría", "Arquitectura", "Ciencia de Datos",
+        "Ciencias Políticas y Administración Pública", "Comunicación",
+        "Derecho", "Diseño Gráfico", "Economía", "Enseñanza de Inglés",
+        "Filosofía", "Historia", "Ingeniería Civil",
+        "Lengua y Literatura Hispánicas", "Matemáticas Aplicadas y Computación",
+        "Pedagogía", "Relaciones Internacionales", "Sociología"
     ];
 
     const cargarCitas = async () => {
@@ -171,7 +171,7 @@ const AdminCitas: React.FC = () => {
     };
 
     const handleEliminar = async (id: number) => {
-        if (window.confirm('¿Estas seguro de eliminar esta cita?')) {
+        if (window.confirm('¿Estás seguro de eliminar esta cita?')) {
             const result = await adminEliminarCita(id);
             if (result.success) {
                 setSnackbar({ 
@@ -197,7 +197,7 @@ const AdminCitas: React.FC = () => {
         if (result.success) {
             setSnackbar({ 
                 open: true, 
-                message: 'Salon asignado correctamente', 
+                message: 'Salón asignado correctamente', 
                 severity: 'success' 
             });
             handleCloseLugarModal();
@@ -205,7 +205,7 @@ const AdminCitas: React.FC = () => {
         } else {
             setSnackbar({ 
                 open: true, 
-                message: result.error || 'Error al asignar salon', 
+                message: result.error || 'Error al asignar salón', 
                 severity: 'error' 
             });
         }
@@ -232,7 +232,7 @@ const AdminCitas: React.FC = () => {
                 <Container className="admin-citas-content">
                     <Box className="admin-citas-header">
                         <Typography variant="h4" className="admin-citas-titulo">
-                            Gestion de Citas
+                            Gestión de Citas
                         </Typography>
                         <Button 
                             variant="contained" 
@@ -255,7 +255,7 @@ const AdminCitas: React.FC = () => {
                                         <TableCell>Fecha</TableCell>
                                         <TableCell>Hora</TableCell>
                                         <TableCell>Carrera</TableCell>
-                                        <TableCell>Salon</TableCell>
+                                        <TableCell>Salón</TableCell>
                                         <TableCell>Cupos</TableCell>
                                         <TableCell>Acciones</TableCell>
                                     </TableRow>
@@ -316,7 +316,7 @@ const AdminCitas: React.FC = () => {
                                                         onClick={() => handleOpenLugarModal(cita)}
                                                         className="admin-citas-btn-lugar"
                                                     >
-                                                        Asignar Salon
+                                                        Asignar Salón
                                                     </Button>
                                                 </TableCell>
                                             </TableRow>
@@ -442,7 +442,7 @@ const AdminCitas: React.FC = () => {
                 </DialogActions>
             </Dialog>
 
-            {/* Modal Asignar Salon */}
+            {/* Modal Asignar Salón */}
             <Dialog 
                 open={openLugarModal} 
                 onClose={handleCloseLugarModal} 
@@ -451,7 +451,7 @@ const AdminCitas: React.FC = () => {
                 className="admin-citas-modal"
             >
                 <DialogTitle className="admin-citas-modal-titulo">
-                    Asignar Salon
+                    Asignar Salón
                     <IconButton 
                         onClick={handleCloseLugarModal} 
                         className="admin-citas-modal-close"
@@ -462,11 +462,11 @@ const AdminCitas: React.FC = () => {
                 <DialogContent>
                     <TextField
                         fullWidth
-                        label="Salon"
+                        label="Salón"
                         value={lugarData.lugar}
                         onChange={(e) => setLugarData({ lugar: e.target.value })}
                         margin="normal"
-                        placeholder="Ej: Salon 301, Laboratorio de computo, Aula virtual"
+                        placeholder="Ej: Salón 301, Laboratorio de cómputo, Aula virtual"
                         className="admin-citas-input"
                     />
                 </DialogContent>

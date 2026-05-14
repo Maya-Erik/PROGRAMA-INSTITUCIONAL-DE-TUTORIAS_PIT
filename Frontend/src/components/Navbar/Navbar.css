@@ -1,4 +1,26 @@
 /* ==================== NAVBAR PRINCIPAL ==================== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: var(--bg-white);
+  box-shadow: var(--shadow-sm);
+  border-bottom: 3px solid var(--color-primary);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: var(--z-fixed);
+  box-sizing: border-box;
+}
+
+body {
+  padding-top: 80px;
+}
+
+/* Secciones con scroll margin */
 section, 
 [id="inicio"], 
 [id="sobre-nosotros"], 
@@ -9,45 +31,24 @@ section,
   min-height: 100vh;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-bottom: 3px solid #003DA5;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 1000;
-  box-sizing: border-box;
-}
-
-body {
-  padding-top: 80px;
-}
-
 /* ==================== LOGO ==================== */
 .logo {
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-family: 'Montserrat', sans-serif;
+  gap: var(--spacing-xs);
+  font-family: var(--font-secondary);
   font-size: 25px;
   white-space: nowrap;
 }
 
 .logo-pit {
-  color: #D6A600;
+  color: var(--color-secondary);
   font-weight: 700;
 }
 
 .logo-fes {
-  color: #003DA5;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -55,8 +56,8 @@ body {
   width: 2rem;
   height: 2rem;
   font-size: 25px;
-  color: #D6A600;
-  transition: 0.3s;
+  color: var(--color-secondary);
+  transition: var(--transition-normal);
 }
 
 .logo:hover .logo-icon {
@@ -75,25 +76,24 @@ body {
 
 .auth-buttons {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-sm);
   align-items: center;
 }
 
-/* ==================== ESTILOS UNIFICADOS ==================== */
+/* ==================== BOTONES ==================== */
 .nav-button,
 .login-btn {
   background-color: transparent;
   text-decoration: none;
-  color: #333;
-  font-family: 'Montserrat', sans-serif;
+  color: var(--text-dark);
+  font-family: var(--font-secondary);
   font-size: 15px;
   font-weight: 500;
-  padding: 8px 14px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+  padding: var(--spacing-sm) 14px;
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-normal);
   border: none;
   outline: none;
-  box-shadow: none;
   cursor: pointer;
   display: inline-block;
   white-space: nowrap;
@@ -101,123 +101,75 @@ body {
 
 .nav-button:hover,
 .login-btn:hover {
-  background: #D6A600;
-  color: rgb(251, 242, 242);
+  background: var(--color-secondary);
+  color: white;
   transform: translateY(-2px);
 }
 
 .nav-button.active,
 .login-btn.active {
-  background: #003DA5;
+  background: var(--color-primary);
   color: white;
 }
 
-/* ==================== BOTÓN HAMBURGUESA ==================== */
+/* ==================== HAMBURGUESA ==================== */
 .hamburger {
   display: none;
   cursor: pointer;
   font-size: 30px;
+  color: var(--color-primary);
 }
 
-.hamburger .material-symbols-outlined {
-  font-size: 30px;
-  color: #003DA5;
-}
-
-/* ==================== RESPONSIVE MÓVIL ==================== */
+/* ==================== RESPONSIVE ==================== */
 @media (max-width: 900px) {
-  .menu {
-    gap: 12px;
-  }
-  
-  .nav-button,
-  .login-btn {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
+  .menu { gap: 12px; }
+  .nav-button, .login-btn { padding: 6px 10px; font-size: 13px; }
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    padding: 12px 20px;
-  }
-
-  .hamburger {
-    display: block;
-  }
-
+  .navbar { padding: 12px 20px; }
+  .hamburger { display: block; }
+  
   .menu {
     position: absolute;
     top: 70px;
     left: 0;
     width: 100%;
-    background: white;
+    background: var(--bg-white);
     flex-direction: column;
     align-items: stretch;
-    gap: 5px;
+    gap: var(--spacing-xs);
     padding: 20px;
     display: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 999;
+    box-shadow: var(--shadow-lg);
+    z-index: calc(var(--z-fixed) - 1);
   }
-
-  .menu.open {
-    display: flex;
-  }
-
-  .nav-button,
-  .login-btn {
+  
+  .menu.open { display: flex; }
+  
+  .nav-button, .login-btn {
     width: 100%;
     text-align: center;
     padding: 12px;
     font-size: 16px;
     white-space: normal;
   }
-
+  
   .auth-buttons {
     flex-direction: column;
     width: 100%;
-    gap: 8px;
-  }
-
-  .auth-buttons button {
-    width: 100%;
-  }
-
-  .logo {
-    font-size: 18px;
-  }
-
-  .logo-icon {
-    width: 1.6rem;
-    height: 1.6rem;
+    gap: var(--spacing-sm);
   }
   
-  .logo-pit, .logo-fes {
-    font-size: 14px;
-  }
+  .logo { font-size: 18px; }
+  .logo-icon { width: 1.6rem; height: 1.6rem; }
+  .logo-pit, .logo-fes { font-size: 14px; }
 }
 
 @media (max-width: 480px) {
-  .navbar {
-    padding: 10px 15px;
-  }
-  
-  .logo {
-    font-size: 14px;
-  }
-  
-  .logo-icon {
-    width: 1.4rem;
-    height: 1.4rem;
-  }
-  
-  .logo-pit, .logo-fes {
-    font-size: 12px;
-  }
-  
-  .menu {
-    top: 60px;
-    padding: 15px;
-  }
+  .navbar { padding: 10px 15px; }
+  .logo { font-size: 14px; }
+  .logo-icon { width: 1.4rem; height: 1.4rem; }
+  .logo-pit, .logo-fes { font-size: 12px; }
+  .menu { top: 60px; padding: 15px; }
 }

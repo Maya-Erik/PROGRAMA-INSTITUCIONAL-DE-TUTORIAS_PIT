@@ -1,6 +1,7 @@
 import "./Navbar.css";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import MenuIcon from '@mui/icons-material/Menu';
 import Logo from "../../assets/icons/unam_logo.svg";
 import Login from "../../pages/Login/Login";
 import Registro from "../../pages/Registro/Registro";
@@ -25,16 +26,15 @@ function Navbar({ onLoginClick }: NavbarProps) {
     return navbar ? navbar.getBoundingClientRect().height : 80;
   };
 
-  // En Navbar.tsx - useEffect para detectar login
   useEffect(() => {
-      setIsLoggedIn(isAuthenticated());
-      if (isAuthenticated()) {
-          const user = localStorage.getItem('user');
-          if (user) {
-              const userData = JSON.parse(user);
-              console.log('Usuario logueado:', userData);
-          }
+    setIsLoggedIn(isAuthenticated());
+    if (isAuthenticated()) {
+      const user = localStorage.getItem('user');
+      if (user) {
+        const userData = JSON.parse(user);
+        console.log('Usuario logueado:', userData);
       }
+    }
   }, [location.pathname]);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ function Navbar({ onLoginClick }: NavbarProps) {
     }
 
     const checkSections = () => {
-      const sections = ["inicio", "sobre-nosotros", "servicios", "divisiones", "contacto"]; // Eliminado "avisos"
+      const sections = ["inicio", "sobre-nosotros", "servicios", "divisiones", "contacto"];
       sections.forEach(section => {
         const element = document.getElementById(section);
         if (!element) console.warn(`Sección no encontrada: ${section}`);
@@ -55,7 +55,7 @@ function Navbar({ onLoginClick }: NavbarProps) {
 
     const handleScroll = () => {
       if (isScrolling.current) return;
-      const sections = ["inicio", "sobre-nosotros", "servicios", "divisiones", "contacto"]; // Eliminado "avisos"
+      const sections = ["inicio", "sobre-nosotros", "servicios", "divisiones", "contacto"];
       const navbarHeight = getNavbarHeight();
       let currentSection = "";
 
@@ -155,7 +155,7 @@ function Navbar({ onLoginClick }: NavbarProps) {
         </NavLink>
 
         <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-          <span className="material-symbols-outlined">menu</span>
+          <MenuIcon />
         </div>
 
         <ul className={`menu ${menuOpen ? "open" : ""}`}>
@@ -164,7 +164,6 @@ function Navbar({ onLoginClick }: NavbarProps) {
               Inicio
             </button>
           </li>
-          {/* Eliminado el botón de Avisos */}
           <li>
             <button className={`nav-button ${isActive("sobre-nosotros") ? "active" : ""}`} onClick={() => handleClick("sobre-nosotros")}>
               Sobre Nosotros

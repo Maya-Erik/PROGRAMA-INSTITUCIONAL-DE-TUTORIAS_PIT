@@ -1,13 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&family=Montserrat:wght@400;600&display=swap');
-
+/* Layout principal */
 .agenda-layout {
   display: flex;
   min-height: 100vh;
-  background: #f4f6fb;
-  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-body);
+  font-family: var(--font-secondary);
 }
 
-/* Main content area */
 .agenda-main {
   margin-left: 200px;
   flex: 1;
@@ -18,28 +16,23 @@
 
 /* Topbar */
 .agenda-topbar {
-  background: white;
+  background: var(--bg-white);
   padding: 14px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e8eaf0;
+  border-bottom: 1px solid var(--bg-gray);
 }
 
 .agenda-breadcrumb {
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
 }
 
 .agenda-topbar-right {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
-
-.agenda-topbar-bell {
-  font-size: 18px;
-  cursor: pointer;
+  gap: var(--spacing-md);
 }
 
 .agenda-topbar-user {
@@ -51,13 +44,13 @@
 .agenda-topbar-name {
   font-size: 13px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-dark);
   text-align: right;
 }
 
 .agenda-topbar-role {
   font-size: 10px;
-  color: #888;
+  color: var(--text-muted);
   text-align: right;
   letter-spacing: 0.5px;
 }
@@ -65,9 +58,9 @@
 .agenda-topbar-avatar {
   width: 36px;
   height: 36px;
-  background: #003DA5;
+  background: var(--color-primary);
   color: white;
-  border-radius: 50%;
+  border-radius: var(--border-radius-circle);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,100 +68,42 @@
   font-weight: 600;
 }
 
-/* Section label */
-.section-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-/* Highlight card */
-.highlight-card {
-  border-left: 6px solid #D6A600 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-  border: 1px solid #E5E7EB;
-}
-
-.next-badge {
-  color: #D6A600;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.agenda-btn-join {
-  background: #003DA5;
-  color: white;
-  border: none;
-  padding: 8px 32px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 20px;
-}
-
-.agenda-btn-join:hover {
-  background: #002d7a;
-}
-
-/* Filter section */
+/* Sección de filtros */
 .filter-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 48px 0 24px;
+  margin: var(--spacing-3xl) 0 var(--spacing-lg);
 }
 
-/* Tutor cards */
+/* Tarjetas de tutoría */
 .agenda-tutoria-card {
-  border-radius: 16px !important;
+  border-radius: var(--border-radius-xl) !important;
   border: 1px solid #E5E7EB !important;
-  box-shadow: none !important;
+  box-shadow: var(--shadow-sm) !important;
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: var(--transition-normal);
+}
+
+.agenda-tutoria-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg) !important;
 }
 
 .agenda-icon-box {
   width: 44px;
   height: 44px;
-  background-color: #F9FAFB;
-  border-radius: 12px;
+  background-color: var(--bg-gray-light);
+  border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
 }
 
-.agenda-btn-inscribir {
-  width: 100%;
-  background-color: #F3F4F6;
-  color: #374151;
-  border: 1px solid #E5E7EB;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.agenda-btn-inscribir:hover:not(.disabled) {
-  background-color: #003DA5;
-  color: white;
-  border-color: #003DA5;
-}
-
-.agenda-btn-inscribir.disabled {
-  background-color: #F9FAFB;
-  color: #9CA3AF;
-  cursor: not-allowed;
-}
-
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 768px) {
   .agenda-main {
     margin-left: 0;
@@ -178,11 +113,17 @@
     padding: 14px 16px;
   }
   
-  .agenda-topbar-name {
+  .agenda-topbar-name,
+  .agenda-topbar-role {
     display: none;
   }
   
-  .agenda-topbar-role {
-    display: none;
+  .filter-section {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .tu-clase-main {
+    margin-left: 0 !important;
   }
 }
