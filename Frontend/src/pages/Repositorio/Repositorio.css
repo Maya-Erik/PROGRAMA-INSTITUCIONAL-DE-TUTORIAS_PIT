@@ -258,4 +258,8 @@
   .carreras-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
+
+  .agenda-main {
+    margin-left: 0 !important;
+  }
 }
