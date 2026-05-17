@@ -8,7 +8,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
-import SidebarToggle from '../../components/Sidebar/SidebarToggle';
+import SidebarToggle from '../../../components/Sidebar/SidebarToggle';
 import "./GestionCitas.css"
 
 function GestionCitas() {
