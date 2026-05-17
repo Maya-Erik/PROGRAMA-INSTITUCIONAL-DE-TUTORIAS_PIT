@@ -258,9 +258,16 @@
   font-size: 0.9rem;
 }
 
+@media (min-width: 769px) {
+  .admin-container{
+    margin-left: 200px;
+  }
+}
+
 @media (max-width: 768px) {
   .admin-container {
     padding: var(--spacing-md);
+    margin-left: 0;
   }
   
   .admin-form {
@@ -289,9 +296,5 @@
   .btn-guardar,
   .btn-cancelar {
     width: 100%;
-  }
-
-  .admin-container {
-    margin-left: 0 !important;
   }
 }

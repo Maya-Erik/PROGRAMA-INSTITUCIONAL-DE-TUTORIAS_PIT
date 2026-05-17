@@ -7,31 +7,21 @@ interface MainContentProps {
 }
 
 const MainContent: React.FC<MainContentProps> = ({ children, className = '' }) => {
-  const { isMobile, sidebarOpen } = useSidebar();
+  const { isMobile } = useSidebar();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const updateMargin = () => {
-      if (containerRef.current) {
-        if (!isMobile) {
-          // Desktop: sidebar visible (200px)
-          containerRef.current.style.marginLeft = '200px';
-        } else {
-          // Móvil: sin margen
-          containerRef.current.style.marginLeft = '0';
-        }
+    if (containerRef.current) {
+      // En desktop, dejar que el CSS maneje el margen
+      // En móvil, eliminar cualquier margen
+      if (isMobile) {
+        containerRef.current.style.marginLeft = '0';
+      } else {
+        // Restaurar el margen que podría venir del CSS
+        containerRef.current.style.marginLeft = '';
       }
-    };
-
-    updateMargin();
-    window.addEventListener('resize', updateMargin);
-    window.addEventListener('resize-sidebar', updateMargin);
-
-    return () => {
-      window.removeEventListener('resize', updateMargin);
-      window.removeEventListener('resize-sidebar', updateMargin);
-    };
-  }, [isMobile, sidebarOpen]);
+    }
+  }, [isMobile]);
 
   return (
     <div ref={containerRef} className={className}>

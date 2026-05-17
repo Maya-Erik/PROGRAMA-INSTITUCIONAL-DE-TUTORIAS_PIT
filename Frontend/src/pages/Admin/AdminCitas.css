@@ -204,12 +204,17 @@
   margin-top: 8px !important;
 }
 
-
+@media (min-width: 769px) {
+  .admin-citas-main {
+    margin-left: 200px;
+  }
+}
 
 /* Responsive */
 @media (max-width: 1024px) {
   .admin-citas-main {
     padding: 15px;
+    margin-left: 0;
   }
   
   .admin-citas-titulo {

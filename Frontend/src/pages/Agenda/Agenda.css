@@ -102,8 +102,19 @@
   font-size: 18px;
 }
 
+@media (min-width: 769px) {
+  .agenda-main {
+    margin-left: 200px;
+  }
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
+  .agenda-main{
+    margin-left: 0;
+  }
+
   .agenda-topbar {
     padding: 14px 16px;
   }
