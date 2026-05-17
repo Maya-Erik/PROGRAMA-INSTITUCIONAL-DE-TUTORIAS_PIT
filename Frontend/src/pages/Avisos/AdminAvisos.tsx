@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageIcon from '@mui/icons-material/Image';
 import LinkIcon from '@mui/icons-material/Link';
+import MainContent from '../../components/Layout/MainContent';
 import './AdminAvisos.css';
 
 interface Aviso {
@@ -144,7 +145,7 @@ const AdminAvisos = () => {
   }
 
   return (
-    <div className="admin-container">
+    <MainContent className="admin-container">
       <h1 className="admin-titulo">Administrador de Avisos</h1>
       
       <form onSubmit={handleSubmit} className="admin-form">
@@ -258,7 +259,7 @@ const AdminAvisos = () => {
           ))
         )}
       </div>
-    </div>
+    </MainContent>
   );
 };
 

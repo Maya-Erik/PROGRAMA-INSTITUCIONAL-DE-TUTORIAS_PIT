@@ -30,6 +30,8 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
       } else {
         setSidebarOpen(false);
       }
+      // Disparar evento para que los componentes se actualicen
+      window.dispatchEvent(new Event('resize-sidebar'));
     };
 
     window.addEventListener('resize', handleResize);
@@ -40,10 +42,13 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const toggleSidebar = () => {
     setSidebarOpen(prev => !prev);
+    // Disparar evento para que los componentes se actualicen
+    window.dispatchEvent(new Event('resize-sidebar'));
   };
 
   const closeSidebar = () => {
     setSidebarOpen(false);
+    window.dispatchEvent(new Event('resize-sidebar'));
   };
 
   return (

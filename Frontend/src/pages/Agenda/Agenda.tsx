@@ -10,6 +10,7 @@ import PerfilUsuario from '../../components/PerfilUsuario/PerfilUsuario';
 import { 
   obtenerCitas, inscribirseCita, misCitas, cancelarInscripcionCita
 } from '../../services/api';
+import MainContent from '../../components/Layout/MainContent';
 import './Agenda.css';
 
 const theme = createTheme({
@@ -174,7 +175,7 @@ const Agenda: React.FC = () => {
       <Box className="agenda-layout">
         <Sidebar userRole={userRole} />
         
-        <main className="agenda-main">
+        <MainContent className="agenda-main">
           <header className="agenda-topbar">
             <span className="agenda-breadcrumb">Panel › Agenda</span>
             <div className="agenda-topbar-right">
@@ -354,7 +355,7 @@ const Agenda: React.FC = () => {
               </Box>
             )}
           </Container>
-        </main>
+        </MainContent>
       </Box>
 
       <PerfilUsuario 

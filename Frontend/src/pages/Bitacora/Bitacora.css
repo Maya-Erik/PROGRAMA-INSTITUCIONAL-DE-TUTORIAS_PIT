@@ -5,7 +5,6 @@
 }
 
 .bitacora-main {
-  margin-left: 200px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -329,9 +328,5 @@
   .bitacora-header-buttons {
     width: 100%;
     flex-direction: column;
-  }
-
-  .agenda-main {
-    margin-left: 0 !important;
   }
 }

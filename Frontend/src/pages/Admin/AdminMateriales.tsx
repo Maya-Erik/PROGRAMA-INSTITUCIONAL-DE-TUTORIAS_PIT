@@ -14,6 +14,7 @@ import {
     eliminarMaterial,
     obtenerCategorias
 } from '../../services/api';
+import MainContent from '../../components/Layout/MainContent';
 import './AdminMateriales.css';
 
 interface Material {

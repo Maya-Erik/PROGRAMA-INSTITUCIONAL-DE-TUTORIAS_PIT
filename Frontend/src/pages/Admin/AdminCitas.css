@@ -6,7 +6,6 @@
 
 .admin-citas-main {
   flex-grow: 1;
-  margin-left: 200px;
   padding: 20px;
   margin-top: 64px;
 }
@@ -237,7 +236,6 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .admin-citas-main {
-    margin-left: 0;
     padding: var(--spacing-md);
   }
   

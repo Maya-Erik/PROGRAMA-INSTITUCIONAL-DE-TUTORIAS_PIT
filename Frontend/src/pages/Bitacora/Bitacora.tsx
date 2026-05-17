@@ -24,6 +24,7 @@ import {
     obtenerInscritosPorCita,
     exportarBitacora
 } from '../../services/api';
+import MainContent from '../../components/Layout/MainContent';
 import './Bitacora.css';
 
 interface Cita {
@@ -268,7 +269,7 @@ const Bitacora: React.FC = () => {
         <div className="bitacora-container">
             <Sidebar userRole={userRole} />
             
-            <main className="bitacora-main">
+            <MainContent className="bitacora-main">
                 <header className="bitacora-topbar">
                     <span className="bitacora-breadcrumb">Configuración › Bitácora</span>
                     <div className="bitacora-topbar-right">
@@ -409,7 +410,7 @@ const Bitacora: React.FC = () => {
                         </TableContainer>
                     </Paper>
                 </div>
-            </main>
+            </MainContent>
 
             {/* Modal Agregar Nota */}
             <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)} maxWidth="md" fullWidth>
