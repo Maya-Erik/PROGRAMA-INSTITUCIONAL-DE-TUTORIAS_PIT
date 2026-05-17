@@ -5,13 +5,12 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Sidebar from "../../components/Sidebar/Sidebar";
 import PerfilUsuario from '../../components/PerfilUsuario/PerfilUsuario';
 import { 
   obtenerCitas, inscribirseCita, misCitas, cancelarInscripcionCita
 } from '../../services/api';
 import SidebarToggle from '../../components/Sidebar/SidebarToggle';
-import PageLayout from '../../components/Layout/PageLayout';
+import PageLayout from '../../components/Layout/pageLayout';
 import './Agenda.css';
 
 const theme = createTheme({
