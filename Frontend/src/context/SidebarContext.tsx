@@ -5,6 +5,7 @@ interface SidebarContextType {
   toggleSidebar: () => void;
   closeSidebar: () => void;
   isMobile: boolean;
+  setSidebarVisible: (visible: boolean) => void;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
@@ -20,6 +21,7 @@ export const useSidebar = () => {
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,7 +32,6 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
       } else {
         setSidebarOpen(false);
       }
-      // Disparar evento para que los componentes se actualicen
       window.dispatchEvent(new Event('resize-sidebar'));
     };
 
@@ -51,7 +52,13 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   return (
-    <SidebarContext.Provider value={{ sidebarOpen, toggleSidebar, closeSidebar, isMobile }}>
+    <SidebarContext.Provider value={{ 
+      sidebarOpen, 
+      toggleSidebar, 
+      closeSidebar, 
+      isMobile,
+      setSidebarVisible 
+    }}>
       {children}
     </SidebarContext.Provider>
   );
