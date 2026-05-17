@@ -11,6 +11,7 @@ import {
   obtenerCitas, inscribirseCita, misCitas, cancelarInscripcionCita
 } from '../../services/api';
 import SidebarToggle from '../../components/Sidebar/SidebarToggle';
+import PageLayout from '../../components/Layout/PageLayout';
 import './Agenda.css';
 
 const theme = createTheme({
@@ -173,7 +174,7 @@ const Agenda: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box className="agenda-layout" sx={{ display: 'flex', minHeight: '100vh' }}>
-        <Sidebar userRole={userRole} />
+        <PageLayout userRole={userRole}>
         <SidebarToggle />
         <main className="agenda-main">
           <header className="agenda-topbar">
@@ -356,6 +357,7 @@ const Agenda: React.FC = () => {
             )}
           </Container>
         </main>
+        </PageLayout>
       </Box>
 
       <PerfilUsuario 
