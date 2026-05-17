@@ -269,7 +269,7 @@ const Bitacora: React.FC = () => {
         <div className="bitacora-container">
             <Sidebar userRole={userRole} />
             
-            <MainContent className="bitacora-main">
+            <main className="bitacora-main">
                 <header className="bitacora-topbar">
                     <span className="bitacora-breadcrumb">Configuración › Bitácora</span>
                     <div className="bitacora-topbar-right">
@@ -410,7 +410,7 @@ const Bitacora: React.FC = () => {
                         </TableContainer>
                     </Paper>
                 </div>
-            </MainContent>
+            </main>
 
             {/* Modal Agregar Nota */}
             <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)} maxWidth="md" fullWidth>
