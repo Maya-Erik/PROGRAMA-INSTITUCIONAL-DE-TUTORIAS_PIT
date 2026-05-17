@@ -1,37 +1,37 @@
-/* Layout principal */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&family=Montserrat:wght@400;600&display=swap');
+
 .agenda-layout {
   display: flex;
   min-height: 100vh;
-  background: var(--bg-body);
-  font-family: var(--font-secondary);
+  background: #f4f6fb;
 }
 
 .agenda-main {
   flex: 1;
+  margin-left: 200px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Topbar */
 .agenda-topbar {
-  background: var(--bg-white);
+  background: white;
   padding: 14px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--bg-gray);
+  border-bottom: 1px solid #e8eaf0;
 }
 
 .agenda-breadcrumb {
   font-size: 13px;
-  color: var(--text-muted);
+  color: #888;
 }
 
 .agenda-topbar-right {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: 16px;
 }
 
 .agenda-topbar-user {
@@ -43,80 +43,64 @@
 .agenda-topbar-name {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-dark);
+  color: #333;
   text-align: right;
 }
 
 .agenda-topbar-role {
   font-size: 10px;
-  color: var(--text-muted);
+  color: #888;
   text-align: right;
-  letter-spacing: 0.5px;
 }
 
 .agenda-topbar-avatar {
   width: 36px;
   height: 36px;
-  background: var(--color-primary);
+  background: #003DA5;
   color: white;
-  border-radius: var(--border-radius-circle);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  font-weight: 600;
 }
 
-/* Sección de filtros */
 .filter-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: var(--spacing-3xl) 0 var(--spacing-lg);
+  margin: 48px 0 24px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
-/* Tarjetas de tutoría */
 .agenda-tutoria-card {
-  border-radius: var(--border-radius-xl) !important;
+  border-radius: 16px !important;
   border: 1px solid #E5E7EB !important;
-  box-shadow: var(--shadow-sm) !important;
+  box-shadow: none !important;
   height: 100%;
   display: flex;
   flex-direction: column;
-  transition: var(--transition-normal);
-}
-
-.agenda-tutoria-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg) !important;
 }
 
 .agenda-icon-box {
   width: 44px;
   height: 44px;
-  background-color: var(--bg-gray-light);
-  border-radius: var(--border-radius-lg);
+  background-color: #F9FAFB;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
 }
 
-@media (min-width: 769px) {
-  .agenda-main {
-    margin-left: 200px;
-  }
-}
-
-
 /* Responsive */
 @media (max-width: 768px) {
-  .agenda-main{
+  .agenda-main {
     margin-left: 0;
   }
-
+  
   .agenda-topbar {
-    padding: 14px 16px;
+    padding: 12px 20px;
   }
   
   .agenda-topbar-name,
@@ -126,8 +110,7 @@
   
   .filter-section {
     flex-direction: column;
-    gap: var(--spacing-md);
+    align-items: stretch;
+    margin: 30px 0 20px;
   }
-  
-
 }
