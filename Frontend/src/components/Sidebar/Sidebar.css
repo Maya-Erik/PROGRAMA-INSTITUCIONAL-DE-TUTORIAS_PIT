@@ -1,6 +1,6 @@
-/* Sidebar base */
 .sidebar {
   width: 260px;
+  min-width: 260px;
   background: #0d1b3e;
   display: flex;
   flex-direction: column;

@@ -1,0 +1,17 @@
+.page-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.page-content {
+  flex: 1;
+  margin-left: 260px;
+  min-height: 100vh;
+}
+
+/* En móvil, la sidebar se oculta y el contenido ocupa todo */
+@media (max-width: 768px) {
+  .page-content {
+    margin-left: 0;
+  }
+}
