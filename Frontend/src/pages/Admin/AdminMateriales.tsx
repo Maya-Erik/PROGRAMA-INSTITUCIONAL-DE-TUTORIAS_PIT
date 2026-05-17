@@ -162,7 +162,7 @@ const AdminMateriales: React.FC = () => {
         <div className="admin-materiales-container">
             <Sidebar userRole="admin" />
             
-            <main className="admin-materiales-main">
+            <MainContent className="admin-materiales-main">
                 <header className="admin-materiales-topbar">
                     <span className="admin-materiales-breadcrumb">Administración › Materiales</span>
                     <div className="admin-materiales-topbar-right">
@@ -234,7 +234,7 @@ const AdminMateriales: React.FC = () => {
                         </TableContainer>
                     </Paper>
                 </div>
-            </main>
+            </MainContent>
 
             <Dialog open={openModal} onClose={() => setOpenModal(false)} maxWidth="md" fullWidth>
                 <DialogTitle>{editando ? 'Editar Material' : 'Nuevo Material'}</DialogTitle>

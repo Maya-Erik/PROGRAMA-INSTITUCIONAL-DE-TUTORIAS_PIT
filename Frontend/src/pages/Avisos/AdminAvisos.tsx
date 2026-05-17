@@ -36,7 +36,6 @@ const AdminAvisos = () => {
     orden: 0
   });
   const [editandoId, setEditandoId] = useState<number | null>(null);
-  const [userRole, setUserRole] = useState<string>('admin');
 
   const coloresDisponibles = ['#003DA5', '#001F54', '#D6A600', '#4A4A4A'];
 
