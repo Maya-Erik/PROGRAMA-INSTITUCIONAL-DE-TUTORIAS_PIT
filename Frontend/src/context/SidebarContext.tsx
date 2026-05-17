@@ -19,10 +19,10 @@ export const useSidebar = () => {
 
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
+    const checkMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
       if (!mobile) {
@@ -30,24 +30,19 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
       } else {
         setSidebarOpen(false);
       }
-      // Disparar evento para que los componentes se actualicen
-      window.dispatchEvent(new Event('resize-sidebar'));
     };
 
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen(prev => !prev);
-    window.dispatchEvent(new Event('resize-sidebar'));
   };
 
   const closeSidebar = () => {
     setSidebarOpen(false);
-    window.dispatchEvent(new Event('resize-sidebar'));
   };
 
   return (
