@@ -8,11 +8,13 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .admin-materiales-topbar {
   background: var(--bg-white);
-  padding: 14px 32px;
+  padding: 12px 20px;
   display: flex;
   justify-content: flex-end;
   border-bottom: 1px solid var(--bg-gray);
@@ -23,25 +25,28 @@
   height: 36px;
   background: var(--color-primary);
   color: white;
-  border-radius: var(--border-radius-circle);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .admin-materiales-content {
-  padding: var(--spacing-xl) var(--spacing-2xl);
+  padding: 20px;
+  width: 100%;
 }
 
 .admin-materiales-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .admin-materiales-header h1 {
-  font-size: 28px;
+  font-size: 24px;
   color: var(--color-primary);
   margin: 0;
 }
@@ -50,27 +55,48 @@
   background: var(--color-secondary);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: var(--border-radius-md);
+  padding: 8px 16px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 6px;
   cursor: pointer;
-  transition: all var(--transition-normal);
-}
-
-.admin-materiales-add-btn:hover {
-  background: var(--color-secondary-dark);
+  font-size: 13px;
 }
 
 .admin-materiales-table-container {
-  border-radius: var(--border-radius-xl);
-  overflow: hidden;
+  border-radius: 12px;
+  overflow-x: auto;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.admin-materiales-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.admin-materiales-table-container th {
+  padding: 12px 12px;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: left;
+}
+
+.admin-materiales-table-container td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
 }
 
 .url-cell a {
   color: var(--color-primary);
   text-decoration: none;
+  font-size: 12px;
+  word-break: break-all;
 }
 
 .url-cell a:hover {
@@ -78,13 +104,30 @@
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-  .admin-materiales-content {
-    padding: 20px;
+@media (max-width: 768px) {
+  .admin-materiales-header {
+    flex-direction: column;
+    align-items: stretch;
   }
   
+  .admin-materiales-add-btn {
+    justify-content: center;
+  }
+  
+  .admin-materiales-header h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+  
+  .admin-materiales-table-container th,
+  .admin-materiales-table-container td {
+    padding: 8px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 650px) {
   .admin-materiales-table-container {
     overflow-x: auto;
   }
-
 }
