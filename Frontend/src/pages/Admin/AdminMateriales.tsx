@@ -14,7 +14,7 @@ import {
     eliminarMaterial,
     obtenerCategorias
 } from '../../services/api';
-import MainContent from '../../components/Layout/MainContent';
+import SidebarToggle from '../../components/Sidebar/SidebarToggle';
 import './AdminMateriales.css';
 
 interface Material {
@@ -161,8 +161,8 @@ const AdminMateriales: React.FC = () => {
     return (
         <div className="admin-materiales-container">
             <Sidebar userRole="admin" />
-            
-            <MainContent className="admin-materiales-main">
+            <SidebarToggle />
+            <main className="admin-materiales-main">
                 <header className="admin-materiales-topbar">
                     <span className="admin-materiales-breadcrumb">Administración › Materiales</span>
                     <div className="admin-materiales-topbar-right">
@@ -234,7 +234,7 @@ const AdminMateriales: React.FC = () => {
                         </TableContainer>
                     </Paper>
                 </div>
-            </MainContent>
+            </main>
 
             <Dialog open={openModal} onClose={() => setOpenModal(false)} maxWidth="md" fullWidth>
                 <DialogTitle>{editando ? 'Editar Material' : 'Nuevo Material'}</DialogTitle>

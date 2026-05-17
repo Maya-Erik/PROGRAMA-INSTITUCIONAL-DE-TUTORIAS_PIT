@@ -8,7 +8,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
-import MainContent from '../../../components/Layout/MainContent';
+import SidebarToggle from '../../components/Sidebar/SidebarToggle';
 import "./GestionCitas.css"
 
 function GestionCitas() {
@@ -100,8 +100,8 @@ function GestionCitas() {
   return (
     <div className="gc-layout">
       <Sidebar userRole={userRole} />
-      
-      <MainContent className="gc-main">
+      <SidebarToggle />
+      <main className="gc-main">
         <header className="gc-topbar">
           <span className="gc-breadcrumb">Panel › Citas</span>
           <div className="gc-topbar-right">
@@ -215,7 +215,7 @@ function GestionCitas() {
         </div>
 
         <p className="gc-total">Mostrando {citasFiltradas.length} de {citas.length} citas disponibles</p>
-      </MainContent>
+      </main>
 
       <NuevaCitaModal 
         isOpen={openModal} 

@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ImageIcon from '@mui/icons-material/Image';
 import LinkIcon from '@mui/icons-material/Link';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import MainContent from '../../components/Layout/MainContent';
+import SidebarToggle from '../../components/Sidebar/SidebarToggle';
 import './AdminAvisos.css';
 
 interface Aviso {
@@ -145,9 +145,9 @@ const AdminAvisos = () => {
     return (
       <div className="admin-citas-container">
         <Sidebar userRole="admin" />
-        <MainContent className="admin-container">
+        <main className="admin-container">
           <div>Cargando avisos...</div>
-        </MainContent>
+        </main>
       </div>
     );
   }
@@ -155,8 +155,8 @@ const AdminAvisos = () => {
   return (
     <div className="admin-citas-container">
       <Sidebar userRole="admin" />
-      
-      <MainContent className="admin-container">
+      <SidebarToggle />
+      <main className="admin-container">
         <h1 className="admin-titulo">Administrador de Avisos</h1>
         
         <form onSubmit={handleSubmit} className="admin-form">
@@ -270,7 +270,7 @@ const AdminAvisos = () => {
             ))
           )}
         </div>
-      </MainContent>
+      </main>
     </div>
   );
 };

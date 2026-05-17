@@ -24,7 +24,7 @@ import {
     obtenerInscritosPorCita,
     exportarBitacora
 } from '../../services/api';
-import MainContent from '../../components/Layout/MainContent';
+import SidebarToggle from '../../components/Sidebar/SidebarToggle';
 import './Bitacora.css';
 
 interface Cita {
@@ -268,7 +268,7 @@ const Bitacora: React.FC = () => {
     return (
         <div className="bitacora-container">
             <Sidebar userRole={userRole} />
-            
+            <SidebarToggle />
             <main className="bitacora-main">
                 <header className="bitacora-topbar">
                     <span className="bitacora-breadcrumb">Configuración › Bitácora</span>

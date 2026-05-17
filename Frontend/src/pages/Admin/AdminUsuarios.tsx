@@ -17,7 +17,7 @@ import {
     adminEliminarUsuario,
     adminObtenerRoles
 } from '../../services/api';
-import MainContent from '../../components/Layout/MainContent';
+import SidebarToggle from '../../components/Sidebar/SidebarToggle';
 import './AdminUsuarios.css';
 
 interface Usuario {
@@ -255,8 +255,8 @@ const AdminUsuarios: React.FC = () => {
     return (
         <div className="admin-usuarios-container">
             <Sidebar userRole="admin" />
-            
-            <MainContent className="admin-usuarios-main">
+            <SidebarToggle />
+            <main className="admin-usuarios-main">
                 <header className="admin-usuarios-topbar">
                     <span className="admin-usuarios-breadcrumb">Configuración › Usuarios</span>
                     <div className="admin-usuarios-topbar-right">
@@ -365,7 +365,7 @@ const AdminUsuarios: React.FC = () => {
                         </TableContainer>
                     </div>
                 </div>
-            </MainContent>
+            </main>
 
             {/* Modales... (se mantienen igual) */}
             <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)} maxWidth="sm" fullWidth>

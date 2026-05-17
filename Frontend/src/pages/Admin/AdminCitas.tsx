@@ -15,7 +15,7 @@ import {
     adminEliminarCita,
     adminAsignarLugar
 } from '../../services/api';
-import MainContent from '../../components/Layout/MainContent';
+import SidebarToggle from '../../components/Sidebar/SidebarToggle';
 import './AdminCitas.css';
 
 interface Cita {
@@ -228,8 +228,8 @@ const AdminCitas: React.FC = () => {
     return (
         <Box className="admin-citas-container">
             <Sidebar userRole="admin" />
-            
-            <MainContent className="admin-citas-main">
+            <SidebarToggle />
+            <main className="admin-citas-main">
                 <Container className="admin-citas-content">
                     <Box className="admin-citas-header">
                         <Typography variant="h4" className="admin-citas-titulo">
@@ -328,7 +328,7 @@ const AdminCitas: React.FC = () => {
                         </TableContainer>
                     </Paper>
                 </Container>
-            </MainContent>
+            </main>
 
             {/* Modal Crear/Editar Cita */}
             <Dialog 

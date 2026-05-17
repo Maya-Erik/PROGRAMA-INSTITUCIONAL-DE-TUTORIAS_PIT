@@ -81,7 +81,6 @@ function App() {
             </ProtectedRoute>
           } />
         </Routes>
-        <SidebarToggle />
       </BrowserRouter>
     </SidebarProvider>
   )
