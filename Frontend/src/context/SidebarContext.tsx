@@ -42,7 +42,6 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const toggleSidebar = () => {
     setSidebarOpen(prev => !prev);
-    // Disparar evento para que los componentes se actualicen
     window.dispatchEvent(new Event('resize-sidebar'));
   };
 

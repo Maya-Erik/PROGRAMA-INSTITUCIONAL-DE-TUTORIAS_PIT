@@ -5,14 +5,18 @@
 }
 
 .admin-citas-main {
-  flex-grow: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
   padding: 20px;
-  margin-top: 64px;
 }
 
 .admin-citas-content {
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 }
 
 /* Header */
@@ -20,15 +24,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 20px;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: 15px;
 }
 
 .admin-citas-titulo {
   font-family: var(--font-primary);
   font-weight: 600;
   color: var(--color-primary);
+  font-size: 24px;
+  margin: 0;
 }
 
 .admin-citas-btn-nueva {
@@ -37,38 +43,39 @@
   font-weight: 600 !important;
   text-transform: none !important;
   padding: 8px 20px !important;
-  border-radius: var(--border-radius-md) !important;
-}
-
-.admin-citas-btn-nueva:hover {
-  background-color: var(--color-secondary-dark) !important;
-  transform: translateY(-2px);
+  border-radius: 8px !important;
+  white-space: nowrap;
 }
 
 /* Tabla */
 .admin-citas-tabla-container {
-  border-radius: var(--border-radius-lg) !important;
-  overflow: hidden;
-  box-shadow: var(--shadow-md) !important;
+  border-radius: 12px !important;
+  overflow-x: auto !important;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
 }
 
 .admin-citas-tabla {
   width: 100%;
   border-collapse: collapse;
+  min-width: 800px;
 }
 
 .admin-citas-tabla thead th {
   background-color: var(--color-primary);
   color: white;
   font-weight: 600;
-  padding: 14px 16px;
+  padding: 12px 12px;
   font-family: var(--font-secondary);
+  font-size: 12px;
+  text-align: left;
 }
 
 .admin-citas-tabla tbody td {
-  padding: 12px 16px;
+  padding: 10px 12px;
   border-bottom: 1px solid #e0e0e0;
   font-family: var(--font-secondary);
+  font-size: 13px;
 }
 
 .admin-citas-tabla tbody tr:hover {
@@ -85,16 +92,19 @@
   background-color: var(--color-warning-light) !important;
   color: #e65100 !important;
   font-weight: 600 !important;
+  font-size: 11px !important;
 }
 
 .admin-citas-lugar-asignado {
   color: var(--color-success);
   font-weight: 500;
+  font-size: 12px;
 }
 
 .admin-citas-cupos {
   font-weight: 600;
   color: var(--text-dark);
+  font-size: 12px;
 }
 
 /* Acciones */
@@ -104,20 +114,12 @@
 
 .admin-citas-icono-editar {
   color: var(--color-secondary) !important;
-  margin-right: var(--spacing-xs) !important;
-}
-
-.admin-citas-icono-editar:hover {
-  color: var(--color-secondary-dark) !important;
+  margin-right: 4px !important;
 }
 
 .admin-citas-icono-eliminar {
   color: var(--color-error) !important;
-  margin-right: var(--spacing-sm) !important;
-}
-
-.admin-citas-icono-eliminar:hover {
-  color: #c82333 !important;
+  margin-right: 8px !important;
 }
 
 .admin-citas-btn-lugar {
@@ -125,12 +127,8 @@
   color: white !important;
   font-size: 11px !important;
   text-transform: none !important;
-  padding: 4px 12px !important;
-  border-radius: var(--border-radius-xl) !important;
-}
-
-.admin-citas-btn-lugar:hover {
-  background-color: var(--color-primary-dark) !important;
+  padding: 4px 10px !important;
+  border-radius: 16px !important;
 }
 
 /* Loading */
@@ -142,8 +140,11 @@
 
 /* Modal */
 .admin-citas-modal .MuiDialog-paper {
-  border-radius: var(--border-radius-xl);
+  border-radius: 16px;
   overflow: hidden;
+  margin: 16px;
+  width: calc(100% - 32px);
+  max-width: 550px;
 }
 
 .admin-citas-modal-titulo {
@@ -151,7 +152,7 @@
   color: white !important;
   font-family: var(--font-primary) !important;
   font-weight: 600 !important;
-  padding: var(--spacing-md) var(--spacing-lg) !important;
+  padding: 14px 20px !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
@@ -159,7 +160,7 @@
 
 .admin-citas-modal-close {
   color: white !important;
-  padding: var(--spacing-xs) !important;
+  padding: 4px !important;
 }
 
 .admin-citas-modal-close:hover {
@@ -167,95 +168,97 @@
 }
 
 .admin-citas-modal-acciones {
-  padding: var(--spacing-md) var(--spacing-lg) !important;
+  padding: 16px 20px !important;
   border-top: 1px solid #e0e0e0;
-  gap: var(--spacing-lg);
+  gap: 12px;
 }
 
 .admin-citas-btn-cancelar {
   background-color: #e0e0e0 !important;
   color: var(--text-dark) !important;
   text-transform: none !important;
-  border-radius: var(--border-radius-md) !important;
-}
-
-.admin-citas-btn-cancelar:hover {
-  background-color: #ccc !important;
+  border-radius: 8px !important;
 }
 
 .admin-citas-btn-guardar {
   background-color: var(--color-primary) !important;
   text-transform: none !important;
-  border-radius: var(--border-radius-md) !important;
-}
-
-.admin-citas-btn-guardar:hover {
-  background-color: var(--color-primary-dark) !important;
-}
-
-/* Inputs dentro del modal */
-.admin-citas-input .MuiOutlinedInput-root {
-  border-radius: var(--border-radius-md);
-}
-
-.admin-citas-input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: var(--color-secondary);
-}
-
-.admin-citas-input .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: var(--color-primary);
+  border-radius: 8px !important;
 }
 
 /* Filas de dos columnas */
 .admin-citas-row {
   display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-sm);
+  gap: 15px;
+  margin-top: 8px;
 }
 
-.admin-citas-fecha {
-  flex: 1;
-}
-
-.admin-citas-hora {
-  flex: 1;
-}
-
-.admin-citas-capacidad {
-  flex: 1;
-}
-
+.admin-citas-fecha,
+.admin-citas-hora,
+.admin-citas-capacidad,
 .admin-citas-tipo {
   flex: 1;
 }
 
 .admin-citas-carrera {
-  margin-top: var(--spacing-sm) !important;
+  margin-top: 8px !important;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
   .admin-citas-main {
-    padding: var(--spacing-md);
+    padding: 15px;
   }
   
-  .admin-citas-tabla-container {
-    overflow-x: auto;
-  }
-  
-  .admin-citas-tabla {
-    min-width: 900px;
+  .admin-citas-titulo {
+    font-size: 20px;
   }
 }
 
 @media (max-width: 768px) {
   .admin-citas-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+  }
+  
+  .admin-citas-btn-nueva {
+    width: 100%;
+    text-align: center;
   }
   
   .admin-citas-row {
     flex-direction: column;
     gap: 0;
+  }
+  
+  .admin-citas-modal .MuiDialog-paper {
+    margin: 10px;
+    width: calc(100% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-citas-main {
+    padding: 10px;
+  }
+  
+  .admin-citas-tabla-container {
+    border-radius: 8px !important;
+  }
+  
+  .admin-citas-tabla thead th,
+  .admin-citas-tabla tbody td {
+    padding: 8px 8px;
+    font-size: 11px;
+  }
+  
+  .admin-citas-btn-lugar {
+    font-size: 9px !important;
+    padding: 2px 6px !important;
+  }
+  
+  .admin-citas-icono-editar,
+  .admin-citas-icono-eliminar {
+    padding: 4px !important;
   }
 }
