@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { SidebarProvider } from './context/SidebarContext'
-import SidebarToggle from './components/Sidebar/SidebarToggle'
 import Inicio from "./pages/Inicio/Inicio"
 import SobreNosotros from "./pages/SobreNosotros/SobreNosotros"
 import Servicios from "./pages/Servicios/Servicios"
@@ -17,6 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import AdminCitas from "./pages/Admin/AdminCitas"
 import AdminUsuarios from "./pages/Admin/AdminUsuarios"
 import AdminMateriales from "./pages/Admin/AdminMateriales"
+import SidebarToggle from './components/Sidebar/SidebarToggle';
 
 function App() {
   return (
@@ -81,6 +81,7 @@ function App() {
             </ProtectedRoute>
           } />
         </Routes>
+        <SidebarToggle />
       </BrowserRouter>
     </SidebarProvider>
   )
