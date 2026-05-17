@@ -5,12 +5,11 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Sidebar from "../../components/Sidebar/Sidebar";
 import PerfilUsuario from '../../components/PerfilUsuario/PerfilUsuario';
 import { 
   obtenerCitas, inscribirseCita, misCitas, cancelarInscripcionCita
 } from '../../services/api';
-import SidebarToggle from '../../components/Sidebar/SidebarToggle';
-import PageLayout from '../../components/Layout/pageLayout';
 import './Agenda.css';
 
 const theme = createTheme({
@@ -172,9 +171,9 @@ const Agenda: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box className="agenda-layout" sx={{ display: 'flex', minHeight: '100vh' }}>
-        <PageLayout userRole={userRole}>
-        <SidebarToggle />
+      <Box className="agenda-layout">
+        <Sidebar userRole={userRole} />
+        
         <main className="agenda-main">
           <header className="agenda-topbar">
             <span className="agenda-breadcrumb">Panel › Agenda</span>
@@ -242,7 +241,7 @@ const Agenda: React.FC = () => {
                   )}
                 </Box>
 
-                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
+                <div className="agenda-grid">
                   {citasDisponibles().map((cita) => (
                     <Card key={cita.id_cita} className="agenda-tutoria-card">
                       <CardContent>
@@ -299,7 +298,7 @@ const Agenda: React.FC = () => {
                       </Box>
                     </Card>
                   ))}
-                </Box>
+                </div>
               </>
             )}
 
@@ -356,7 +355,6 @@ const Agenda: React.FC = () => {
             )}
           </Container>
         </main>
-        </PageLayout>
       </Box>
 
       <PerfilUsuario 
