@@ -14,7 +14,7 @@ const MainContent: React.FC<MainContentProps> = ({ children, className = '' }) =
     const updateMargin = () => {
       if (containerRef.current) {
         if (!isMobile) {
-          // Desktop: sidebar siempre visible
+          // Desktop: sidebar visible (200px)
           containerRef.current.style.marginLeft = '200px';
         } else {
           // Móvil: sin margen
