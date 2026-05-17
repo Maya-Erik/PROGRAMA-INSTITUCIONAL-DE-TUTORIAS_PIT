@@ -1,3 +1,4 @@
+
 .admin-citas-container {
   display: flex;
   min-height: 100vh;
@@ -11,6 +12,14 @@
   min-height: 100vh;
   width: 100%;
   padding: 20px;
+  margin-left: 260px;
+}
+
+.admin-citas-container-original {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #F8F9FC;
+  border-radius: 16px;
 }
 
 .admin-citas-content {

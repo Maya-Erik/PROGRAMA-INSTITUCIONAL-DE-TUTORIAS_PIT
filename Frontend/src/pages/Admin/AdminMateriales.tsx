@@ -163,76 +163,78 @@ const AdminMateriales: React.FC = () => {
             <Sidebar userRole="admin" />
             <SidebarToggle />
             <main className="admin-materiales-main">
-                <header className="admin-materiales-topbar">
-                    <span className="admin-materiales-breadcrumb">Administración › Materiales</span>
-                    <div className="admin-materiales-topbar-right">
-                        <div className="admin-materiales-topbar-user">
-                            <div className="admin-materiales-topbar-avatar">AD</div>
+                <div className="admin-materiales-container-original">
+                    <header className="admin-materiales-topbar">
+                        <span className="admin-materiales-breadcrumb">Administración › Materiales</span>
+                        <div className="admin-materiales-topbar-right">
+                            <div className="admin-materiales-topbar-user">
+                                <div className="admin-materiales-topbar-avatar">AD</div>
+                            </div>
                         </div>
-                    </div>
-                </header>
+                    </header>
 
-                <div className="admin-materiales-content">
-                    <div className="admin-materiales-header">
-                        <h1>Gestión de Materiales</h1>
-                        <button className="admin-materiales-add-btn" onClick={() => handleOpenModal()}>
-                            <AddIcon /> Agregar Material
-                        </button>
-                    </div>
+                    <div className="admin-materiales-content">
+                        <div className="admin-materiales-header">
+                            <h1>Gestión de Materiales</h1>
+                            <button className="admin-materiales-add-btn" onClick={() => handleOpenModal()}>
+                                <AddIcon /> Agregar Material
+                            </button>
+                        </div>
 
-                    <Paper className="admin-materiales-table-container">
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>TÍTULO</TableCell>
-                                        <TableCell>TIPO</TableCell>
-                                        <TableCell>CATEGORÍA</TableCell>
-                                        <TableCell>CARRERA</TableCell>
-                                        <TableCell>URL</TableCell>
-                                        <TableCell>ESTADO</TableCell>
-                                        <TableCell>ACCIONES</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {loading ? (
-                                        <TableRow><TableCell colSpan={7} align="center">Cargando...</TableCell></TableRow>
-                                    ) : materiales.length === 0 ? (
-                                        <TableRow><TableCell colSpan={7} align="center">No hay materiales registrados</TableCell></TableRow>
-                                    ) : (
-                                        materiales.map((mat) => (
-                                            <TableRow key={mat.id_material}>
-                                                <TableCell>{mat.titulo}</TableCell>
-                                                <TableCell><Chip label={getTipoLabel(mat.tipo)} size="small" /></TableCell>
-                                                <TableCell>{mat.categoria}</TableCell>
-                                                <TableCell>{mat.carrera || '-'}</TableCell>
-                                                <TableCell className="url-cell">
-                                                    <a href={mat.archivo_url} target="_blank" rel="noopener noreferrer">
-                                                        Ver archivo
-                                                    </a>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Chip 
-                                                        label={mat.activo ? 'Activo' : 'Inactivo'} 
-                                                        size="small"
-                                                        sx={{ bgcolor: mat.activo ? '#28a745' : '#dc3545', color: 'white' }}
-                                                    />
-                                                </TableCell>
-                                                <TableCell>
-                                                    <IconButton size="small" onClick={() => handleOpenModal(mat)}>
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                    <IconButton size="small" onClick={() => handleEliminar(mat.id_material)} sx={{ color: '#dc3545' }}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
+                        <Paper className="admin-materiales-table-container">
+                            <TableContainer>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>TÍTULO</TableCell>
+                                            <TableCell>TIPO</TableCell>
+                                            <TableCell>CATEGORÍA</TableCell>
+                                            <TableCell>CARRERA</TableCell>
+                                            <TableCell>URL</TableCell>
+                                            <TableCell>ESTADO</TableCell>
+                                            <TableCell>ACCIONES</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {loading ? (
+                                            <TableRow><TableCell colSpan={7} align="center">Cargando...</TableCell></TableRow>
+                                        ) : materiales.length === 0 ? (
+                                            <TableRow><TableCell colSpan={7} align="center">No hay materiales registrados</TableCell></TableRow>
+                                        ) : (
+                                            materiales.map((mat) => (
+                                                <TableRow key={mat.id_material}>
+                                                    <TableCell>{mat.titulo}</TableCell>
+                                                    <TableCell><Chip label={getTipoLabel(mat.tipo)} size="small" /></TableCell>
+                                                    <TableCell>{mat.categoria}</TableCell>
+                                                    <TableCell>{mat.carrera || '-'}</TableCell>
+                                                    <TableCell className="url-cell">
+                                                        <a href={mat.archivo_url} target="_blank" rel="noopener noreferrer">
+                                                            Ver archivo
+                                                        </a>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Chip 
+                                                            label={mat.activo ? 'Activo' : 'Inactivo'} 
+                                                            size="small"
+                                                            sx={{ bgcolor: mat.activo ? '#28a745' : '#dc3545', color: 'white' }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <IconButton size="small" onClick={() => handleOpenModal(mat)}>
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                        <IconButton size="small" onClick={() => handleEliminar(mat.id_material)} sx={{ color: '#dc3545' }}>
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Paper>
+                    </div>
                 </div>
             </main>
 

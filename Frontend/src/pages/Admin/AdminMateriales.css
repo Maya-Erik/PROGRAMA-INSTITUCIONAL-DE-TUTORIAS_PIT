@@ -6,10 +6,18 @@
 
 .admin-materiales-main {
   flex: 1;
-  margin-left: 200px;
+  margin-left: 260px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.admin-materiales-container-original {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.03);
 }
 
 .admin-materiales-topbar {

@@ -229,105 +229,108 @@ const AdminCitas: React.FC = () => {
         <Box className="admin-citas-container">
             <Sidebar userRole="admin" />
             <SidebarToggle />
-            <main className="admin-citas-main">
-                <Container className="admin-citas-content">
-                    <Box className="admin-citas-header">
-                        <Typography variant="h4" className="admin-citas-titulo">
-                            Gestión de Citas
-                        </Typography>
-                        <Button 
-                            variant="contained" 
-                            startIcon={<AddIcon />} 
-                            onClick={() => handleOpenModal()} 
-                            className="admin-citas-btn-nueva"
-                        >
-                            Nueva Cita
-                        </Button>
-                    </Box>
 
-                    <Paper className="admin-citas-tabla-container">
-                        <TableContainer>
-                            <Table className="admin-citas-tabla">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>ID</TableCell>
-                                        <TableCell>Materia</TableCell>
-                                        <TableCell>Tutor</TableCell>
-                                        <TableCell>Fecha</TableCell>
-                                        <TableCell>Hora</TableCell>
-                                        <TableCell>Carrera</TableCell>
-                                        <TableCell>Salón</TableCell>
-                                        <TableCell>Cupos</TableCell>
-                                        <TableCell>Acciones</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {citas.length === 0 ? (
+            <main className="admin-citas-main">
+                <div className='admin-citas-container-original'>
+                    <Container className="admin-citas-content">
+                        <Box className="admin-citas-header">
+                            <Typography variant="h4" className="admin-citas-titulo">
+                                Gestión de Citas
+                            </Typography>
+                            <Button 
+                                variant="contained" 
+                                startIcon={<AddIcon />} 
+                                onClick={() => handleOpenModal()} 
+                                className="admin-citas-btn-nueva"
+                            >
+                                Nueva Cita
+                            </Button>
+                        </Box>
+
+                        <Paper className="admin-citas-tabla-container">
+                            <TableContainer>
+                                <Table className="admin-citas-tabla">
+                                    <TableHead>
                                         <TableRow>
-                                            <TableCell colSpan={9} className="admin-citas-loading">
-                                                No hay citas registradas
-                                            </TableCell>
+                                            <TableCell>ID</TableCell>
+                                            <TableCell>Materia</TableCell>
+                                            <TableCell>Tutor</TableCell>
+                                            <TableCell>Fecha</TableCell>
+                                            <TableCell>Hora</TableCell>
+                                            <TableCell>Carrera</TableCell>
+                                            <TableCell>Salón</TableCell>
+                                            <TableCell>Cupos</TableCell>
+                                            <TableCell>Acciones</TableCell>
                                         </TableRow>
-                                    ) : (
-                                        citas.map((cita) => (
-                                            <TableRow key={cita.id_cita}>
-                                                <TableCell>{cita.id_cita}</TableCell>
-                                                <TableCell className="admin-citas-materia">
-                                                    {cita.materia}
-                                                </TableCell>
-                                                <TableCell>{cita.tutor_nombre}</TableCell>
-                                                <TableCell>{cita.fecha}</TableCell>
-                                                <TableCell>{cita.hora}</TableCell>
-                                                <TableCell>{cita.carrera}</TableCell>
-                                                <TableCell>
-                                                    {cita.lugar === 'Por asignar' ? (
-                                                        <Chip 
-                                                            label="Por asignar" 
-                                                            className="admin-citas-chip-pendiente" 
-                                                            size="small" 
-                                                        />
-                                                    ) : (
-                                                        <span className="admin-citas-lugar-asignado">
-                                                            {cita.lugar}
-                                                        </span>
-                                                    )}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <span className="admin-citas-cupos">
-                                                        {cita.inscritos}/{cita.capacidad}
-                                                    </span>
-                                                </TableCell>
-                                                <TableCell className="admin-citas-acciones">
-                                                    <IconButton 
-                                                        size="small" 
-                                                        onClick={() => handleOpenModal(cita)}
-                                                        className="admin-citas-icono-editar"
-                                                    >
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                    <IconButton 
-                                                        size="small" 
-                                                        onClick={() => handleEliminar(cita.id_cita)}
-                                                        className="admin-citas-icono-eliminar"
-                                                    >
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                    <Button 
-                                                        size="small" 
-                                                        onClick={() => handleOpenLugarModal(cita)}
-                                                        className="admin-citas-btn-lugar"
-                                                    >
-                                                        Asignar Salón
-                                                    </Button>
+                                    </TableHead>
+                                    <TableBody>
+                                        {citas.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={9} className="admin-citas-loading">
+                                                    No hay citas registradas
                                                 </TableCell>
                                             </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
-                </Container>
+                                        ) : (
+                                            citas.map((cita) => (
+                                                <TableRow key={cita.id_cita}>
+                                                    <TableCell>{cita.id_cita}</TableCell>
+                                                    <TableCell className="admin-citas-materia">
+                                                        {cita.materia}
+                                                    </TableCell>
+                                                    <TableCell>{cita.tutor_nombre}</TableCell>
+                                                    <TableCell>{cita.fecha}</TableCell>
+                                                    <TableCell>{cita.hora}</TableCell>
+                                                    <TableCell>{cita.carrera}</TableCell>
+                                                    <TableCell>
+                                                        {cita.lugar === 'Por asignar' ? (
+                                                            <Chip 
+                                                                label="Por asignar" 
+                                                                className="admin-citas-chip-pendiente" 
+                                                                size="small" 
+                                                            />
+                                                        ) : (
+                                                            <span className="admin-citas-lugar-asignado">
+                                                                {cita.lugar}
+                                                            </span>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <span className="admin-citas-cupos">
+                                                            {cita.inscritos}/{cita.capacidad}
+                                                        </span>
+                                                    </TableCell>
+                                                    <TableCell className="admin-citas-acciones">
+                                                        <IconButton 
+                                                            size="small" 
+                                                            onClick={() => handleOpenModal(cita)}
+                                                            className="admin-citas-icono-editar"
+                                                        >
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                        <IconButton 
+                                                            size="small" 
+                                                            onClick={() => handleEliminar(cita.id_cita)}
+                                                            className="admin-citas-icono-eliminar"
+                                                        >
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                        <Button 
+                                                            size="small" 
+                                                            onClick={() => handleOpenLugarModal(cita)}
+                                                            className="admin-citas-btn-lugar"
+                                                        >
+                                                            Asignar Salón
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Paper>
+                    </Container>
+                </div>
             </main>
 
             {/* Modal Crear/Editar Cita */}

@@ -257,112 +257,114 @@ const AdminUsuarios: React.FC = () => {
             <Sidebar userRole="admin" />
             <SidebarToggle />
             <main className="admin-usuarios-main">
-                <header className="admin-usuarios-topbar">
-                    <span className="admin-usuarios-breadcrumb">Configuración › Usuarios</span>
-                    <div className="admin-usuarios-topbar-right">
-                        <span className="admin-usuarios-topbar-bell">🔔</span>
-                        <div className="admin-usuarios-topbar-user">
-                            <div>
-                                <p className="admin-usuarios-topbar-name">Administrador</p>
-                                <p className="admin-usuarios-topbar-role">ADMIN</p>
+                <div className="admin-usuarios-container-original">
+                    <header className="admin-usuarios-topbar">
+                        <span className="admin-usuarios-breadcrumb">Configuración › Usuarios</span>
+                        <div className="admin-usuarios-topbar-right">
+                            <span className="admin-usuarios-topbar-bell">🔔</span>
+                            <div className="admin-usuarios-topbar-user">
+                                <div>
+                                    <p className="admin-usuarios-topbar-name">Administrador</p>
+                                    <p className="admin-usuarios-topbar-role">ADMIN</p>
+                                </div>
+                                <div className="admin-usuarios-topbar-avatar">AD</div>
                             </div>
-                            <div className="admin-usuarios-topbar-avatar">AD</div>
                         </div>
-                    </div>
-                </header>
+                    </header>
 
-                <div className="admin-usuarios-content">
-                    <div className="admin-usuarios-top-actions">
-                        <div className="admin-usuarios-left-group">
-                            <button className="admin-usuarios-white-btn">📋 Exportar</button>
+                    <div className="admin-usuarios-content">
+                        <div className="admin-usuarios-top-actions">
+                            <div className="admin-usuarios-left-group">
+                                <button className="admin-usuarios-white-btn">📋 Exportar</button>
+                            </div>
+                            <button className="admin-usuarios-gold-btn" onClick={handleOpenAddModal}>
+                                <AddIcon /> Nuevo Usuario
+                            </button>
                         </div>
-                        <button className="admin-usuarios-gold-btn" onClick={handleOpenAddModal}>
-                            <AddIcon /> Nuevo Usuario
-                        </button>
-                    </div>
 
-                    <div className="admin-usuarios-table-card">
-                        <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
-                            <Table className="admin-usuarios-user-table" sx={{ minWidth: 800 }}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>USUARIO</TableCell>
-                                        <TableCell>CORREO</TableCell>
-                                        <TableCell>NÚMERO CUENTA</TableCell>
-                                        <TableCell>CARRERA</TableCell>
-                                        <TableCell>ROL</TableCell>
-                                        <TableCell>ESTADO</TableCell>
-                                        <TableCell>ACCIONES</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {loading ? (
+                        <div className="admin-usuarios-table-card">
+                            <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+                                <Table className="admin-usuarios-user-table" sx={{ minWidth: 800 }}>
+                                    <TableHead>
                                         <TableRow>
-                                            <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
-                                                Cargando usuarios...
-                                            </TableCell>
+                                            <TableCell>USUARIO</TableCell>
+                                            <TableCell>CORREO</TableCell>
+                                            <TableCell>NÚMERO CUENTA</TableCell>
+                                            <TableCell>CARRERA</TableCell>
+                                            <TableCell>ROL</TableCell>
+                                            <TableCell>ESTADO</TableCell>
+                                            <TableCell>ACCIONES</TableCell>
                                         </TableRow>
-                                    ) : usuarios.length === 0 ? (
-                                        <TableRow>
-                                            <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
-                                                No hay usuarios registrados
-                                            </TableCell>
-                                        </TableRow>
-                                    ) : (
-                                        usuarios.map((usuario) => (
-                                            <TableRow key={usuario.id_user}>
-                                                <TableCell>
-                                                    <div className="admin-usuarios-user-cell">
-                                                        <Avatar 
-                                                            sx={{ 
-                                                                width: 40, 
-                                                                height: 40, 
-                                                                bgcolor: getColorPerfil(usuario.id_user),
-                                                                fontSize: '1rem',
-                                                                fontWeight: 'bold'
-                                                            }}
-                                                        >
-                                                            {getInitials(usuario.nombre_completo || usuario.correo)}
-                                                        </Avatar>
-                                                        <div className="admin-usuarios-u-name">{usuario.nombre_completo || 'Sin nombre'}</div>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell sx={{ maxWidth: 200, wordBreak: 'break-word' }}>{usuario.correo}</TableCell>
-                                                <TableCell>{usuario.n_cuenta}</TableCell>
-                                                <TableCell sx={{ maxWidth: 180, wordBreak: 'break-word' }}>{usuario.carrera || 'Sin carrera'}</TableCell>
-                                                <TableCell>
-                                                    <div className="admin-usuarios-role-cell">
-                                                        <span className="admin-usuarios-dot-role" style={{ backgroundColor: getRolColor(usuario.rol) }}></span>
-                                                        {usuario.rol}
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <span className={`admin-usuarios-status-pill ${usuario.activo ? 'activo' : 'inactivo'}`}>
-                                                        {usuario.activo ? 'Activo' : 'Inactivo'}
-                                                    </span>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="admin-usuarios-action-btns">
-                                                        <IconButton size="small" onClick={() => handleOpenEditModal(usuario)} title="Editar">
-                                                            <EditIcon fontSize="small" />
-                                                        </IconButton>
-                                                        <IconButton size="small" onClick={() => handleCambiarEstado(usuario)} title={usuario.activo ? 'Desactivar' : 'Activar'}>
-                                                            {usuario.activo ? <BlockIcon fontSize="small" /> : <CheckCircleIcon fontSize="small" />}
-                                                        </IconButton>
-                                                        <IconButton size="small" onClick={() => handleOpenRolModal(usuario)} title="Cambiar rol">
-                                                            <PersonIcon fontSize="small" />
-                                                        </IconButton>
-                                                        <IconButton size="small" onClick={() => handleEliminar(usuario)} title="Eliminar" sx={{ color: '#dc3545' }}>
-                                                            <DeleteIcon fontSize="small" />
-                                                        </IconButton>
-                                                    </div>
+                                    </TableHead>
+                                    <TableBody>
+                                        {loading ? (
+                                            <TableRow>
+                                                <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                                                    Cargando usuarios...
                                                 </TableCell>
                                             </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                                        ) : usuarios.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                                                    No hay usuarios registrados
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : (
+                                            usuarios.map((usuario) => (
+                                                <TableRow key={usuario.id_user}>
+                                                    <TableCell>
+                                                        <div className="admin-usuarios-user-cell">
+                                                            <Avatar 
+                                                                sx={{ 
+                                                                    width: 40, 
+                                                                    height: 40, 
+                                                                    bgcolor: getColorPerfil(usuario.id_user),
+                                                                    fontSize: '1rem',
+                                                                    fontWeight: 'bold'
+                                                                }}
+                                                            >
+                                                                {getInitials(usuario.nombre_completo || usuario.correo)}
+                                                            </Avatar>
+                                                            <div className="admin-usuarios-u-name">{usuario.nombre_completo || 'Sin nombre'}</div>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell sx={{ maxWidth: 200, wordBreak: 'break-word' }}>{usuario.correo}</TableCell>
+                                                    <TableCell>{usuario.n_cuenta}</TableCell>
+                                                    <TableCell sx={{ maxWidth: 180, wordBreak: 'break-word' }}>{usuario.carrera || 'Sin carrera'}</TableCell>
+                                                    <TableCell>
+                                                        <div className="admin-usuarios-role-cell">
+                                                            <span className="admin-usuarios-dot-role" style={{ backgroundColor: getRolColor(usuario.rol) }}></span>
+                                                            {usuario.rol}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <span className={`admin-usuarios-status-pill ${usuario.activo ? 'activo' : 'inactivo'}`}>
+                                                            {usuario.activo ? 'Activo' : 'Inactivo'}
+                                                        </span>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <div className="admin-usuarios-action-btns">
+                                                            <IconButton size="small" onClick={() => handleOpenEditModal(usuario)} title="Editar">
+                                                                <EditIcon fontSize="small" />
+                                                            </IconButton>
+                                                            <IconButton size="small" onClick={() => handleCambiarEstado(usuario)} title={usuario.activo ? 'Desactivar' : 'Activar'}>
+                                                                {usuario.activo ? <BlockIcon fontSize="small" /> : <CheckCircleIcon fontSize="small" />}
+                                                            </IconButton>
+                                                            <IconButton size="small" onClick={() => handleOpenRolModal(usuario)} title="Cambiar rol">
+                                                                <PersonIcon fontSize="small" />
+                                                            </IconButton>
+                                                            <IconButton size="small" onClick={() => handleEliminar(usuario)} title="Eliminar" sx={{ color: '#dc3545' }}>
+                                                                <DeleteIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </div>
                     </div>
                 </div>
             </main>

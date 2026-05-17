@@ -270,145 +270,147 @@ const Bitacora: React.FC = () => {
             <Sidebar userRole={userRole} />
             <SidebarToggle />
             <main className="bitacora-main">
-                <header className="bitacora-topbar">
-                    <span className="bitacora-breadcrumb">Configuración › Bitácora</span>
-                    <div className="bitacora-topbar-right">
-                        <div className="bitacora-topbar-user">
-                            <div>
-                                <p className="bitacora-topbar-name">{userName}</p>
-                                <p className="bitacora-topbar-role">
-                                    {userRole === 'admin' ? 'ADMIN' : 
-                                     userRole === 'tutor' ? 'TUTOR' :
-                                     userRole === 'tutorado' ? 'TUTORADO' : 'ALUMNO'}
-                                </p>
-                            </div>
-                            <div className="bitacora-topbar-avatar">
-                                {userName.charAt(0).toUpperCase()}
+                <div className="bitacora-container-original">
+                    <header className="bitacora-topbar">
+                        <span className="bitacora-breadcrumb">Configuración › Bitácora</span>
+                        <div className="bitacora-topbar-right">
+                            <div className="bitacora-topbar-user">
+                                <div>
+                                    <p className="bitacora-topbar-name">{userName}</p>
+                                    <p className="bitacora-topbar-role">
+                                        {userRole === 'admin' ? 'ADMIN' : 
+                                        userRole === 'tutor' ? 'TUTOR' :
+                                        userRole === 'tutorado' ? 'TUTORADO' : 'ALUMNO'}
+                                    </p>
+                                </div>
+                                <div className="bitacora-topbar-avatar">
+                                    {userName.charAt(0).toUpperCase()}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </header>
+                    </header>
 
-                <div className="bitacora-content">
-                    <div className="bitacora-header">
-                        <div className="bitacora-title-section">
-                            <h1>Bitácora de Tutorías</h1>
-                            <p>Registro de notas generales y personales sobre las tutorías impartidas</p>
-                        </div>
-                        <div className="bitacora-header-buttons">
-                            {puedeAgregarNotas() && (
-                                <button className="bitacora-add-btn" onClick={handleOpenAddModal}>
-                                    <AddIcon /> Agregar Nota
+                    <div className="bitacora-content">
+                        <div className="bitacora-header">
+                            <div className="bitacora-title-section">
+                                <h1>Bitácora de Tutorías</h1>
+                                <p>Registro de notas generales y personales sobre las tutorías impartidas</p>
+                            </div>
+                            <div className="bitacora-header-buttons">
+                                {puedeAgregarNotas() && (
+                                    <button className="bitacora-add-btn" onClick={handleOpenAddModal}>
+                                        <AddIcon /> Agregar Nota
+                                    </button>
+                                )}
+                                <button className="bitacora-export-btn" onClick={() => setOpenExportModal(true)}>
+                                    <DownloadIcon /> Exportar CSV
                                 </button>
-                            )}
-                            <button className="bitacora-export-btn" onClick={() => setOpenExportModal(true)}>
-                                <DownloadIcon /> Exportar CSV
-                            </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <Paper className="bitacora-table-container">
-                        <TableContainer>
-                            <Table className="bitacora-table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>FECHA</TableCell>
-                                        <TableCell>TEMA</TableCell>
-                                        <TableCell>TUTOR</TableCell>
-                                        <TableCell>FECHA CITA</TableCell>
-                                        <TableCell>TIPO TUTORÍA</TableCell>
-                                        <TableCell>CANALIZADO</TableCell>
-                                        <TableCell>NOTA GENERAL</TableCell>
-                                        <TableCell>NOTAS PERSONALES</TableCell>
-                                        <TableCell>REGISTRADO POR</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {loading ? (
+                        <Paper className="bitacora-table-container">
+                            <TableContainer>
+                                <Table className="bitacora-table">
+                                    <TableHead>
                                         <TableRow>
-                                            <TableCell colSpan={9} align="center" sx={{ py: 4 }}>
-                                                Cargando notas...
-                                            </TableCell>
+                                            <TableCell>FECHA</TableCell>
+                                            <TableCell>TEMA</TableCell>
+                                            <TableCell>TUTOR</TableCell>
+                                            <TableCell>FECHA CITA</TableCell>
+                                            <TableCell>TIPO TUTORÍA</TableCell>
+                                            <TableCell>CANALIZADO</TableCell>
+                                            <TableCell>NOTA GENERAL</TableCell>
+                                            <TableCell>NOTAS PERSONALES</TableCell>
+                                            <TableCell>REGISTRADO POR</TableCell>
                                         </TableRow>
-                                    ) : notas.length === 0 ? (
-                                        <TableRow>
-                                            <TableCell colSpan={9} align="center" sx={{ py: 4 }}>
-                                                No hay notas registradas
-                                            </TableCell>
-                                        </TableRow>
-                                    ) : (
-                                        notas.map((nota) => (
-                                            <TableRow key={nota.id_bitacora}>
-                                                <TableCell>{formatFechaHora(nota.fecha)}</TableCell>
-                                                <TableCell>{nota.materia}</TableCell>
-                                                <TableCell>{nota.tutor_nombre}</TableCell>
-                                                <TableCell>{formatFecha(nota.cita_fecha)} {nota.hora}</TableCell>
-                                                <TableCell>
-                                                    <Chip 
-                                                        label={nota.tipo_tutoria || 'No especificado'} 
-                                                        size="small"
-                                                        sx={{ 
-                                                            bgcolor: nota.tipo_tutoria === 'Informativa' ? '#2196f3' : 
-                                                                    nota.tipo_tutoria === 'Orientación' ? '#ff9800' : '#4caf50',
-                                                            color: 'white'
-                                                        }}
-                                                    />
+                                    </TableHead>
+                                    <TableBody>
+                                        {loading ? (
+                                            <TableRow>
+                                                <TableCell colSpan={9} align="center" sx={{ py: 4 }}>
+                                                    Cargando notas...
                                                 </TableCell>
-                                                <TableCell>
-                                                    <Chip 
-                                                        label={nota.canalizado ? 'Sí' : 'No'} 
-                                                        size="small"
-                                                        sx={{ bgcolor: nota.canalizado ? '#f44336' : '#9e9e9e', color: 'white' }}
-                                                    />
+                                            </TableRow>
+                                        ) : notas.length === 0 ? (
+                                            <TableRow>
+                                                <TableCell colSpan={9} align="center" sx={{ py: 4 }}>
+                                                    No hay notas registradas
                                                 </TableCell>
-                                                <TableCell className="bitacora-nota-cell">
-                                                    <Accordion className="bitacora-accordion">
-                                                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                                            <span className="bitacora-nota-preview">
-                                                                {nota.nota.length > 80 ? `${nota.nota.substring(0, 80)}...` : nota.nota}
-                                                            </span>
-                                                        </AccordionSummary>
-                                                        <AccordionDetails>
-                                                            <span className="bitacora-nota-completa">
-                                                                {nota.nota}
-                                                            </span>
-                                                        </AccordionDetails>
-                                                    </Accordion>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {nota.notas_personales.length > 0 ? (
+                                            </TableRow>
+                                        ) : (
+                                            notas.map((nota) => (
+                                                <TableRow key={nota.id_bitacora}>
+                                                    <TableCell>{formatFechaHora(nota.fecha)}</TableCell>
+                                                    <TableCell>{nota.materia}</TableCell>
+                                                    <TableCell>{nota.tutor_nombre}</TableCell>
+                                                    <TableCell>{formatFecha(nota.cita_fecha)} {nota.hora}</TableCell>
+                                                    <TableCell>
+                                                        <Chip 
+                                                            label={nota.tipo_tutoria || 'No especificado'} 
+                                                            size="small"
+                                                            sx={{ 
+                                                                bgcolor: nota.tipo_tutoria === 'Informativa' ? '#2196f3' : 
+                                                                        nota.tipo_tutoria === 'Orientación' ? '#ff9800' : '#4caf50',
+                                                                color: 'white'
+                                                            }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Chip 
+                                                            label={nota.canalizado ? 'Sí' : 'No'} 
+                                                            size="small"
+                                                            sx={{ bgcolor: nota.canalizado ? '#f44336' : '#9e9e9e', color: 'white' }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell className="bitacora-nota-cell">
                                                         <Accordion className="bitacora-accordion">
                                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                                                 <span className="bitacora-nota-preview">
-                                                                    {nota.notas_personales.length} notas personales
+                                                                    {nota.nota.length > 80 ? `${nota.nota.substring(0, 80)}...` : nota.nota}
                                                                 </span>
                                                             </AccordionSummary>
                                                             <AccordionDetails>
-                                                                {nota.notas_personales.map((np, idx) => (
-                                                                    <Box key={idx} className="bitacora-personal-item">
-                                                                        <Typography variant="subtitle2">
-                                                                            {np.n_cuenta} - {np.nombre_completo}
-                                                                        </Typography>
-                                                                        <Typography variant="body2" className="bitacora-personal-nota">
-                                                                            {np.nota}
-                                                                        </Typography>
-                                                                        {idx < nota.notas_personales.length - 1 && <Divider sx={{ my: 1 }} />}
-                                                                    </Box>
-                                                                ))}
+                                                                <span className="bitacora-nota-completa">
+                                                                    {nota.nota}
+                                                                </span>
                                                             </AccordionDetails>
                                                         </Accordion>
-                                                    ) : (
-                                                        <span className="bitacora-sin-notas">Sin notas personales</span>
-                                                    )}
-                                                </TableCell>
-                                                <TableCell>{nota.usuario_nombre}</TableCell>
-                                            </TableRow>
-                                        ))
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {nota.notas_personales.length > 0 ? (
+                                                            <Accordion className="bitacora-accordion">
+                                                                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                                                    <span className="bitacora-nota-preview">
+                                                                        {nota.notas_personales.length} notas personales
+                                                                    </span>
+                                                                </AccordionSummary>
+                                                                <AccordionDetails>
+                                                                    {nota.notas_personales.map((np, idx) => (
+                                                                        <Box key={idx} className="bitacora-personal-item">
+                                                                            <Typography variant="subtitle2">
+                                                                                {np.n_cuenta} - {np.nombre_completo}
+                                                                            </Typography>
+                                                                            <Typography variant="body2" className="bitacora-personal-nota">
+                                                                                {np.nota}
+                                                                            </Typography>
+                                                                            {idx < nota.notas_personales.length - 1 && <Divider sx={{ my: 1 }} />}
+                                                                        </Box>
+                                                                    ))}
+                                                                </AccordionDetails>
+                                                            </Accordion>
+                                                        ) : (
+                                                            <span className="bitacora-sin-notas">Sin notas personales</span>
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell>{nota.usuario_nombre}</TableCell>
+                                                </TableRow>
+                                            ))
+                                        )}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Paper>
+                    </div>
                 </div>
             </main>
 

@@ -12,10 +12,18 @@
 
 .gc-main {
   flex: 1;
-  margin-left: 200px;
+  margin-left: 260px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.gc-container-original {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #F8F9FC;
+  border-radius: 16px;
 }
 
 .gc-topbar {
@@ -219,6 +227,12 @@
   padding: 16px 32px;
   font-size: 13px;
   color: #888;
+}
+
+@media (max-width: 1024px) {
+  .gc-main {
+    margin-left: 0;
+  }
 }
 
 /* Responsive */
