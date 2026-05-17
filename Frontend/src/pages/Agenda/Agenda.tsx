@@ -172,7 +172,7 @@ const Agenda: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box className="agenda-layout">
+      <Box className="agenda-layout" sx={{ display: 'flex', minHeight: '100vh' }}>
         <Sidebar userRole={userRole} />
         
         <MainContent className="agenda-main">
