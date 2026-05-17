@@ -1,7 +1,6 @@
 import React from 'react';
 import { Plus, Filter, Download, Edit3, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import MainContent from '../../../components/Layout/MainContent';
 import './Usuarios.css';
 
 const Usuarios: React.FC = () => {
@@ -16,7 +15,7 @@ const Usuarios: React.FC = () => {
     <div className="usuarios-layout">
       <Sidebar />
       
-      <MainContent className="usuarios-main">
+      <main className="usuarios-main">
         <header className="usuarios-topbar">
           <span className="usuarios-breadcrumb">Configuración › Usuarios</span>
           <div className="usuarios-topbar-right">
@@ -100,7 +99,7 @@ const Usuarios: React.FC = () => {
             </footer>
           </div>
         </div>
-      </MainContent>
+      </main>
     </div>
   );
 };

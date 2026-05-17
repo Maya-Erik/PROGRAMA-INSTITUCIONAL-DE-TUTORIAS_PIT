@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageIcon from '@mui/icons-material/Image';
 import LinkIcon from '@mui/icons-material/Link';
+import Sidebar from '../../components/Sidebar/Sidebar';
 import MainContent from '../../components/Layout/MainContent';
 import './AdminAvisos.css';
 
@@ -35,6 +36,7 @@ const AdminAvisos = () => {
     orden: 0
   });
   const [editandoId, setEditandoId] = useState<number | null>(null);
+  const [userRole, setUserRole] = useState<string>('admin');
 
   const coloresDisponibles = ['#003DA5', '#001F54', '#D6A600', '#4A4A4A'];
 
@@ -141,125 +143,136 @@ const AdminAvisos = () => {
   };
 
   if (loading) {
-    return <div className="admin-container">Cargando avisos...</div>;
+    return (
+      <div className="admin-citas-container">
+        <Sidebar userRole="admin" />
+        <MainContent className="admin-container">
+          <div>Cargando avisos...</div>
+        </MainContent>
+      </div>
+    );
   }
 
   return (
-    <MainContent className="admin-container">
-      <h1 className="admin-titulo">Administrador de Avisos</h1>
+    <div className="admin-citas-container">
+      <Sidebar userRole="admin" />
       
-      <form onSubmit={handleSubmit} className="admin-form">
-        <input
-          type="text"
-          name="titulo"
-          placeholder="Título del aviso *"
-          value={formData.titulo}
-          onChange={handleChange}
-          className="form-input"
-          required
-        />
-        <textarea
-          name="contenido"
-          placeholder="Contenido del aviso *"
-          value={formData.contenido}
-          onChange={handleChange}
-          className="form-textarea"
-          required
-        />
-        <input
-          type="text"
-          name="imagen"
-          placeholder="URL de la imagen (opcional)"
-          value={formData.imagen}
-          onChange={handleChange}
-          className="form-input"
-        />
-        <input
-          type="text"
-          name="enlace"
-          placeholder="URL del enlace (opcional)"
-          value={formData.enlace}
-          onChange={handleChange}
-          className="form-input"
-        />
+      <MainContent className="admin-container">
+        <h1 className="admin-titulo">Administrador de Avisos</h1>
         
-        <div className="campo-color">
-          <label className="color-label">Color de fondo:</label>
-          <div className="colores-opciones">
-            {coloresDisponibles.map((color) => (
-              <button
-                key={color}
-                type="button"
-                className={`color-opcion ${formData.color === color ? 'seleccionado' : ''}`}
-                style={{ backgroundColor: color }}
-                onClick={() => setFormData({ ...formData, color })}
-              />
-            ))}
+        <form onSubmit={handleSubmit} className="admin-form">
+          <input
+            type="text"
+            name="titulo"
+            placeholder="Título del aviso *"
+            value={formData.titulo}
+            onChange={handleChange}
+            className="form-input"
+            required
+          />
+          <textarea
+            name="contenido"
+            placeholder="Contenido del aviso *"
+            value={formData.contenido}
+            onChange={handleChange}
+            className="form-textarea"
+            required
+          />
+          <input
+            type="text"
+            name="imagen"
+            placeholder="URL de la imagen (opcional)"
+            value={formData.imagen}
+            onChange={handleChange}
+            className="form-input"
+          />
+          <input
+            type="text"
+            name="enlace"
+            placeholder="URL del enlace (opcional)"
+            value={formData.enlace}
+            onChange={handleChange}
+            className="form-input"
+          />
+          
+          <div className="campo-color">
+            <label className="color-label">Color de fondo:</label>
+            <div className="colores-opciones">
+              {coloresDisponibles.map((color) => (
+                <button
+                  key={color}
+                  type="button"
+                  className={`color-opcion ${formData.color === color ? 'seleccionado' : ''}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => setFormData({ ...formData, color })}
+                />
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="form-buttons">
-          <button type="submit" className="btn-guardar">
-            {editandoId ? 'Actualizar' : 'Guardar'} Aviso
-          </button>
-          {editandoId && (
-            <button type="button" onClick={() => {
-              setEditandoId(null);
-              setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5', orden: 0 });
-            }} className="btn-cancelar">
-              Cancelar
+          <div className="form-buttons">
+            <button type="submit" className="btn-guardar">
+              {editandoId ? 'Actualizar' : 'Guardar'} Aviso
             </button>
+            {editandoId && (
+              <button type="button" onClick={() => {
+                setEditandoId(null);
+                setFormData({ titulo: '', contenido: '', imagen: '', enlace: '', color: '#003DA5', orden: 0 });
+              }} className="btn-cancelar">
+                Cancelar
+              </button>
+            )}
+          </div>
+        </form>
+
+        <div className="avisos-lista">
+          <h2 className="lista-titulo">Avisos del Carrusel</h2>
+          <p className="lista-subtitulo">Ordena los avisos y agrega su contenido</p>
+          
+          {avisos.length === 0 ? (
+            <p className="sin-avisos">No hay avisos creados</p>
+          ) : (
+            avisos.map((aviso, posicion) => (
+              <div key={aviso.id_aviso} className="aviso-item">
+                <div className="aviso-info">
+                  <div className="aviso-preview" style={{ backgroundColor: aviso.color }}>
+                    <span className="preview-numero">{posicion + 1}</span>
+                  </div>
+                  <div className="aviso-detalles">
+                    <h3 className="item-titulo">{aviso.titulo}</h3>
+                    <p className="item-contenido">{aviso.contenido}</p>
+                    {aviso.imagen && (
+                      <span className="item-imagen-text">
+                        <ImageIcon fontSize="small" /> Con imagen
+                      </span>
+                    )}
+                    {aviso.enlace && (
+                      <span className="item-enlace-text">
+                        <LinkIcon fontSize="small" /> Con enlace
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="aviso-acciones">
+                  <button onClick={() => moverArriba(posicion)} className="btn-mover" disabled={posicion === 0}>
+                    <ArrowUpwardIcon fontSize="small" />
+                  </button>
+                  <button onClick={() => moverAbajo(posicion)} className="btn-mover" disabled={posicion === avisos.length - 1}>
+                    <ArrowDownwardIcon fontSize="small" />
+                  </button>
+                  <button onClick={() => handleEdit(aviso)} className="btn-editar">
+                    <EditIcon fontSize="small" /> Editar
+                  </button>
+                  <button onClick={() => handleDelete(aviso.id_aviso)} className="btn-eliminar">
+                    <DeleteIcon fontSize="small" /> Eliminar
+                  </button>
+                </div>
+              </div>
+            ))
           )}
         </div>
-      </form>
-
-      <div className="avisos-lista">
-        <h2 className="lista-titulo">Avisos del Carrusel</h2>
-        <p className="lista-subtitulo">Ordena los avisos y agrega su contenido</p>
-        
-        {avisos.length === 0 ? (
-          <p className="sin-avisos">No hay avisos creados</p>
-        ) : (
-          avisos.map((aviso, posicion) => (
-            <div key={aviso.id_aviso} className="aviso-item">
-              <div className="aviso-info">
-                <div className="aviso-preview" style={{ backgroundColor: aviso.color }}>
-                  <span className="preview-numero">{posicion + 1}</span>
-                </div>
-                <div className="aviso-detalles">
-                  <h3 className="item-titulo">{aviso.titulo}</h3>
-                  <p className="item-contenido">{aviso.contenido}</p>
-                  {aviso.imagen && (
-                    <span className="item-imagen-text">
-                      <ImageIcon fontSize="small" /> Con imagen
-                    </span>
-                  )}
-                  {aviso.enlace && (
-                    <span className="item-enlace-text">
-                      <LinkIcon fontSize="small" /> Con enlace
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="aviso-acciones">
-                <button onClick={() => moverArriba(posicion)} className="btn-mover" disabled={posicion === 0}>
-                  <ArrowUpwardIcon fontSize="small" />
-                </button>
-                <button onClick={() => moverAbajo(posicion)} className="btn-mover" disabled={posicion === avisos.length - 1}>
-                  <ArrowDownwardIcon fontSize="small" />
-                </button>
-                <button onClick={() => handleEdit(aviso)} className="btn-editar">
-                  <EditIcon fontSize="small" /> Editar
-                </button>
-                <button onClick={() => handleDelete(aviso.id_aviso)} className="btn-eliminar">
-                  <DeleteIcon fontSize="small" /> Eliminar
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </MainContent>
+      </MainContent>
+    </div>
   );
 };
 
