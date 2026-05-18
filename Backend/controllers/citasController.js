@@ -1,13 +1,31 @@
 const db = require("../connection");
 
-// Obtener citas según rol y carrera del usuario
+// Función para crear notificaciones (sin errores)
+const crearNotificacion = async (userId, titulo, mensaje, tipo = 'info') => {
+    if (!userId) return;
+    try {
+        await db.query(`
+            INSERT INTO tr_notificaciones (id_usuario, titulo, mensaje, tipo, fecha)
+            VALUES ($1, $2, $3, $4, NOW())
+        `, [userId, titulo, mensaje, tipo]);
+        console.log(`Notificación creada para usuario ${userId}: ${titulo}`);
+    } catch (error) {
+        console.error("Error al crear notificación:", error.message);
+        // No detenemos el flujo principal si falla la notificación
+    }
+};
+
+// ============================================
+// FUNCIONES EXISTENTES
+// ============================================
+
+// Obtener citas disponibles según el rol del usuario
 exports.obtenerCitas = async (req, res) => {
     try {
         const userId = req.user.id;
         const userRole = req.user.role;
         const userCarrera = req.user.carrera;
         
-        console.log("=== obtenerCitas ===");
         console.log("Usuario:", { userId, userRole, userCarrera });
         
         let query = `
@@ -19,19 +37,14 @@ exports.obtenerCitas = async (req, res) => {
         
         const params = [];
         
-        // Si es alumno, solo ver citas de su carrera
         if (userRole === 'alumno' && userCarrera) {
             query += ` AND c.carrera = $1`;
             params.push(userCarrera);
-            console.log("Filtrando por carrera:", userCarrera);
         }
         
         query += ` ORDER BY c.fecha ASC, c.hora ASC`;
         
-        console.log("Query:", query);
-        
         const result = await db.query(query, params);
-        console.log("Citas encontradas:", result.rows.length);
         
         res.json({ success: true, citas: result.rows });
     } catch (error) {
@@ -40,15 +53,13 @@ exports.obtenerCitas = async (req, res) => {
     }
 };
 
-
-// Crear cita (solo tutor, tutorado y admin)
+// Crear cita
 exports.crearCita = async (req, res) => {
     try {
         const { materia, tutor_nombre, fecha, hora, capacidad, tipo, carrera } = req.body;
         const userId = req.user.id;
         const userRole = req.user.role;
         
-        // Validar permisos
         if (!['admin', 'tutor', 'tutorado'].includes(userRole)) {
             return res.status(403).json({ success: false, error: "No tienes permisos para crear citas" });
         }
@@ -58,18 +69,17 @@ exports.crearCita = async (req, res) => {
             VALUES ($1, $2, $3, $4, $5, 0, $6, $7, $8, 'disponible', 'Salón sujeto a disponibilidad')
             RETURNING *
         `;
-
-        // Notificar al tutor (si es admin quien crea)
-        if (req.user.role === 'admin') {
-            await crearNotificacion(
-                tutorId,
-                'Nueva tutoría asignada',
-                `Se te ha asignado una nueva tutoría: ${materia}`,
-                'info'
-            );
-        }
         
         const result = await db.query(query, [materia, tutor_nombre, fecha, hora, capacidad, tipo, carrera, userId]);
+        
+        // Crear notificación para el tutor
+        await crearNotificacion(
+            userId,
+            'Cita creada exitosamente',
+            `Has creado una nueva tutoría: ${materia} para el ${fecha} a las ${hora}`,
+            'success'
+        );
+        
         res.json({ success: true, cita: result.rows[0] });
     } catch (error) {
         console.error("Error al crear cita:", error);
@@ -77,68 +87,7 @@ exports.crearCita = async (req, res) => {
     }
 };
 
-// Editar cita (solo creador o admin)
-exports.editarCita = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { materia, tutor_nombre, fecha, hora, capacidad, tipo } = req.body;
-        const userId = req.user.id;
-        const userRole = req.user.role;
-        
-        // Verificar si es creador o admin
-        const checkQuery = `SELECT id_creador FROM tr_citas WHERE id_cita = $1`;
-        const checkResult = await db.query(checkQuery, [id]);
-        
-        if (checkResult.rows.length === 0) {
-            return res.status(404).json({ success: false, error: "Cita no encontrada" });
-        }
-        
-        if (checkResult.rows[0].id_creador !== userId && userRole !== 'admin') {
-            return res.status(403).json({ success: false, error: "No tienes permisos para editar esta cita" });
-        }
-        
-        const query = `
-            UPDATE tr_citas 
-            SET materia = $1, tutor_nombre = $2, fecha = $3, hora = $4, capacidad = $5, tipo = $6
-            WHERE id_cita = $7
-            RETURNING *
-        `;
-        
-        const result = await db.query(query, [materia, tutor_nombre, fecha, hora, capacidad, tipo, id]);
-        res.json({ success: true, cita: result.rows[0] });
-    } catch (error) {
-        console.error("Error al editar cita:", error);
-        res.status(500).json({ success: false, error: "Error al editar cita" });
-    }
-};
-
-// Eliminar cita (solo creador o admin)
-exports.eliminarCita = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const userId = req.user.id;
-        const userRole = req.user.role;
-        
-        const checkQuery = `SELECT id_creador FROM tr_citas WHERE id_cita = $1`;
-        const checkResult = await db.query(checkQuery, [id]);
-        
-        if (checkResult.rows.length === 0) {
-            return res.status(404).json({ success: false, error: "Cita no encontrada" });
-        }
-        
-        if (checkResult.rows[0].id_creador !== userId && userRole !== 'admin') {
-            return res.status(403).json({ success: false, error: "No tienes permisos para eliminar esta cita" });
-        }
-        
-        await db.query(`DELETE FROM tr_citas WHERE id_cita = $1`, [id]);
-        res.json({ success: true, message: "Cita eliminada correctamente" });
-    } catch (error) {
-        console.error("Error al eliminar cita:", error);
-        res.status(500).json({ success: false, error: "Error al eliminar cita" });
-    }
-};
-
-// Inscribirse a cita (solo alumnos o tutorados)
+// Inscribirse a cita
 exports.inscribirseCita = async (req, res) => {
     try {
         const { id } = req.params;
@@ -149,6 +98,7 @@ exports.inscribirseCita = async (req, res) => {
             return res.status(403).json({ success: false, error: "No tienes permisos para inscribirte" });
         }
         
+        // Verificar si ya está inscrito
         const checkInscripcion = await db.query(
             `SELECT * FROM tr_citas_inscritos WHERE id_cita = $1 AND id_usuario = $2`,
             [id, userId]
@@ -157,11 +107,10 @@ exports.inscribirseCita = async (req, res) => {
         if (checkInscripcion.rows.length > 0) {
             return res.status(400).json({ success: false, error: "Ya estás inscrito en esta cita" });
         }
-
-        const { crearNotificacion } = require('./notificacionesController');
         
+        // Obtener cita y verificar capacidad
         const citaQuery = await db.query(
-            `SELECT capacidad, inscritos FROM tr_citas WHERE id_cita = $1 AND estado = 'disponible'`,
+            `SELECT capacidad, inscritos, materia, fecha, id_creador FROM tr_citas WHERE id_cita = $1 AND estado = 'disponible'`,
             [id]
         );
         
@@ -175,36 +124,32 @@ exports.inscribirseCita = async (req, res) => {
             return res.status(400).json({ success: false, error: "No hay cupos disponibles" });
         }
         
+        // Inscribir usuario
         await db.query(
             `INSERT INTO tr_citas_inscritos (id_cita, id_usuario) VALUES ($1, $2)`,
             [id, userId]
         );
         
+        // Actualizar contador de inscritos
         await db.query(
             `UPDATE tr_citas SET inscritos = inscritos + 1 WHERE id_cita = $1`,
             [id]
         );
-
-        // Notificar al tutor
-        const tutorQuery = await db.query(
-            "SELECT id_creador FROM tr_citas WHERE id_cita = $1",
-            [id]
-        );
-        if (tutorQuery.rows.length > 0) {
-            await crearNotificacion(
-                tutorQuery.rows[0].id_creador,
-                'Nueva inscripción',
-                `Un alumno se ha inscrito a tu tutoría: ${citaData.materia}`,
-                'success'
-            );
-        }
-
+        
         // Notificar al alumno
         await crearNotificacion(
             userId,
-            'Inscripción exitosa',
-            `Te has inscrito correctamente a la tutoría de ${citaData.materia}`,
+            'Inscripción confirmada',
+            `Te has inscrito a la tutoría de ${cita.materia} para el ${cita.fecha}`,
             'success'
+        );
+        
+        // Notificar al tutor
+        await crearNotificacion(
+            cita.id_creador,
+            'Nuevo inscrito en tu tutoría',
+            `Un alumno se ha inscrito a tu tutoría de ${cita.materia} para el ${cita.fecha}`,
+            'info'
         );
         
         res.json({ success: true, message: "Te has inscrito correctamente" });
@@ -214,20 +159,26 @@ exports.inscribirseCita = async (req, res) => {
     }
 };
 
+// Cancelar inscripción a cita
 exports.cancelarInscripcionCita = async (req, res) => {
     try {
         const { id } = req.params;
         const userId = req.user.id;
         
-        // Verificar si está inscrito
-        const checkInscripcion = await db.query(
-            `SELECT * FROM tr_citas_inscritos WHERE id_cita = $1 AND id_usuario = $2`,
+        // Verificar que la cita existe y obtener información
+        const citaQuery = await db.query(
+            `SELECT c.materia, c.fecha, c.id_creador, c.inscritos 
+             FROM tr_citas c
+             JOIN tr_citas_inscritos ci ON c.id_cita = ci.id_cita
+             WHERE ci.id_cita = $1 AND ci.id_usuario = $2`,
             [id, userId]
         );
         
-        if (checkInscripcion.rows.length === 0) {
-            return res.status(400).json({ success: false, error: "No estás inscrito en esta cita" });
+        if (citaQuery.rows.length === 0) {
+            return res.status(404).json({ success: false, error: "No estás inscrito en esta cita" });
         }
+        
+        const cita = citaQuery.rows[0];
         
         // Eliminar inscripción
         await db.query(
@@ -240,20 +191,20 @@ exports.cancelarInscripcionCita = async (req, res) => {
             `UPDATE tr_citas SET inscritos = inscritos - 1 WHERE id_cita = $1`,
             [id]
         );
-
-        // Notificar al tutor
-        await crearNotificacion(
-            tutorId,
-            'Cancelación de inscripción',
-            `Un alumno ha cancelado su inscripción a la tutoría: ${citaData.materia}`,
-            'warning'
-        );
-
+        
         // Notificar al alumno
         await crearNotificacion(
             userId,
             'Inscripción cancelada',
-            `Has cancelado tu inscripción a la tutoría de ${citaData.materia}`,
+            `Has cancelado tu inscripción a la tutoría de ${cita.materia} para el ${cita.fecha}`,
+            'warning'
+        );
+        
+        // Notificar al tutor
+        await crearNotificacion(
+            cita.id_creador,
+            'Inscripción cancelada',
+            `Un alumno ha cancelado su inscripción a tu tutoría de ${cita.materia} para el ${cita.fecha}`,
             'info'
         );
         
@@ -285,7 +236,69 @@ exports.misCitas = async (req, res) => {
     }
 };
 
-// Actualizar lugar de cita (solo admin)
+// Editar cita
+exports.editarCita = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { materia, tutor_nombre, fecha, hora, capacidad, tipo } = req.body;
+        const userId = req.user.id;
+        const userRole = req.user.role;
+        
+        const checkQuery = `SELECT id_creador FROM tr_citas WHERE id_cita = $1`;
+        const checkResult = await db.query(checkQuery, [id]);
+        
+        if (checkResult.rows.length === 0) {
+            return res.status(404).json({ success: false, error: "Cita no encontrada" });
+        }
+        
+        if (checkResult.rows[0].id_creador !== userId && userRole !== 'admin') {
+            return res.status(403).json({ success: false, error: "No tienes permisos para editar esta cita" });
+        }
+        
+        const query = `
+            UPDATE tr_citas 
+            SET materia = $1, tutor_nombre = $2, fecha = $3, hora = $4, capacidad = $5, tipo = $6
+            WHERE id_cita = $7
+            RETURNING *
+        `;
+        
+        const result = await db.query(query, [materia, tutor_nombre, fecha, hora, capacidad, tipo, id]);
+        
+        res.json({ success: true, cita: result.rows[0] });
+    } catch (error) {
+        console.error("Error al editar cita:", error);
+        res.status(500).json({ success: false, error: "Error al editar cita" });
+    }
+};
+
+// Eliminar cita
+exports.eliminarCita = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id;
+        const userRole = req.user.role;
+        
+        const checkQuery = `SELECT id_creador FROM tr_citas WHERE id_cita = $1`;
+        const checkResult = await db.query(checkQuery, [id]);
+        
+        if (checkResult.rows.length === 0) {
+            return res.status(404).json({ success: false, error: "Cita no encontrada" });
+        }
+        
+        if (checkResult.rows[0].id_creador !== userId && userRole !== 'admin') {
+            return res.status(403).json({ success: false, error: "No tienes permisos para eliminar esta cita" });
+        }
+        
+        await db.query(`DELETE FROM tr_citas WHERE id_cita = $1`, [id]);
+        
+        res.json({ success: true, message: "Cita eliminada correctamente" });
+    } catch (error) {
+        console.error("Error al eliminar cita:", error);
+        res.status(500).json({ success: false, error: "Error al eliminar cita" });
+    }
+};
+
+// Asignar lugar
 exports.asignarLugar = async (req, res) => {
     try {
         const { id } = req.params;
