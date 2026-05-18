@@ -31,13 +31,6 @@ function Navbar({ onLoginClick }: NavbarProps) {
 
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
-    if (isAuthenticated()) {
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        const userData = JSON.parse(userStr);
-        console.log('Usuario logueado:', userData);
-      }
-    }
   }, [location.pathname]);
 
   useEffect(() => {
@@ -149,18 +142,13 @@ function Navbar({ onLoginClick }: NavbarProps) {
   };
 
   const handlePerfilUpdate = () => {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      const user = JSON.parse(userStr);
-      // Actualizar el nombre en el navbar si es necesario
-    }
+    // No es necesario hacer nada aquí por ahora
   };
 
   const isActive = (sectionId: string) => {
     return location.pathname === "/" && activeSection === sectionId;
   };
 
-  // Obtener iniciales del usuario
   const getUserInitials = () => {
     const userStr = localStorage.getItem('user');
     if (userStr) {
@@ -237,7 +225,6 @@ function Navbar({ onLoginClick }: NavbarProps) {
           </li>
         </ul>
 
-        {/* Avatar del usuario - solo cuando está logueado */}
         {isLoggedIn && (
           <div className="user-avatar-container">
             <div className="user-avatar" onClick={handleOpenPerfil}>
