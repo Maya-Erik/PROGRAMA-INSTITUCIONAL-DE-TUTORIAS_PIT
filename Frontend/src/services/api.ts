@@ -236,7 +236,7 @@ export const obtenerMisCitasBitacora = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/bitacora/mis-citas`, {
         headers: {
-            'Content-Type': 'application/json',  // ← Comilla simple corregida
+            'Content-Type': 'application/json',
             'Authorization': token ? `Bearer ${token}` : ''
         }
     });
@@ -309,6 +309,19 @@ export const exportarBitacora = async (filtros: {
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
+};
+
+
+//Reportes
+export const obtenerReportesEstadisticas = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/reportes/estadisticas`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+        }
+    });
+    return response.json();
 };
 
 
