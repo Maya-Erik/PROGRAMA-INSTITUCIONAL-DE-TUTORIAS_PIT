@@ -10,7 +10,7 @@ import {
     PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer
 } from 'recharts';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { obtenerEstadisticas } from '../../services/api';
+import { obtenerReportesEstadisticas } from '../../services/api';
 import './Reportes.css';
 
 // Tema para las gráficas
@@ -45,7 +45,7 @@ const Reportes: React.FC = () => {
     const cargarEstadisticas = async () => {
         setLoading(true);
         try {
-            const data = await obtenerEstadisticas();
+            const data = await obtenerReportesEstadisticas();
             if (data.success) {
                 setStats(data.stats);
                 setUserRole(data.userRole);
