@@ -17,6 +17,7 @@ import AdminCitas from "./pages/Admin/AdminCitas"
 import AdminUsuarios from "./pages/Admin/AdminUsuarios"
 import AdminMateriales from "./pages/Admin/AdminMateriales"
 import SidebarToggle from './components/Sidebar/SidebarToggle';
+import Reportes from "./pages/Reportes/Reportes" 
 
 function App() {
   return (
@@ -80,6 +81,13 @@ function App() {
               <AdminMateriales />
             </ProtectedRoute>
           } />
+
+          <Route path="/reportes" element={
+            <ProtectedRoute allowedRoles={['admin', 'tutor', 'tutorado']}>
+              <Reportes />
+            </ProtectedRoute>
+          } />
+          
         </Routes>
         <SidebarToggle />
       </BrowserRouter>
