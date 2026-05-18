@@ -15,9 +15,6 @@ const crearNotificacion = async (userId, titulo, mensaje, tipo = 'info') => {
     }
 };
 
-// ============================================
-// FUNCIONES EXISTENTES
-// ============================================
 
 // Obtener citas disponibles según el rol del usuario
 exports.obtenerCitas = async (req, res) => {
