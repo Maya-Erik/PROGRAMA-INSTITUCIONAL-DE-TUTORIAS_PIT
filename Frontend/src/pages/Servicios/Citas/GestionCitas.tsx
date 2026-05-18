@@ -8,7 +8,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
-import SidebarToggle from '../../../components/Sidebar/SidebarToggle';
 import "./GestionCitas.css"
 
 function GestionCitas() {
@@ -35,8 +34,11 @@ function GestionCitas() {
     setLoading(true)
     try {
       const data = await obtenerCitas()
+      console.log("Respuesta de obtenerCitas:", data)
       if (data.success) {
         setCitas(data.citas || [])
+      } else {
+        console.error("Error en obtenerCitas:", data.error)
       }
     } catch (error) {
       console.error("Error al cargar citas:", error)
@@ -63,13 +65,15 @@ function GestionCitas() {
     
     try {
       const result = await inscribirseCita(id_cita)
+      console.log("Respuesta de inscribirseCita:", result)
       if (result.success) {
-        alert("Cita registrada correctamente")
+        alert("Te has inscrito correctamente")
         cargarCitas()
       } else {
         alert(result.error || "Error al seleccionar la cita")
       }
     } catch (error) {
+      console.error("Error en inscripción:", error)
       alert("Error al seleccionar la cita")
     }
   }
@@ -78,6 +82,7 @@ function GestionCitas() {
     if (window.confirm('¿Estás seguro de eliminar esta cita?')) {
       try {
         const result = await eliminarCita(id_cita)
+        console.log("Respuesta de eliminarCita:", result)
         if (result.success) {
           alert("Cita eliminada correctamente")
           cargarCitas()
@@ -85,6 +90,7 @@ function GestionCitas() {
           alert(result.error || "Error al eliminar la cita")
         }
       } catch (error) {
+        console.error("Error al eliminar:", error)
         alert("Error al eliminar la cita")
       }
     }
@@ -100,123 +106,117 @@ function GestionCitas() {
   return (
     <div className="gc-layout">
       <Sidebar userRole={userRole} />
-      <SidebarToggle />
+      
       <main className="gc-main">
-        <div className="gc-container-original">
-          <header className="gc-topbar">
-            <span className="gc-breadcrumb">Panel › Citas</span>
-            <div className="gc-topbar-right">
-              <NotificationsIcon className="gc-topbar-bell" />
-              <div className="gc-topbar-user">
-                <div>
-                  <p className="gc-topbar-name">Usuario</p>
-                  <p className="gc-topbar-role">
-                    {userRole === 'admin' ? 'ADMINISTRADOR' : 
-                    userRole === 'tutor' ? 'TUTOR' :
-                    userRole === 'tutorado' ? 'TUTORADO' : 'ALUMNO'}
-                  </p>
-                </div>
-                <div className="gc-topbar-avatar">
-                  {userRole === 'admin' ? 'A' : userRole === 'tutor' ? 'T' : userRole === 'tutorado' ? 'T' : 'U'}
-                </div>
+        <header className="gc-topbar">
+          <span className="gc-breadcrumb">Panel › Citas</span>
+          <div className="gc-topbar-right">
+            <NotificationsIcon className="gc-topbar-bell" />
+            <div className="gc-topbar-user">
+              <div>
+                <p className="gc-topbar-name">Usuario</p>
+                <p className="gc-topbar-role">
+                  {userRole === 'admin' ? 'ADMINISTRADOR' : 
+                   userRole === 'tutor' ? 'TUTOR' :
+                   userRole === 'tutorado' ? 'TUTORADO' : 'ALUMNO'}
+                </p>
+              </div>
+              <div className="gc-topbar-avatar">
+                {userRole === 'admin' ? 'A' : userRole === 'tutor' ? 'T' : userRole === 'tutorado' ? 'T' : 'U'}
               </div>
             </div>
-          </header>
-
-          <div className="gc-header">
-            <div>
-              <h1>Gestión de Citas de Tutoría</h1>
-              <p>Administra y programa las sesiones académicas de acompañamiento.</p>
-            </div>
-            {(userRole === 'admin' || userRole === 'tutor' || userRole === 'tutorado') && (
-              <button className="gc-btn-nueva" onClick={handleOpenModal}>
-                + Nueva Cita
-              </button>
-            )}
           </div>
+        </header>
 
-          <div className="gc-filtros">
-            <div className="gc-search">
-              <SearchIcon />
-              <input
-                type="text"
-                placeholder="Buscar materias, tutores..."
-                value={busqueda}
-                onChange={e => setBusqueda(e.target.value)}
-              />
-            </div>
-            <input
-              type="date"
-              className="gc-date-filter"
-              value={fechaFiltro}
-              onChange={e => setFechaFiltro(e.target.value)}
-            />
-            <button className="gc-btn-filtros">
-              <FilterListIcon /> Filtros
+        <div className="gc-header">
+          <div>
+            <h1>Gestión de Citas de Tutoría</h1>
+            <p>Administra y programa las sesiones académicas de acompañamiento.</p>
+          </div>
+          {(userRole === 'admin' || userRole === 'tutor' || userRole === 'tutorado') && (
+            <button className="gc-btn-nueva" onClick={handleOpenModal}>
+              + Nueva Cita
             </button>
-          </div>
-
-          <div className="gc-tabla-wrapper">
-            <table className="gc-tabla">
-              <thead>
-                <tr>
-                  <th>MATERIA</th>
-                  <th>TUTOR</th>
-                  <th>FECHA</th>
-                  <th>HORA</th>
-                  <th>LUGAR</th>
-                  <th>CUPOS</th>
-                  <th>ACCIONES</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan={7} className="gc-empty">Cargando citas...</td>
-                  </tr>
-                ) : citasFiltradas.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="gc-empty">No hay citas disponibles</td>
-                  </tr>
-                ) : (
-                  citasFiltradas.map((cita, i) => (
-                    <tr key={i}>
-                      <td><strong>{cita.materia}</strong></td>
-                      <td>{cita.tutor_nombre}</td>
-                      <td className="gc-fecha">{cita.fecha}</td>
-                      <td><span className="gc-hora-badge">{cita.hora}</span></td>
-                      <td>{cita.lugar || "Por asignar"}</td>
-                      <td>
-                        <span className={`status-pill ${(cita.inscritos || 0) >= (cita.capacidad || 1) ? 'lleno' : 'disponible'}`}>
-                          {(cita.inscritos || 0)}/{(cita.capacidad || 1)}
-                        </span>
-                      </td>
-                      <td>
-                        {(userRole === 'admin' || userRole === 'tutor' || userRole === 'tutorado') && (
-                          <button className="gc-btn-icono" onClick={() => handleEliminarCita(cita.id_cita)} title="Eliminar cita">
-                            <DeleteIcon />
-                          </button>
-                        )}
-                        {(userRole === 'alumno' || userRole === 'tutorado') && (
-                          <button 
-                            className="gc-btn-icono" 
-                            onClick={() => handleSeleccionarCita(cita.id_cita)}
-                            disabled={(cita.inscritos || 0) >= (cita.capacidad || 1)}
-                            title={(cita.inscritos || 0) >= (cita.capacidad || 1) ? "Sin cupo" : "Inscribirse"}
-                          >
-                            <EventAvailableIcon /> {(cita.inscritos || 0) >= (cita.capacidad || 1) ? "Sin cupo" : "Inscribirse"}
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          <p className="gc-total">Mostrando {citasFiltradas.length} de {citas.length} citas disponibles</p>
+          )}
         </div>
+
+        <div className="gc-filtros">
+          <div className="gc-search">
+            <SearchIcon />
+            <input
+              type="text"
+              placeholder="Buscar materias, tutores..."
+              value={busqueda}
+              onChange={e => setBusqueda(e.target.value)}
+            />
+          </div>
+          <input
+            type="date"
+            className="gc-date-filter"
+            value={fechaFiltro}
+            onChange={e => setFechaFiltro(e.target.value)}
+          />
+          <button className="gc-btn-filtros">
+            <FilterListIcon /> Filtros
+          </button>
+        </div>
+
+        <div className="gc-tabla-wrapper">
+          <table className="gc-tabla">
+            <thead>
+              <tr>
+                <th>MATERIA</th>
+                <th>TUTOR</th>
+                <th>FECHA</th>
+                <th>HORA</th>
+                <th>LUGAR</th>
+                <th>CUPOS</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr><td colSpan={7} className="gc-empty">Cargando citas...</td></tr>
+              ) : citasFiltradas.length === 0 ? (
+                <tr><td colSpan={7} className="gc-empty">No hay citas disponibles</td></tr>
+              ) : (
+                citasFiltradas.map((cita, i) => (
+                  <tr key={i}>
+                    <td><strong>{cita.materia}</strong></td>
+                    <td>{cita.tutor_nombre}</td>
+                    <td className="gc-fecha">{cita.fecha}</td>
+                    <td><span className="gc-hora-badge">{cita.hora}</span></td>
+                    <td>{cita.lugar || "Por asignar"}</td>
+                    <td>
+                      <span className={`status-pill ${(cita.inscritos || 0) >= (cita.capacidad || 1) ? 'lleno' : 'disponible'}`}>
+                        {(cita.inscritos || 0)}/{(cita.capacidad || 1)}
+                      </span>
+                    </td>
+                    <td>
+                      {(userRole === 'admin' || userRole === 'tutor' || userRole === 'tutorado') && (
+                        <button className="gc-btn-icono" onClick={() => handleEliminarCita(cita.id_cita)} title="Eliminar cita">
+                          <DeleteIcon />
+                        </button>
+                      )}
+                      {(userRole === 'alumno' || userRole === 'tutorado') && (
+                        <button 
+                          className="gc-btn-icono" 
+                          onClick={() => handleSeleccionarCita(cita.id_cita)}
+                          disabled={(cita.inscritos || 0) >= (cita.capacidad || 1)}
+                          title={(cita.inscritos || 0) >= (cita.capacidad || 1) ? "Sin cupo" : "Inscribirse"}
+                        >
+                          <EventAvailableIcon /> {(cita.inscritos || 0) >= (cita.capacidad || 1) ? "Sin cupo" : "Inscribirse"}
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <p className="gc-total">Mostrando {citasFiltradas.length} de {citas.length} citas disponibles</p>
       </main>
 
       <NuevaCitaModal 
