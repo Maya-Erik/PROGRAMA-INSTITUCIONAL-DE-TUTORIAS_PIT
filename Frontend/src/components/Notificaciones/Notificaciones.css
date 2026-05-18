@@ -141,6 +141,16 @@
     color: #ccc;
 }
 
+/* Botón de notificaciones */
+.notificaciones-boton {
+    color: #003DA5 !important;
+    background-color: transparent !important;
+}
+
+.notificaciones-boton:hover {
+    background-color: rgba(0, 61, 165, 0.1) !important;
+}
+
 /* Acciones */
 .notificaciones-dialog-acciones {
     padding: 12px 16px !important;

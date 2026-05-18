@@ -6,6 +6,7 @@ import {
     CircularProgress, Tooltip
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -60,18 +61,10 @@ const Notificaciones: React.FC = () => {
             cargarNotificaciones();
         }, 30000);
         
-        // Escuchar evento para abrir desde el navbar
-        const handleOpenModal = () => {
-            setOpen(true);
-            cargarNotificaciones();
-        };
-        window.addEventListener('openNotificacionesModal', handleOpenModal);
-        
         return () => {
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
             }
-            window.removeEventListener('openNotificacionesModal', handleOpenModal);
         };
     }, []);
 
@@ -133,6 +126,7 @@ const Notificaciones: React.FC = () => {
                     onClick={handleOpen} 
                     className="notificaciones-boton"
                     size="small"
+                    sx={{ color: '#003DA5' }}
                 >
                     <Badge 
                         badgeContent={noLeidas} 
