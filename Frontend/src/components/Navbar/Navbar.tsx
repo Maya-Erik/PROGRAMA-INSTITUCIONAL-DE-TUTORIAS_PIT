@@ -32,9 +32,9 @@ function Navbar({ onLoginClick }: NavbarProps) {
   useEffect(() => {
     setIsLoggedIn(isAuthenticated());
     if (isAuthenticated()) {
-      const user = localStorage.getItem('user');
-      if (user) {
-        const userData = JSON.parse(user);
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        const userData = JSON.parse(userStr);
         console.log('Usuario logueado:', userData);
       }
     }
@@ -146,20 +146,6 @@ function Navbar({ onLoginClick }: NavbarProps) {
 
   const handleOpenPerfil = () => {
     setOpenPerfilModal(true);
-  };
-
-  const handlePerfilUpdate = () => {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      const user = JSON.parse(userStr);
-      // Actualizar el nombre en el navbar si es necesario
-    }
-  };
-
-  const handleOpenNotificaciones = () => {
-    // Abrir el modal de notificaciones
-    const event = new CustomEvent('openNotificacionesModal');
-    window.dispatchEvent(event);
   };
 
   const isActive = (sectionId: string) => {
