@@ -8,6 +8,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import EventNoteIcon from '@mui/icons-material/EventNote'
 import LogoutIcon from '@mui/icons-material/Logout'
 import CloseIcon from '@mui/icons-material/Close'
+import BarChartIcon from '@mui/icons-material/BarChart';
 import { useSidebar } from '../../context/SidebarContext'
 
 interface SidebarProps {
@@ -92,6 +93,7 @@ function Sidebar({ userRole }: SidebarProps) {
             <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`} onClick={handleLinkClick}>
               <AssignmentIcon fontSize="small" /> Bitácora
             </Link>
+            
           )}
 
           {/* Enlaces comunes para todos */}
@@ -105,6 +107,10 @@ function Sidebar({ userRole }: SidebarProps) {
           
           <Link to="/repositorio" className={`nav-item ${isActive("/repositorio") ? "active" : ""}`} onClick={handleLinkClick}>
             <MenuBookIcon fontSize="small" /> Repositorio
+          </Link>
+
+          <Link to="/reportes" className={`nav-item ${isActive("/reportes") ? "active" : ""}`} onClick={handleLinkClick}>
+            <BarChartIcon fontSize="small" /> Reportes y Estadísticas
           </Link>
         </nav>
 

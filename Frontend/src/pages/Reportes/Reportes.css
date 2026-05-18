@@ -1,0 +1,113 @@
+/* Layout principal */
+.reportes-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #F8F9FC;
+}
+
+.reportes-main {
+  flex: 1;
+  margin-left: 260px;
+  padding: 20px;
+  width: calc(100% - 260px);
+}
+
+/* Header */
+.reportes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.reportes-titulo {
+  font-family: 'Lexend', sans-serif;
+  font-weight: 600;
+  color: #003DA5;
+}
+
+.reportes-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Tarjetas */
+.reportes-cards {
+  margin-bottom: 30px;
+}
+
+.reportes-card {
+  border-radius: 16px !important;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.reportes-card:hover {
+  transform: translateY(-4px);
+}
+
+.reportes-card-number {
+  font-family: 'Lexend', sans-serif;
+  font-weight: 700;
+  color: #003DA5;
+  font-size: 2.5rem;
+}
+
+.reportes-card-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Gráficas */
+.reportes-grafica {
+  padding: 20px;
+  border-radius: 16px !important;
+  margin-bottom: 30px;
+}
+
+.reportes-grafica-titulo {
+  font-family: 'Lexend', sans-serif;
+  font-weight: 600;
+  color: #001F54;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #D6A600;
+}
+
+/* Loading */
+.reportes-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .reportes-main {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .reportes-main {
+    margin-left: 0;
+    padding: 15px;
+    width: 100%;
+  }
+  
+  .reportes-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .reportes-titulo {
+    font-size: 1.5rem;
+  }
+}
