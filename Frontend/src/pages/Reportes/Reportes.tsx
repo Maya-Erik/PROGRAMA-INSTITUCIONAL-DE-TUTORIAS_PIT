@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Typography,Paper, Card, CardContent,
+    Typography, Paper, Card, CardContent,
     CircularProgress, Chip, Table, TableHead, TableRow, TableCell,
-    TableBody,TableContainer
+    TableBody, TableContainer, Button, Tooltip
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import DownloadIcon from '@mui/icons-material/Download';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import PeopleIcon from '@mui/icons-material/People';
+import EventIcon from '@mui/icons-material/Event';
+import SchoolIcon from '@mui/icons-material/School';
 import {
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip,
     PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer
 } from 'recharts';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { obtenerReportesEstadisticas } from '../../services/api';
 import './Reportes.css';
 
-// Tema para las gráficas
 const theme = createTheme({
   palette: {
     primary: { main: '#003DA5' },
@@ -24,7 +28,7 @@ const theme = createTheme({
   },
 });
 
-const COLORS = ['#003DA5', '#D6A600', '#28a745', '#dc3545', '#17a2b8', '#6f42c1'];
+const COLORS = ['#003DA5', '#D6A600', '#28a745', '#17a2b8', '#6f42c1', '#fd7e14'];
 
 const Reportes: React.FC = () => {
     const [stats, setStats] = useState<any>(null);
@@ -57,6 +61,82 @@ const Reportes: React.FC = () => {
         }
     };
 
+    const exportarCSV = () => {
+        if (!stats) return;
+        
+        let csvData: any[] = [];
+        
+        if (userRole === 'admin') {
+            csvData = [
+                ['Reporte General - PIT FES Acatlán'],
+                ['Fecha de exportación:', new Date().toLocaleString()],
+                [],
+                ['Total Usuarios', stats.usuariosPorRol?.reduce((acc: number, r: any) => acc + parseInt(r.total), 0) || 0],
+                ['Total Inscripciones', stats.totalInscripciones || 0],
+                ['Usuarios Activos', stats.usuariosActivos?.activos || 0],
+                ['Total Citas', stats.citasPorEstado?.reduce((acc: number, e: any) => acc + parseInt(e.total), 0) || 0],
+                [],
+                ['Top 5 Temas más solicitados'],
+                ['Tema', 'Cantidad'],
+                ...(stats.topMaterias?.map((m: any) => [m.materia, m.total]) || []),
+                [],
+                ['Top 5 Tutores con más citas'],
+                ['Tutor', 'Cantidad'],
+                ...(stats.topTutores?.map((t: any) => [t.tutor_nombre, t.total]) || []),
+                [],
+                ['Citas por Mes'],
+                ['Mes', 'Cantidad'],
+                ...(stats.citasPorMes?.map((m: any) => [m.mes, m.total]) || [])
+            ];
+        } else if (userRole === 'tutor') {
+            csvData = [
+                ['Reporte de Tutor - PIT FES Acatlán'],
+                ['Fecha de exportación:', new Date().toLocaleString()],
+                ['Tutor:', userName],
+                [],
+                ['Total Citas Creadas', stats.totalCitas || 0],
+                ['Alumnos Atendidos', stats.totalAlumnos || 0],
+                ['Citas Activas', stats.citasPorEstado?.find((e: any) => e.estado === 'disponible')?.total || 0],
+                [],
+                ['Top Temas que impartes'],
+                ['Tema', 'Cantidad'],
+                ...(stats.topMaterias?.map((m: any) => [m.materia, m.total]) || []),
+                [],
+                ['Citas por Mes'],
+                ['Mes', 'Cantidad'],
+                ...(stats.citasPorMes?.map((m: any) => [m.mes, m.total]) || [])
+            ];
+        } else if (userRole === 'tutorado') {
+            csvData = [
+                ['Reporte de Tutorado - PIT FES Acatlán'],
+                ['Fecha de exportación:', new Date().toLocaleString()],
+                ['Tutorado:', userName],
+                [],
+                ['Total Tutorías Tomadas', stats.totalInscripciones || 0],
+                ['Tutorías Pendientes', stats.citasPorEstado?.find((e: any) => e.estado === 'disponible')?.total || 0],
+                [],
+                ['Temas que más has tomado'],
+                ['Tema', 'Cantidad'],
+                ...(stats.topMaterias?.map((m: any) => [m.materia, m.total]) || []),
+                [],
+                ['Tutores que más te han apoyado'],
+                ['Tutor', 'Cantidad'],
+                ...(stats.topTutores?.map((t: any) => [t.tutor_nombre, t.total]) || [])
+            ];
+        }
+        
+        const csvContent = csvData.map(row => row.join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute('download', `reporte_${userRole}_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
     if (loading) {
         return (
             <ThemeProvider theme={theme}>
@@ -80,17 +160,24 @@ const Reportes: React.FC = () => {
                 
                 <div className="reportes-main">
                     <div className="reportes-header">
-                        <Typography variant="h4" className="reportes-titulo">
-                            Reportes y Estadísticas
-                        </Typography>
-                        <div className="reportes-user">
-                            <Typography variant="body2">{userName}</Typography>
-                            <Chip 
-                                label={userRole === 'admin' ? 'Administrador' : userRole === 'tutor' ? 'Tutor' : 'Tutorado'}
-                                size="small"
-                                sx={{ bgcolor: '#003DA5', color: 'white' }}
-                            />
+                        <div>
+                            <Typography variant="h4" className="reportes-titulo">
+                                Reportes y Estadísticas
+                            </Typography>
+                            <Typography variant="body2" className="reportes-subtitulo">
+                                Visualiza el rendimiento y las métricas del sistema de tutorías
+                            </Typography>
                         </div>
+                        <Tooltip title="Exportar a CSV">
+                            <Button 
+                                variant="contained" 
+                                className="reportes-export-btn"
+                                startIcon={<DownloadIcon />}
+                                onClick={exportarCSV}
+                            >
+                                Exportar Reporte
+                            </Button>
+                        </Tooltip>
                     </div>
 
                     {/* ADMIN: Estadísticas generales */}
@@ -99,6 +186,7 @@ const Reportes: React.FC = () => {
                             <div className="reportes-grid reportes-grid-4">
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <PeopleIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.usuariosPorRol?.reduce((acc: number, r: any) => acc + parseInt(r.total), 0) || 0}
                                         </Typography>
@@ -107,6 +195,7 @@ const Reportes: React.FC = () => {
                                 </Card>
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <EventIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.totalInscripciones || 0}
                                         </Typography>
@@ -115,6 +204,7 @@ const Reportes: React.FC = () => {
                                 </Card>
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <TrendingUpIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.usuariosActivos?.activos || 0}
                                         </Typography>
@@ -123,6 +213,7 @@ const Reportes: React.FC = () => {
                                 </Card>
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <SchoolIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.citasPorEstado?.reduce((acc: number, e: any) => acc + parseInt(e.total), 0) || 0}
                                         </Typography>
@@ -151,39 +242,22 @@ const Reportes: React.FC = () => {
                                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                                 ))}
                                             </Pie>
-                                            <Tooltip />
-                                            <Legend />
+                                            <RechartsTooltip />
+                                            
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </Paper>
 
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Citas por Estado
-                                    </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <BarChart data={stats.citasPorEstado}>
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="estado" />
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Bar dataKey="total" fill="#003DA5" />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                </Paper>
-                            </div>
-
-                            <div className="reportes-grid reportes-grid-1">
-                                <Paper className="reportes-grafica">
-                                    <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Citas por Mes (últimos 6 meses)
+                                        Citas por Mes
                                     </Typography>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <LineChart data={stats.citasPorMes}>
                                             <CartesianGrid strokeDasharray="3 3" />
                                             <XAxis dataKey="mes" />
                                             <YAxis />
-                                            <Tooltip />
+                                            <RechartsTooltip />
                                             <Line type="monotone" dataKey="total" stroke="#D6A600" strokeWidth={2} />
                                         </LineChart>
                                     </ResponsiveContainer>
@@ -193,30 +267,30 @@ const Reportes: React.FC = () => {
                             <div className="reportes-grid reportes-grid-2">
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Top 5 Materias
+                                        Top 5 Temas más Solicitados
                                     </Typography>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <BarChart data={stats.topMaterias} layout="vertical">
                                             <CartesianGrid strokeDasharray="3 3" />
                                             <XAxis type="number" />
-                                            <YAxis type="category" dataKey="materia" width={100} />
-                                            <Tooltip />
-                                            <Bar dataKey="total" fill="#17a2b8" />
+                                            <YAxis type="category" dataKey="materia" width={120} />
+                                            <RechartsTooltip />
+                                            <Bar dataKey="total" fill="#17a2b8" radius={[0, 8, 8, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </Paper>
 
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Top 5 Tutores
+                                        Top 5 Tutores con más Citas
                                     </Typography>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <BarChart data={stats.topTutores} layout="vertical">
                                             <CartesianGrid strokeDasharray="3 3" />
                                             <XAxis type="number" />
-                                            <YAxis type="category" dataKey="tutor_nombre" width={120} />
-                                            <Tooltip />
-                                            <Bar dataKey="total" fill="#28a745" />
+                                            <YAxis type="category" dataKey="tutor_nombre" width={140} />
+                                            <RechartsTooltip />
+                                            <Bar dataKey="total" fill="#28a745" radius={[0, 8, 8, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </Paper>
@@ -230,6 +304,7 @@ const Reportes: React.FC = () => {
                             <div className="reportes-grid reportes-grid-3">
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <EventIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.totalCitas || 0}
                                         </Typography>
@@ -238,6 +313,7 @@ const Reportes: React.FC = () => {
                                 </Card>
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <PeopleIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.totalAlumnos || 0}
                                         </Typography>
@@ -246,6 +322,7 @@ const Reportes: React.FC = () => {
                                 </Card>
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <TrendingUpIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.citasPorEstado?.find((e: any) => e.estado === 'disponible')?.total || 0}
                                         </Typography>
@@ -257,46 +334,19 @@ const Reportes: React.FC = () => {
                             <div className="reportes-grid reportes-grid-2">
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Citas por Estado
+                                        Top Temas que Impartes
                                     </Typography>
                                     <ResponsiveContainer width="100%" height={300}>
-                                        <PieChart>
-                                            <Pie
-                                                data={stats.citasPorEstado}
-                                                dataKey="total"
-                                                nameKey="estado"
-                                                cx="50%"
-                                                cy="50%"
-                                                outerRadius={80}
-                                                label
-                                            >
-                                                {stats.citasPorEstado?.map((_entry: any, index: number) => (
-                                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                                ))}
-                                            </Pie>
-                                            <Tooltip />
-                                            <Legend />
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                </Paper>
-
-                                <Paper className="reportes-grafica">
-                                    <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Top Materias
-                                    </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <BarChart data={stats.topMaterias}>
+                                        <BarChart data={stats.topMaterias} layout="vertical">
                                             <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="materia" angle={-45} textAnchor="end" height={80} />
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Bar dataKey="total" fill="#D6A600" />
+                                            <XAxis type="number" />
+                                            <YAxis type="category" dataKey="materia" width={120} />
+                                            <RechartsTooltip />
+                                            <Bar dataKey="total" fill="#D6A600" radius={[0, 8, 8, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </Paper>
-                            </div>
 
-                            <div className="reportes-grid reportes-grid-1">
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Citas por Mes
@@ -306,7 +356,7 @@ const Reportes: React.FC = () => {
                                             <CartesianGrid strokeDasharray="3 3" />
                                             <XAxis dataKey="mes" />
                                             <YAxis />
-                                            <Tooltip />
+                                            <RechartsTooltip />
                                             <Line type="monotone" dataKey="total" stroke="#003DA5" strokeWidth={2} />
                                         </LineChart>
                                     </ResponsiveContainer>
@@ -316,32 +366,36 @@ const Reportes: React.FC = () => {
                             <div className="reportes-grid reportes-grid-1">
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Inscripciones por Cita
+                                        Detalle de Inscripciones por Cita
                                     </Typography>
-                                    <TableContainer component={Paper} sx={{ mt: 2 }}>
+                                    <TableContainer component={Paper} sx={{ mt: 2, borderRadius: 2 }}>
                                         <Table>
                                             <TableHead>
                                                 <TableRow sx={{ bgcolor: '#003DA5' }}>
-                                                    <TableCell sx={{ color: 'white' }}>Materia</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Fecha</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Inscritos</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Capacidad</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Ocupación</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tema</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Fecha</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Inscritos</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Capacidad</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Ocupación</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
                                                 {stats.inscripcionesPorCita?.map((cita: any, idx: number) => (
-                                                    <TableRow key={idx}>
+                                                    <TableRow key={idx} hover>
                                                         <TableCell>{cita.materia}</TableCell>
                                                         <TableCell>{new Date(cita.fecha).toLocaleDateString('es-MX')}</TableCell>
                                                         <TableCell>{cita.inscritos}</TableCell>
                                                         <TableCell>{cita.capacidad}</TableCell>
                                                         <TableCell>
-                                                            <Chip 
-                                                                label={`${Math.round((cita.inscritos / cita.capacidad) * 100)}%`}
-                                                                size="small"
-                                                                sx={{ bgcolor: cita.inscritos >= cita.capacidad ? '#dc3545' : '#28a745', color: 'white' }}
-                                                            />
+                                                            <div className="reportes-ocupacion">
+                                                                <div 
+                                                                    className="reportes-ocupacion-bar"
+                                                                    style={{ width: `${Math.round((cita.inscritos / cita.capacidad) * 100)}%` }}
+                                                                />
+                                                                <span className="reportes-ocupacion-text">
+                                                                    {Math.round((cita.inscritos / cita.capacidad) * 100)}%
+                                                                </span>
+                                                            </div>
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
@@ -364,6 +418,7 @@ const Reportes: React.FC = () => {
                             <div className="reportes-grid reportes-grid-2">
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <SchoolIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.totalInscripciones || 0}
                                         </Typography>
@@ -372,6 +427,7 @@ const Reportes: React.FC = () => {
                                 </Card>
                                 <Card className="reportes-card">
                                     <CardContent>
+                                        <TrendingUpIcon className="reportes-card-icon" />
                                         <Typography variant="h4" className="reportes-card-number">
                                             {stats.citasPorEstado?.find((e: any) => e.estado === 'disponible')?.total || 0}
                                         </Typography>
@@ -383,54 +439,54 @@ const Reportes: React.FC = () => {
                             <div className="reportes-grid reportes-grid-2">
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Materias que más has tomado
+                                        Temas que más has Tomado
                                     </Typography>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <BarChart data={stats.topMaterias} layout="vertical">
                                             <CartesianGrid strokeDasharray="3 3" />
                                             <XAxis type="number" />
-                                            <YAxis type="category" dataKey="materia" width={100} />
-                                            <Tooltip />
-                                            <Bar dataKey="total" fill="#D6A600" />
+                                            <YAxis type="category" dataKey="materia" width={120} />
+                                            <RechartsTooltip />
+                                            <Bar dataKey="total" fill="#D6A600" radius={[0, 8, 8, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </Paper>
 
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
-                                        Tutores que más te han apoyado
+                                        Tutores que más te han Apoyado
                                     </Typography>
                                     <ResponsiveContainer width="100%" height={300}>
                                         <BarChart data={stats.topTutores} layout="vertical">
                                             <CartesianGrid strokeDasharray="3 3" />
                                             <XAxis type="number" />
-                                            <YAxis type="category" dataKey="tutor_nombre" width={120} />
-                                            <Tooltip />
-                                            <Bar dataKey="total" fill="#17a2b8" />
+                                            <YAxis type="category" dataKey="tutor_nombre" width={140} />
+                                            <RechartsTooltip />
+                                            <Bar dataKey="total" fill="#17a2b8" radius={[0, 8, 8, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </Paper>
                             </div>
 
-                            <div className="reportes-grid reportes-grid-1">
+                            <div className="reportes-grid reportes-grid-2">
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Próximas Citas
                                     </Typography>
-                                    <TableContainer component={Paper} sx={{ mt: 2 }}>
+                                    <TableContainer component={Paper} sx={{ mt: 2, borderRadius: 2 }}>
                                         <Table>
                                             <TableHead>
                                                 <TableRow sx={{ bgcolor: '#003DA5' }}>
-                                                    <TableCell sx={{ color: 'white' }}>Materia</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Tutor</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Fecha</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Hora</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Lugar</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tema</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tutor</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Fecha</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Hora</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Lugar</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
                                                 {stats.proximasCitas?.map((cita: any, idx: number) => (
-                                                    <TableRow key={idx}>
+                                                    <TableRow key={idx} hover>
                                                         <TableCell>{cita.materia}</TableCell>
                                                         <TableCell>{cita.tutor_nombre}</TableCell>
                                                         <TableCell>{new Date(cita.fecha).toLocaleDateString('es-MX')}</TableCell>
@@ -447,28 +503,26 @@ const Reportes: React.FC = () => {
                                         </Table>
                                     </TableContainer>
                                 </Paper>
-                            </div>
 
-                            <div className="reportes-grid reportes-grid-1">
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Historial de Citas
                                     </Typography>
-                                    <TableContainer component={Paper} sx={{ mt: 2 }}>
+                                    <TableContainer component={Paper} sx={{ mt: 2, borderRadius: 2 }}>
                                         <Table>
                                             <TableHead>
                                                 <TableRow sx={{ bgcolor: '#003DA5' }}>
-                                                    <TableCell sx={{ color: 'white' }}>Materia</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Tutor</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Fecha</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Hora</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Lugar</TableCell>
-                                                    <TableCell sx={{ color: 'white' }}>Estado</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tema</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tutor</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Fecha</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Hora</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Lugar</TableCell>
+                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Estado</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
                                                 {stats.historialCitas?.map((cita: any, idx: number) => (
-                                                    <TableRow key={idx}>
+                                                    <TableRow key={idx} hover>
                                                         <TableCell>{cita.materia}</TableCell>
                                                         <TableCell>{cita.tutor_nombre}</TableCell>
                                                         <TableCell>{new Date(cita.fecha).toLocaleDateString('es-MX')}</TableCell>
