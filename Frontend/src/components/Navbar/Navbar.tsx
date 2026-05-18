@@ -5,8 +5,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Logo from "../../assets/icons/unam_logo.svg";
 import Login from "../../pages/Login/Login";
 import Registro from "../../pages/Registro/Registro";
-import Notificaciones from '../Notificaciones/Notificaciones';
 import { isAuthenticated, logout } from "../../services/api";
+import Notificaciones from "../Notificaciones/Notificaciones";
+import PerfilUsuario from "../PerfilUsuario/PerfilUsuario";
 
 interface NavbarProps {
   onLoginClick?: () => void;
@@ -18,6 +19,7 @@ function Navbar({ onLoginClick }: NavbarProps) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegistroModalOpen, setIsRegistroModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [openPerfilModal, setOpenPerfilModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const isScrolling = useRef(false);
@@ -142,8 +144,39 @@ function Navbar({ onLoginClick }: NavbarProps) {
     setIsRegistroModalOpen(false);
   };
 
+  const handleOpenPerfil = () => {
+    setOpenPerfilModal(true);
+  };
+
+  const handlePerfilUpdate = () => {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      // Actualizar el nombre en el navbar si es necesario
+    }
+  };
+
+  const handleOpenNotificaciones = () => {
+    // Abrir el modal de notificaciones
+    const event = new CustomEvent('openNotificacionesModal');
+    window.dispatchEvent(event);
+  };
+
   const isActive = (sectionId: string) => {
     return location.pathname === "/" && activeSection === sectionId;
+  };
+
+  // Obtener iniciales del usuario
+  const getUserInitials = () => {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      const nombre = user.nombre || user.nombre_completo || '';
+      if (nombre) {
+        return nombre.charAt(0).toUpperCase();
+      }
+    }
+    return 'U';
   };
 
   return (
@@ -153,7 +186,6 @@ function Navbar({ onLoginClick }: NavbarProps) {
           <img src={Logo} className="logo-icon" alt="Logo UNAM" />
           <span className="logo-pit">PIT</span>
           <span className="logo-fes">FES ACATLÁN</span>
-          <Notificaciones />
         </NavLink>
 
         <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
@@ -210,10 +242,25 @@ function Navbar({ onLoginClick }: NavbarProps) {
             )}
           </li>
         </ul>
+
+        {/* Avatar del usuario - solo cuando está logueado */}
+        {isLoggedIn && (
+          <div className="user-avatar-container">
+            <div className="user-avatar" onClick={handleOpenPerfil}>
+              {getUserInitials()}
+            </div>
+            <Notificaciones />
+          </div>
+        )}
       </nav>
 
       <Login isOpen={isLoginModalOpen} onClose={handleCloseLoginModal} />
       <Registro isOpen={isRegistroModalOpen} onClose={handleCloseRegistroModal} />
+      <PerfilUsuario 
+        open={openPerfilModal} 
+        onClose={() => setOpenPerfilModal(false)}
+        onUpdate={handlePerfilUpdate}
+      />
     </>
   );
 }

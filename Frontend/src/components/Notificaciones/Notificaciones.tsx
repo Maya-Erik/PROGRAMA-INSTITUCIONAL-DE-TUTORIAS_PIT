@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    IconButton, Badge, Menu, MenuItem, Typography, Box,
-    Divider, Button, List, ListItemText, ListItemIcon,
-    Chip, CircularProgress, Tooltip
+    Dialog, DialogTitle, DialogContent, DialogActions,
+    IconButton, Badge, Typography, Box, Divider, Button,
+    List, ListItem, ListItemText, ListItemIcon, Chip,
+    CircularProgress, Tooltip
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -32,9 +34,9 @@ interface Notificacion {
 const Notificaciones: React.FC = () => {
     const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
     const [noLeidas, setNoLeidas] = useState(0);
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const intervalRef = useRef<number | null>(null);
+    const intervalRef = React.useRef<number | null>(null);
 
     const cargarNotificaciones = async () => {
         setLoading(true);
@@ -54,24 +56,32 @@ const Notificaciones: React.FC = () => {
     useEffect(() => {
         cargarNotificaciones();
         
-        // Actualizar cada 30 segundos
         intervalRef.current = window.setInterval(() => {
             cargarNotificaciones();
         }, 30000);
+        
+        // Escuchar evento para abrir desde el navbar
+        const handleOpenModal = () => {
+            setOpen(true);
+            cargarNotificaciones();
+        };
+        window.addEventListener('openNotificacionesModal', handleOpenModal);
         
         return () => {
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
             }
+            window.removeEventListener('openNotificacionesModal', handleOpenModal);
         };
     }, []);
 
-    const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
+    const handleOpen = () => {
+        setOpen(true);
+        cargarNotificaciones();
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
+        setOpen(false);
     };
 
     const handleMarcarLeida = async (id: number) => {
@@ -122,7 +132,7 @@ const Notificaciones: React.FC = () => {
                 <IconButton 
                     onClick={handleOpen} 
                     className="notificaciones-boton"
-                    size="large"
+                    size="small"
                 >
                     <Badge 
                         badgeContent={noLeidas} 
@@ -133,101 +143,105 @@ const Notificaciones: React.FC = () => {
                     </Badge>
                 </IconButton>
             </Tooltip>
-            
-            <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
+
+            <Dialog 
+                open={open} 
                 onClose={handleClose}
-                className="notificaciones-menu"
+                maxWidth="sm"
+                fullWidth
+                className="notificaciones-dialog"
                 PaperProps={{
-                    className: 'notificaciones-paper'
-                }}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    className: 'notificaciones-dialog-paper'
                 }}
             >
-                <Box className="notificaciones-header">
+                <DialogTitle className="notificaciones-dialog-titulo">
                     <Typography variant="h6">Notificaciones</Typography>
+                    <IconButton onClick={handleClose} className="notificaciones-dialog-close">
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                
+                <Divider />
+                
+                <DialogContent className="notificaciones-dialog-content">
                     {notificaciones.length > 0 && (
-                        <Button 
-                            size="small" 
-                            onClick={handleMarcarTodasLeidas}
-                            startIcon={<DoneAllIcon />}
-                        >
-                            Marcar todas
-                        </Button>
-                    )}
-                </Box>
-                <Divider />
-                
-                {loading ? (
-                    <Box className="notificaciones-loading">
-                        <CircularProgress size={30} />
-                    </Box>
-                ) : notificaciones.length === 0 ? (
-                    <Box className="notificaciones-vacio">
-                        <NotificationsNoneIcon className="notificaciones-vacio-icon" />
-                        <Typography variant="body2" color="textSecondary">
-                            No hay notificaciones
-                        </Typography>
-                    </Box>
-                ) : (
-                    <List className="notificaciones-lista">
-                        {notificaciones.map((notif) => (
-                            <MenuItem 
-                                key={notif.id_notificacion} 
-                                className={`notificacion-item ${!notif.leida ? 'no-leida' : ''}`}
-                                onClick={() => handleMarcarLeida(notif.id_notificacion)}
+                        <Box className="notificaciones-dialog-actions">
+                            <Button 
+                                size="small" 
+                                onClick={handleMarcarTodasLeidas}
+                                startIcon={<DoneAllIcon />}
+                                disabled={noLeidas === 0}
                             >
-                                <ListItemIcon>
-                                    {getIcono(notif.tipo)}
-                                </ListItemIcon>
-                                <ListItemText 
-                                    primary={
-                                        <Box className="notificacion-titulo">
-                                            <Typography variant="subtitle2" component="span">
-                                                {notif.titulo}
-                                            </Typography>
-                                            <Chip 
-                                                label={formatFecha(notif.fecha)} 
-                                                size="small" 
-                                                className="notificacion-fecha"
-                                            />
-                                        </Box>
-                                    }
-                                    secondary={
-                                        <Typography variant="body2" className="notificacion-mensaje">
-                                            {notif.mensaje}
-                                        </Typography>
-                                    }
-                                />
-                                <IconButton 
-                                    size="small" 
-                                    className="notificacion-eliminar"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleEliminar(notif.id_notificacion);
-                                    }}
+                                Marcar todas como leídas
+                            </Button>
+                        </Box>
+                    )}
+                    
+                    {loading ? (
+                        <Box className="notificaciones-loading">
+                            <CircularProgress size={40} />
+                            <Typography>Cargando...</Typography>
+                        </Box>
+                    ) : notificaciones.length === 0 ? (
+                        <Box className="notificaciones-vacio">
+                            <NotificationsNoneIcon className="notificaciones-vacio-icon" />
+                            <Typography variant="body1">No hay notificaciones</Typography>
+                            <Typography variant="body2" color="textSecondary">
+                                Cuando tengas notificaciones, aparecerán aquí
+                            </Typography>
+                        </Box>
+                    ) : (
+                        <List className="notificaciones-lista">
+                            {notificaciones.map((notif) => (
+                                <ListItem 
+                                    key={notif.id_notificacion} 
+                                    className={`notificacion-item ${!notif.leida ? 'no-leida' : ''}`}
+                                    onClick={() => handleMarcarLeida(notif.id_notificacion)}
                                 >
-                                    <DeleteIcon fontSize="small" />
-                                </IconButton>
-                            </MenuItem>
-                        ))}
-                    </List>
-                )}
+                                    <ListItemIcon>
+                                        {getIcono(notif.tipo)}
+                                    </ListItemIcon>
+                                    <ListItemText 
+                                        primary={
+                                            <Box className="notificacion-item-titulo">
+                                                <Typography variant="subtitle2" component="span" fontWeight={!notif.leida ? 600 : 400}>
+                                                    {notif.titulo}
+                                                </Typography>
+                                                <Chip 
+                                                    label={formatFecha(notif.fecha)} 
+                                                    size="small" 
+                                                    className="notificacion-fecha-chip"
+                                                />
+                                            </Box>
+                                        }
+                                        secondary={
+                                            <Typography variant="body2" className="notificacion-item-mensaje">
+                                                {notif.mensaje}
+                                            </Typography>
+                                        }
+                                    />
+                                    <IconButton 
+                                        size="small" 
+                                        className="notificacion-item-eliminar"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleEliminar(notif.id_notificacion);
+                                        }}
+                                    >
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                    )}
+                </DialogContent>
                 
-                <Divider />
-                <Box className="notificaciones-footer">
-                    <Button size="small" onClick={handleClose}>
+                <DialogActions className="notificaciones-dialog-acciones">
+                    <Button onClick={handleClose} fullWidth>
                         Cerrar
                     </Button>
-                </Box>
-            </Menu>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };

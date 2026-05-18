@@ -120,6 +120,35 @@ section,
   color: var(--color-primary);
 }
 
+/* Avatar del usuario y notificaciones */
+.user-avatar-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 20px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #003DA5 0%, #001F54 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 900px) {
   .menu { gap: 12px; }
@@ -159,6 +188,18 @@ section,
     flex-direction: column;
     width: 100%;
     gap: var(--spacing-sm);
+  }
+  
+  .user-avatar-container {
+    position: absolute;
+    top: 15px;
+    right: 70px;
+  }
+  
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
   }
   
   .logo { font-size: 18px; }
