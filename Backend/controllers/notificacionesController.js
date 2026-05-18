@@ -1,5 +1,10 @@
 const db = require("../connection");
 
+// ============================================
+// FUNCIONES PRINCIPALES
+// ============================================
+
+// Obtener notificaciones del usuario
 exports.obtenerNotificaciones = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -71,18 +76,6 @@ exports.marcarTodasLeidas = async (req, res) => {
     }
 };
 
-// Crear notificación (función interna, llamada desde otros controladores)
-const crearNotificacion = async (userId, titulo, mensaje, tipo = 'info') => {
-    try {
-        await db.query(`
-            INSERT INTO tr_notificaciones (id_usuario, titulo, mensaje, tipo, fecha)
-            VALUES ($1, $2, $3, $4, NOW())
-        `, [userId, titulo, mensaje, tipo]);
-    } catch (error) {
-        console.error("Error al crear notificación:", error);
-    }
-};
-
 // Eliminar notificación
 exports.eliminarNotificacion = async (req, res) => {
     try {
@@ -106,10 +99,20 @@ exports.eliminarNotificacion = async (req, res) => {
     }
 };
 
-module.exports = {
-    obtenerNotificaciones,
-    marcarLeida,
-    marcarTodasLeidas,
-    eliminarNotificacion,
-    crearNotificacion  
+// ============================================
+// FUNCIÓN INTERNA PARA CREAR NOTIFICACIONES
+// ============================================
+const crearNotificacion = async (userId, titulo, mensaje, tipo = 'info') => {
+    try {
+        await db.query(`
+            INSERT INTO tr_notificaciones (id_usuario, titulo, mensaje, tipo, fecha)
+            VALUES ($1, $2, $3, $4, NOW())
+        `, [userId, titulo, mensaje, tipo]);
+        console.log(`Notificación creada para usuario ${userId}: ${titulo}`);
+    } catch (error) {
+        console.error("Error al crear notificación:", error);
+    }
 };
+
+// Exportar la función interna también
+exports.crearNotificacion = crearNotificacion;
