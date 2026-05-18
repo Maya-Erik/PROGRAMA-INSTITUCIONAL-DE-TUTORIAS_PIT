@@ -8,7 +8,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import EventNoteIcon from '@mui/icons-material/EventNote'
 import LogoutIcon from '@mui/icons-material/Logout'
 import CloseIcon from '@mui/icons-material/Close'
-import BarChartIcon from '@mui/icons-material/BarChart';
+import BarChartIcon from '@mui/icons-material/BarChart'
 import { useSidebar } from '../../context/SidebarContext'
 
 interface SidebarProps {
@@ -35,12 +35,10 @@ function Sidebar({ userRole }: SidebarProps) {
     }
   }
 
-  // Clases para la sidebar
-  const sidebarClasses = `sidebar ${isMobile ? 'mobile' : ''} ${sidebarOpen ? 'open' : 'closed'}`
+  const sidebarClasses = `sidebar ${isMobile ? 'mobile' : ''} ${sidebarOpen ? 'open' : ''}`
 
   return (
     <>
-      {/* Overlay para móvil */}
       {isMobile && sidebarOpen && (
         <div className="sidebar-overlay" onClick={closeSidebar} />
       )}
@@ -85,18 +83,34 @@ function Sidebar({ userRole }: SidebarProps) {
               <Link to="/admin/materiales" className={`nav-item ${isActive("/admin/materiales") ? "active" : ""}`} onClick={handleLinkClick}>
                 <MenuBookIcon fontSize="small" /> Gestionar Materiales
               </Link>
+              {/* Reportes para admin */}
+              <Link to="/reportes" className={`nav-item ${isActive("/reportes") ? "active" : ""}`} onClick={handleLinkClick}>
+                <BarChartIcon fontSize="small" /> Reportes y Estadísticas
+              </Link>
             </>
           )}
 
-          {/* Solo tutor ve bitácora */}
+          {/* Tutor ve bitácora y reportes */}
           {userRole === 'tutor' && (
-            <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`} onClick={handleLinkClick}>
-              <AssignmentIcon fontSize="small" /> Bitácora
-            </Link>
-            
+            <>
+              <Link to="/bitacora" className={`nav-item ${isActive("/bitacora") ? "active" : ""}`} onClick={handleLinkClick}>
+                <AssignmentIcon fontSize="small" /> Bitácora
+              </Link>
+              {/* Reportes para tutor */}
+              <Link to="/reportes" className={`nav-item ${isActive("/reportes") ? "active" : ""}`} onClick={handleLinkClick}>
+                <BarChartIcon fontSize="small" /> Reportes y Estadísticas
+              </Link>
+            </>
           )}
 
-          {/* Enlaces comunes para todos */}
+          {/* Tutorado ve reportes */}
+          {userRole === 'tutorado' && (
+            <Link to="/reportes" className={`nav-item ${isActive("/reportes") ? "active" : ""}`} onClick={handleLinkClick}>
+              <BarChartIcon fontSize="small" /> Reportes y Estadísticas
+            </Link>
+          )}
+
+          {/* Enlaces comunes para todos (excepto reportes que ya está arriba) */}
           <Link to="/agenda" className={`nav-item ${isActive("/agenda") ? "active" : ""}`} onClick={handleLinkClick}>
             <EventNoteIcon fontSize="small" /> Agenda de Tutorías
           </Link>
@@ -107,10 +121,6 @@ function Sidebar({ userRole }: SidebarProps) {
           
           <Link to="/repositorio" className={`nav-item ${isActive("/repositorio") ? "active" : ""}`} onClick={handleLinkClick}>
             <MenuBookIcon fontSize="small" /> Repositorio
-          </Link>
-
-          <Link to="/reportes" className={`nav-item ${isActive("/reportes") ? "active" : ""}`} onClick={handleLinkClick}>
-            <BarChartIcon fontSize="small" /> Reportes y Estadísticas
           </Link>
         </nav>
 
