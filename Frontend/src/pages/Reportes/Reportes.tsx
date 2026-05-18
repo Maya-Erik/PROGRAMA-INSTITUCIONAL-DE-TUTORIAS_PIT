@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     Typography, Paper, Card, CardContent,
-    CircularProgress, Chip, Table, TableHead, TableRow, TableCell,
-    TableBody, TableContainer, Button, Tooltip
+    CircularProgress, Chip, Button, Tooltip
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -227,40 +226,44 @@ const Reportes: React.FC = () => {
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Usuarios por Rol
                                     </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <PieChart>
-                                            <Pie
-                                                data={stats.usuariosPorRol}
-                                                dataKey="total"
-                                                nameKey="nombre_rol"
-                                                cx="50%"
-                                                cy="50%"
-                                                outerRadius={80}
-                                                label
-                                            >
-                                                {stats.usuariosPorRol?.map((_entry: any, index: number) => (
-                                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                                ))}
-                                            </Pie>
-                                            <RechartsTooltip />
-                                            
-                                        </PieChart>
-                                    </ResponsiveContainer>
+                                    <div className="reportes-chart-container">
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <PieChart>
+                                                <Pie
+                                                    data={stats.usuariosPorRol}
+                                                    dataKey="total"
+                                                    nameKey="nombre_rol"
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    outerRadius={80}
+                                                    label
+                                                >
+                                                    {stats.usuariosPorRol?.map((_entry: any, index: number) => (
+                                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                    ))}
+                                                </Pie>
+                                                <RechartsTooltip />
+                                                
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </Paper>
 
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Citas por Mes
                                     </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <LineChart data={stats.citasPorMes}>
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="mes" />
-                                            <YAxis />
-                                            <RechartsTooltip />
-                                            <Line type="monotone" dataKey="total" stroke="#D6A600" strokeWidth={2} />
-                                        </LineChart>
-                                    </ResponsiveContainer>
+                                    <div className="reportes-chart-container">
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <LineChart data={stats.citasPorMes}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="mes" />
+                                                <YAxis />
+                                                <RechartsTooltip />
+                                                <Line type="monotone" dataKey="total" stroke="#D6A600" strokeWidth={2} />
+                                            </LineChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </Paper>
                             </div>
 
@@ -269,30 +272,34 @@ const Reportes: React.FC = () => {
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Top 5 Temas más Solicitados
                                     </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <BarChart data={stats.topMaterias} layout="vertical">
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis type="number" />
-                                            <YAxis type="category" dataKey="materia" width={120} />
-                                            <RechartsTooltip />
-                                            <Bar dataKey="total" fill="#17a2b8" radius={[0, 8, 8, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                                    <div className="reportes-chart-container">
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <BarChart data={stats.topMaterias} layout="vertical">
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis type="number" />
+                                                <YAxis type="category" dataKey="materia" width={120} />
+                                                <RechartsTooltip />
+                                                <Bar dataKey="total" fill="#17a2b8" radius={[0, 8, 8, 0]} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </Paper>
 
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Top 5 Tutores con más Citas
                                     </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <BarChart data={stats.topTutores} layout="vertical">
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis type="number" />
-                                            <YAxis type="category" dataKey="tutor_nombre" width={140} />
-                                            <RechartsTooltip />
-                                            <Bar dataKey="total" fill="#28a745" radius={[0, 8, 8, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                                    <div className="reportes-chart-container">
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <BarChart data={stats.topTutores} layout="vertical">
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis type="number" />
+                                                <YAxis type="category" dataKey="tutor_nombre" width={140} />
+                                                <RechartsTooltip />
+                                                <Bar dataKey="total" fill="#28a745" radius={[0, 8, 8, 0]} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </Paper>
                             </div>
                         </>
@@ -336,30 +343,34 @@ const Reportes: React.FC = () => {
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Top Temas que Impartes
                                     </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <BarChart data={stats.topMaterias} layout="vertical">
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis type="number" />
-                                            <YAxis type="category" dataKey="materia" width={120} />
-                                            <RechartsTooltip />
-                                            <Bar dataKey="total" fill="#D6A600" radius={[0, 8, 8, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                                    <div className="reportes-chart-container">
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <BarChart data={stats.topMaterias} layout="vertical">
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis type="number" />
+                                                <YAxis type="category" dataKey="materia" width={120} />
+                                                <RechartsTooltip />
+                                                <Bar dataKey="total" fill="#D6A600" radius={[0, 8, 8, 0]} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </Paper>
 
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Citas por Mes
                                     </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <LineChart data={stats.citasPorMes}>
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="mes" />
-                                            <YAxis />
-                                            <RechartsTooltip />
-                                            <Line type="monotone" dataKey="total" stroke="#003DA5" strokeWidth={2} />
-                                        </LineChart>
-                                    </ResponsiveContainer>
+                                    <div className="reportes-chart-container">
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <LineChart data={stats.citasPorMes}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="mes" />
+                                                <YAxis />
+                                                <RechartsTooltip />
+                                                <Line type="monotone" dataKey="total" stroke="#003DA5" strokeWidth={2} />
+                                            </LineChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </Paper>
                             </div>
 
@@ -368,25 +379,25 @@ const Reportes: React.FC = () => {
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Detalle de Inscripciones por Cita
                                     </Typography>
-                                    <TableContainer component={Paper} sx={{ mt: 2, borderRadius: 2 }}>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow sx={{ bgcolor: '#003DA5' }}>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tema</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Fecha</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Inscritos</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Capacidad</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Ocupación</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
+                                    <div className="reportes-table-container">
+                                        <table className="reportes-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tema</th>
+                                                    <th>Fecha</th>
+                                                    <th>Inscritos</th>
+                                                    <th>Capacidad</th>
+                                                    <th>Ocupación</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                                 {stats.inscripcionesPorCita?.map((cita: any, idx: number) => (
-                                                    <TableRow key={idx} hover>
-                                                        <TableCell>{cita.materia}</TableCell>
-                                                        <TableCell>{new Date(cita.fecha).toLocaleDateString('es-MX')}</TableCell>
-                                                        <TableCell>{cita.inscritos}</TableCell>
-                                                        <TableCell>{cita.capacidad}</TableCell>
-                                                        <TableCell>
+                                                    <tr key={idx}>
+                                                        <td>{cita.materia}</td>
+                                                        <td>{new Date(cita.fecha).toLocaleDateString('es-MX')}</td>
+                                                        <td>{cita.inscritos}</td>
+                                                        <td>{cita.capacidad}</td>
+                                                        <td>
                                                             <div className="reportes-ocupacion">
                                                                 <div 
                                                                     className="reportes-ocupacion-bar"
@@ -396,17 +407,17 @@ const Reportes: React.FC = () => {
                                                                     {Math.round((cita.inscritos / cita.capacidad) * 100)}%
                                                                 </span>
                                                             </div>
-                                                        </TableCell>
-                                                    </TableRow>
+                                                        </td>
+                                                    </tr>
                                                 ))}
                                                 {(!stats.inscripcionesPorCita || stats.inscripcionesPorCita.length === 0) && (
-                                                    <TableRow>
-                                                        <TableCell colSpan={5} align="center">No hay datos disponibles</TableCell>
-                                                    </TableRow>
+                                                    <tr>
+                                                        <td colSpan={5} style={{ textAlign: 'center' }}>No hay datos disponibles</td>
+                                                    </tr>
                                                 )}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </Paper>
                             </div>
                         </>
@@ -441,30 +452,34 @@ const Reportes: React.FC = () => {
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Temas que más has Tomado
                                     </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <BarChart data={stats.topMaterias} layout="vertical">
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis type="number" />
-                                            <YAxis type="category" dataKey="materia" width={120} />
-                                            <RechartsTooltip />
-                                            <Bar dataKey="total" fill="#D6A600" radius={[0, 8, 8, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                                    <div className="reportes-chart-container">
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <BarChart data={stats.topMaterias} layout="vertical">
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis type="number" />
+                                                <YAxis type="category" dataKey="materia" width={120} />
+                                                <RechartsTooltip />
+                                                <Bar dataKey="total" fill="#D6A600" radius={[0, 8, 8, 0]} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </Paper>
 
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Tutores que más te han Apoyado
                                     </Typography>
-                                    <ResponsiveContainer width="100%" height={300}>
-                                        <BarChart data={stats.topTutores} layout="vertical">
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis type="number" />
-                                            <YAxis type="category" dataKey="tutor_nombre" width={140} />
-                                            <RechartsTooltip />
-                                            <Bar dataKey="total" fill="#17a2b8" radius={[0, 8, 8, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                                    <div className="reportes-chart-container">
+                                        <ResponsiveContainer width="100%" height={300}>
+                                            <BarChart data={stats.topTutores} layout="vertical">
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis type="number" />
+                                                <YAxis type="category" dataKey="tutor_nombre" width={140} />
+                                                <RechartsTooltip />
+                                                <Bar dataKey="total" fill="#17a2b8" radius={[0, 8, 8, 0]} />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </Paper>
                             </div>
 
@@ -473,78 +488,78 @@ const Reportes: React.FC = () => {
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Próximas Citas
                                     </Typography>
-                                    <TableContainer component={Paper} sx={{ mt: 2, borderRadius: 2 }}>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow sx={{ bgcolor: '#003DA5' }}>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tema</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tutor</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Fecha</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Hora</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Lugar</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
+                                    <div className="reportes-table-container">
+                                        <table className="reportes-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tema</th>
+                                                    <th>Tutor</th>
+                                                    <th>Fecha</th>
+                                                    <th>Hora</th>
+                                                    <th>Lugar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                                 {stats.proximasCitas?.map((cita: any, idx: number) => (
-                                                    <TableRow key={idx} hover>
-                                                        <TableCell>{cita.materia}</TableCell>
-                                                        <TableCell>{cita.tutor_nombre}</TableCell>
-                                                        <TableCell>{new Date(cita.fecha).toLocaleDateString('es-MX')}</TableCell>
-                                                        <TableCell>{cita.hora}</TableCell>
-                                                        <TableCell>{cita.lugar || 'Por asignar'}</TableCell>
-                                                    </TableRow>
+                                                    <tr key={idx}>
+                                                        <td>{cita.materia}</td>
+                                                        <td>{cita.tutor_nombre}</td>
+                                                        <td>{new Date(cita.fecha).toLocaleDateString('es-MX')}</td>
+                                                        <td>{cita.hora}</td>
+                                                        <td>{cita.lugar || 'Por asignar'}</td>
+                                                    </tr>
                                                 ))}
                                                 {(!stats.proximasCitas || stats.proximasCitas.length === 0) && (
-                                                    <TableRow>
-                                                        <TableCell colSpan={5} align="center">No hay próximas citas</TableCell>
-                                                    </TableRow>
+                                                    <tr>
+                                                        <td colSpan={5} style={{ textAlign: 'center' }}>No hay próximas citas</td>
+                                                    </tr>
                                                 )}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </Paper>
 
                                 <Paper className="reportes-grafica">
                                     <Typography variant="h6" className="reportes-grafica-titulo">
                                         Historial de Citas
                                     </Typography>
-                                    <TableContainer component={Paper} sx={{ mt: 2, borderRadius: 2 }}>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow sx={{ bgcolor: '#003DA5' }}>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tema</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Tutor</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Fecha</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Hora</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Lugar</TableCell>
-                                                    <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Estado</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
+                                    <div className="reportes-table-container">
+                                        <table className="reportes-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tema</th>
+                                                    <th>Tutor</th>
+                                                    <th>Fecha</th>
+                                                    <th>Hora</th>
+                                                    <th>Lugar</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                                 {stats.historialCitas?.map((cita: any, idx: number) => (
-                                                    <TableRow key={idx} hover>
-                                                        <TableCell>{cita.materia}</TableCell>
-                                                        <TableCell>{cita.tutor_nombre}</TableCell>
-                                                        <TableCell>{new Date(cita.fecha).toLocaleDateString('es-MX')}</TableCell>
-                                                        <TableCell>{cita.hora}</TableCell>
-                                                        <TableCell>{cita.lugar || 'Por asignar'}</TableCell>
-                                                        <TableCell>
+                                                    <tr key={idx}>
+                                                        <td>{cita.materia}</td>
+                                                        <td>{cita.tutor_nombre}</td>
+                                                        <td>{new Date(cita.fecha).toLocaleDateString('es-MX')}</td>
+                                                        <td>{cita.hora}</td>
+                                                        <td>{cita.lugar || 'Por asignar'}</td>
+                                                        <td>
                                                             <Chip 
                                                                 label={cita.estado === 'disponible' ? 'Activa' : 'Completada'}
                                                                 size="small"
                                                                 sx={{ bgcolor: cita.estado === 'disponible' ? '#28a745' : '#6c757d', color: 'white' }}
                                                             />
-                                                        </TableCell>
-                                                    </TableRow>
+                                                        </td>
+                                                    </tr>
                                                 ))}
                                                 {(!stats.historialCitas || stats.historialCitas.length === 0) && (
-                                                    <TableRow>
-                                                        <TableCell colSpan={6} align="center">No hay historial de citas</TableCell>
-                                                    </TableRow>
+                                                    <tr>
+                                                        <td colSpan={6} style={{ textAlign: 'center' }}>No hay historial de citas</td>
+                                                    </tr>
                                                 )}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </Paper>
                             </div>
                         </>

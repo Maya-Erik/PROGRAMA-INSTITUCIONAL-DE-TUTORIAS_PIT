@@ -58,6 +58,16 @@ exports.crearCita = async (req, res) => {
             VALUES ($1, $2, $3, $4, $5, 0, $6, $7, $8, 'disponible', 'Salón sujeto a disponibilidad')
             RETURNING *
         `;
+
+        // Notificar al tutor (si es admin quien crea)
+        if (req.user.role === 'admin') {
+            await crearNotificacion(
+                tutorId,
+                'Nueva tutoría asignada',
+                `Se te ha asignado una nueva tutoría: ${materia}`,
+                'info'
+            );
+        }
         
         const result = await db.query(query, [materia, tutor_nombre, fecha, hora, capacidad, tipo, carrera, userId]);
         res.json({ success: true, cita: result.rows[0] });
@@ -147,6 +157,8 @@ exports.inscribirseCita = async (req, res) => {
         if (checkInscripcion.rows.length > 0) {
             return res.status(400).json({ success: false, error: "Ya estás inscrito en esta cita" });
         }
+
+        const { crearNotificacion } = require('./notificacionesController');
         
         const citaQuery = await db.query(
             `SELECT capacidad, inscritos FROM tr_citas WHERE id_cita = $1 AND estado = 'disponible'`,
@@ -171,6 +183,28 @@ exports.inscribirseCita = async (req, res) => {
         await db.query(
             `UPDATE tr_citas SET inscritos = inscritos + 1 WHERE id_cita = $1`,
             [id]
+        );
+
+        // Notificar al tutor
+        const tutorQuery = await db.query(
+            "SELECT id_creador FROM tr_citas WHERE id_cita = $1",
+            [id]
+        );
+        if (tutorQuery.rows.length > 0) {
+            await crearNotificacion(
+                tutorQuery.rows[0].id_creador,
+                'Nueva inscripción',
+                `Un alumno se ha inscrito a tu tutoría: ${citaData.materia}`,
+                'success'
+            );
+        }
+
+        // Notificar al alumno
+        await crearNotificacion(
+            userId,
+            'Inscripción exitosa',
+            `Te has inscrito correctamente a la tutoría de ${citaData.materia}`,
+            'success'
         );
         
         res.json({ success: true, message: "Te has inscrito correctamente" });
@@ -205,6 +239,22 @@ exports.cancelarInscripcionCita = async (req, res) => {
         await db.query(
             `UPDATE tr_citas SET inscritos = inscritos - 1 WHERE id_cita = $1`,
             [id]
+        );
+
+        // Notificar al tutor
+        await crearNotificacion(
+            tutorId,
+            'Cancelación de inscripción',
+            `Un alumno ha cancelado su inscripción a la tutoría: ${citaData.materia}`,
+            'warning'
+        );
+
+        // Notificar al alumno
+        await crearNotificacion(
+            userId,
+            'Inscripción cancelada',
+            `Has cancelado tu inscripción a la tutoría de ${citaData.materia}`,
+            'info'
         );
         
         res.json({ success: true, message: "Has cancelado tu inscripción correctamente" });

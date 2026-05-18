@@ -5,6 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Logo from "../../assets/icons/unam_logo.svg";
 import Login from "../../pages/Login/Login";
 import Registro from "../../pages/Registro/Registro";
+import Notificaciones from '../Notificaciones/Notificaciones';
 import { isAuthenticated, logout } from "../../services/api";
 
 interface NavbarProps {
@@ -152,6 +153,7 @@ function Navbar({ onLoginClick }: NavbarProps) {
           <img src={Logo} className="logo-icon" alt="Logo UNAM" />
           <span className="logo-pit">PIT</span>
           <span className="logo-fes">FES ACATLÁN</span>
+          <Notificaciones />
         </NavLink>
 
         <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>

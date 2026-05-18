@@ -1,0 +1,136 @@
+.notificaciones-boton {
+    color: #333 !important;
+}
+
+.notificaciones-menu .MuiPaper-root {
+    width: 380px;
+    max-width: 90vw;
+    max-height: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.notificaciones-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #003DA5;
+    color: white;
+}
+
+.notificaciones-header h6 {
+    color: white;
+    font-weight: 600;
+}
+
+.notificaciones-header button {
+    color: white;
+}
+
+.notificaciones-loading {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.notificaciones-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    gap: 10px;
+}
+
+.notificaciones-vacio-icon {
+    font-size: 48px;
+    color: #ccc;
+}
+
+.notificaciones-lista {
+    padding: 0 !important;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notificacion-item {
+    display: flex !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s;
+}
+
+.notificacion-item:hover {
+    background: #f5f5f5;
+}
+
+.notificacion-item.no-leida {
+    background: #f0f7ff;
+}
+
+.notificacion-item.no-leida:hover {
+    background: #e8f0fe;
+}
+
+.notificacion-titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.notificacion-fecha {
+    font-size: 10px !important;
+    height: 20px !important;
+}
+
+.notificacion-mensaje {
+    color: #666;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.notificacion-eliminar {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.notificacion-item:hover .notificacion-eliminar {
+    opacity: 1;
+}
+
+/* Iconos por tipo */
+.notificacion-icon-success {
+    color: #28a745;
+}
+
+.notificacion-icon-warning {
+    color: #ffc107;
+}
+
+.notificacion-icon-error {
+    color: #dc3545;
+}
+
+.notificacion-icon-info {
+    color: #17a2b8;
+}
+
+.notificaciones-footer {
+    padding: 8px 16px;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .notificaciones-menu .MuiPaper-root {
+        width: 95vw;
+        max-height: 80vh;
+    }
+    
+    .notificacion-titulo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}

@@ -8,6 +8,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook'
 import EventNoteIcon from '@mui/icons-material/EventNote'
 import LogoutIcon from '@mui/icons-material/Logout'
 import CloseIcon from '@mui/icons-material/Close'
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import BarChartIcon from '@mui/icons-material/BarChart'
 import { useSidebar } from '../../context/SidebarContext'
 
@@ -65,6 +66,11 @@ function Sidebar({ userRole }: SidebarProps) {
         </div>
 
         <nav className="sidebar-nav">
+
+          <Link to="/notificaciones" className={`nav-item ${isActive("/notificaciones") ? "active" : ""}`} onClick={handleLinkClick}>
+            <NotificationsIcon fontSize="small" /> Notificaciones
+          </Link>
+
           {/* Solo admin ve estos enlaces */}
           {userRole === 'admin' && (
             <>

@@ -325,6 +325,54 @@ export const obtenerReportesEstadisticas = async () => {
 };
 
 
+//Notificaciones
+export const obtenerNotificaciones = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/notificaciones`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+        }
+    });
+    return response.json();
+};
+
+export const marcarNotificacionLeida = async (id: number) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/notificaciones/${id}/leida`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+        }
+    });
+    return response.json();
+};
+
+export const marcarTodasNotificacionesLeidas = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/notificaciones/todas/leidas`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+        }
+    });
+    return response.json();
+};
+
+export const eliminarNotificacion = async (id: number) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/notificaciones/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': token ? `Bearer ${token}` : ''
+        }
+    });
+    return response.json();
+};
+
+
 //Materiales(repositorio)
 export const obtenerMateriales = async (params?: { tipo?: string; carrera?: string }) => {
     const queryParams = new URLSearchParams();
