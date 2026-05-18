@@ -148,6 +148,14 @@ function Navbar({ onLoginClick }: NavbarProps) {
     setOpenPerfilModal(true);
   };
 
+  const handlePerfilUpdate = () => {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      // Actualizar el nombre en el navbar si es necesario
+    }
+  };
+
   const isActive = (sectionId: string) => {
     return location.pathname === "/" && activeSection === sectionId;
   };
