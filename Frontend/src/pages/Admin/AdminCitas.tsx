@@ -226,7 +226,7 @@ const AdminCitas: React.FC = () => {
     }
 
     return (
-        <Box className="admin-citas-container">
+        <div className="admin-citas-layout">
             <Sidebar userRole="admin" />
             <SidebarToggle />
 
@@ -494,7 +494,7 @@ const AdminCitas: React.FC = () => {
                     {snackbar.message}
                 </Alert>
             </Snackbar>
-        </Box>
+        </div>
     );
 };
 
