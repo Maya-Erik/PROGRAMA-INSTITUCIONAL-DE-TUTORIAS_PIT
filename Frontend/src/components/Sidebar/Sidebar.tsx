@@ -66,11 +66,6 @@ function Sidebar({ userRole }: SidebarProps) {
         </div>
 
         <nav className="sidebar-nav">
-
-          <Link to="/notificaciones" className={`nav-item ${isActive("/notificaciones") ? "active" : ""}`} onClick={handleLinkClick}>
-            <NotificationsIcon fontSize="small" /> Notificaciones
-          </Link>
-
           {/* Solo admin ve estos enlaces */}
           {userRole === 'admin' && (
             <>

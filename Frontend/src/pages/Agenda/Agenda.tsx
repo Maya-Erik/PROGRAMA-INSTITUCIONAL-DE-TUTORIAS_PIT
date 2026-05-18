@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import PerfilUsuario from '../../components/PerfilUsuario/PerfilUsuario';
+import Notificaciones from '../../components/Notificaciones/Notificaciones';
 import { 
   obtenerCitas, inscribirseCita, misCitas, cancelarInscripcionCita
 } from '../../services/api';
@@ -135,7 +136,6 @@ const Agenda: React.FC = () => {
     return cita.id_creador === userId;
   };
 
-  // Verificar si el usuario puede inscribirse (solo alumno y tutorado)
   const puedeInscribirse = () => {
     return userRole === 'alumno' || userRole === 'tutorado';
   };
@@ -178,13 +178,14 @@ const Agenda: React.FC = () => {
           <header className="agenda-topbar">
             <span className="agenda-breadcrumb">Panel › Agenda</span>
             <div className="agenda-topbar-right">
+              <Notificaciones />
               <div className="agenda-topbar-user">
                 <div>
                   <p className="agenda-topbar-name">{userName}</p>
                   <p className="agenda-topbar-role">
                     {userRole === 'admin' ? 'ADMINISTRADOR' : 
-                     userRole === 'tutor' ? 'TUTOR' :
-                     userRole === 'tutorado' ? 'TUTORADO' : 'ALUMNO'}
+                    userRole === 'tutor' ? 'TUTOR' :
+                    userRole === 'tutorado' ? 'TUTORADO' : 'ALUMNO'}
                   </p>
                 </div>
                 <Avatar 
@@ -199,6 +200,7 @@ const Agenda: React.FC = () => {
           </header>
 
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            {/* Resto del contenido de Agenda... */}
             <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
               <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)}>
                 <Tab label="Tutorias Disponibles" />
@@ -303,7 +305,7 @@ const Agenda: React.FC = () => {
             )}
 
             {tabValue === 1 && (
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
+              <div className="agenda-grid">
                 {misCitasFiltradas().map((cita) => {
                   const estado = getEstadoUsuario(cita);
                   return (
@@ -351,7 +353,7 @@ const Agenda: React.FC = () => {
                     </Typography>
                   </Box>
                 )}
-              </Box>
+              </div>
             )}
           </Container>
         </main>
